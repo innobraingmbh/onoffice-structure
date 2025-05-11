@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Innobrain\Structure\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class StructureCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'onoffice-structure';
 
     public $description = 'My command';
 

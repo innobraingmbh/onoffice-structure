@@ -1,10 +1,11 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Innobrain\Structure\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Innobrain\OnOfficeAdapter\OnOfficeAdapterServiceProvider;
+use Innobrain\Structure\StructureServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use VendorName\Skeleton\SkeletonServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,14 +14,15 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'VendorName\\Skeleton\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Innobrain\\Structure\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            SkeletonServiceProvider::class,
+            StructureServiceProvider::class,
+            OnOfficeAdapterServiceProvider::class,
         ];
     }
 
