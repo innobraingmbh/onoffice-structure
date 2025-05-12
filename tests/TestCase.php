@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Innobrain\OnOfficeAdapter\OnOfficeAdapterServiceProvider;
 use Innobrain\Structure\StructureServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Override;
 
 class TestCase extends Orchestra
 {
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
