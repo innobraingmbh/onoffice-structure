@@ -11,7 +11,6 @@ use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldDependencies;
 use Innobrain\Structure\DTOs\FieldDependency;
 use Innobrain\Structure\DTOs\FieldFilter;
-use Innobrain\Structure\DTOs\FieldFilters;
 use Innobrain\Structure\DTOs\Module;
 use Innobrain\Structure\DTOs\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
@@ -121,10 +120,10 @@ class FieldConfiguration
         return $permittedValues;
     }
 
-    private function parseFieldFilters(mixed $filtersData): FieldFilters
+    private function parseFieldFilters(mixed $filtersData): Collection
     {
         if (! is_array($filtersData)) {
-            return new FieldFilters(new Collection);
+            return new Collection;
         }
 
         $filters = new Collection;
@@ -143,10 +142,10 @@ class FieldConfiguration
             ));
         }
 
-        return new FieldFilters($filters);
+        return $filters;
     }
 
-    private function parseFieldDependencies(mixed $dependenciesData): FieldDependencies
+    private function parseFieldDependencies(mixed $dependenciesData): Collection
     {
         // As per critical note, this parsing is simplified and might need refinement.
         // The example showed a map 'dependencies' => [ 'stellplatz' => 'parken', ... ]
@@ -174,6 +173,6 @@ class FieldConfiguration
             }
         }
 
-        return new FieldDependencies($dependencies);
+        return $dependencies;
     }
 }

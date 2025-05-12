@@ -16,8 +16,8 @@ class Field
      * @param  int|null  $length  Max length for certain field types.
      * @param  Collection<string, PermittedValue>  $permittedValues  Permitted values for select-like fields, keyed by PermittedValue->key.
      * @param  string|null  $default  Default value for the field.
-     * @param  FieldFilters  $filters  Filters applicable to/for this field.
-     * @param  FieldDependencies  $dependencies  Dependencies of this field.
+     * @param  Collection<string, FieldFilter>  $filters  Filters applicable to/for this field.
+     * @param  Collection<int, FieldDependency>  $dependencies  Dependencies of this field.
      * @param  Collection<int, string>  $compoundFields  List of field keys that this field is a compound of.
      * @param  string|null  $fieldMeasureFormat  Specific measure/format information for the field.
      */
@@ -28,8 +28,8 @@ class Field
         public readonly ?int $length,
         public readonly Collection $permittedValues,
         public readonly ?string $default,
-        public readonly FieldFilters $filters,
-        public readonly FieldDependencies $dependencies,
+        public readonly Collection $filters,
+        public readonly Collection $dependencies,
         public readonly Collection $compoundFields,
         public readonly ?string $fieldMeasureFormat
     ) {}
