@@ -41,10 +41,12 @@ class FieldConfiguration
         $modules = new Collection;
 
         foreach ($rawModulesData as $moduleKey => $moduleData) {
-            if (! isset($moduleData['elements']) || ! is_array($moduleData['elements'])) {
+            if (! isset($moduleData['elements'])) {
                 continue;
             }
-
+            if (! is_array($moduleData['elements'])) {
+                continue;
+            }
             $moduleKey = $moduleData['id'] ?? $moduleKey;
             $moduleEnum = FieldConfigurationModule::tryFrom((string) $moduleKey);
             if (! $moduleEnum) {
@@ -73,10 +75,14 @@ class FieldConfiguration
     {
         $fields = new Collection;
         foreach ($fieldsData as $fieldKey => $fieldData) {
-            if (! is_array($fieldData) || $fieldKey === 'label') { // 'label' at module level, not a field
+            if (! is_array($fieldData)) {
+                // 'label' at module level, not a field
                 continue;
             }
-
+            if ($fieldKey === 'label') {
+                // 'label' at module level, not a field
+                continue;
+            }
             $fieldType = FieldType::tryFrom((string) Arr::get($fieldData, 'type', ''));
             if (! $fieldType) {
                 // Handle unknown field type: skip, log, default, or throw

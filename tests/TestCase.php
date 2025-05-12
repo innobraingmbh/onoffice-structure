@@ -11,6 +11,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
