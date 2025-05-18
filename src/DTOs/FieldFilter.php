@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Innobrain\Structure\DTOs;
 
 use Illuminate\Support\Collection;
+use Innobrain\Structure\Concerns\HasConverter;
+use Innobrain\Structure\Contracts\Convertible;
 
-class FieldFilter
+class FieldFilter implements Convertible
 {
+    use HasConverter;
+
     /**
-     * @param  string  $name  The name/key of the filter (e.g., 'Anrede-Titel').
-     * @param  Collection<string, string[]>  $config  The configuration for the filter (e.g., collect(['kontaktkategorien' => ['', 'value1']])).
+     * @param  Collection<string, string[]>  $config
      */
     public function __construct(
         public readonly string $name,

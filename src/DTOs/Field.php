@@ -5,21 +5,19 @@ declare(strict_types=1);
 namespace Innobrain\Structure\DTOs;
 
 use Illuminate\Support\Collection;
+use Innobrain\Structure\Concerns\HasConverter;
+use Innobrain\Structure\Contracts\Convertible;
 use Innobrain\Structure\Enums\FieldType;
 
-class Field
+class Field implements Convertible
 {
+    use HasConverter;
+
     /**
-     * @param  string  $key  Technical name of the field.
-     * @param  string  $label  Human-readable label of the field.
-     * @param  FieldType  $type  Type of the field.
-     * @param  int|null  $length  Max length for certain field types.
-     * @param  Collection<string, PermittedValue>  $permittedValues  Permitted values for select-like fields, keyed by PermittedValue->key.
-     * @param  string|null  $default  Default value for the field.
-     * @param  Collection<string, FieldFilter>  $filters  Filters applicable to/for this field.
-     * @param  Collection<int, FieldDependency>  $dependencies  Dependencies of this field.
-     * @param  Collection<int, string>  $compoundFields  List of field keys that this field is a compound of.
-     * @param  string|null  $fieldMeasureFormat  Specific measure/format information for the field.
+     * @param  Collection<string, PermittedValue>  $permittedValues
+     * @param  Collection<string, FieldFilter>  $filters
+     * @param  Collection<int, FieldDependency>  $dependencies
+     * @param  Collection<int, string>  $compoundFields
      */
     public function __construct(
         public readonly string $key,
