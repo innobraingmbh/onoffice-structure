@@ -8,9 +8,10 @@ use Illuminate\Support\Collection;
 use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
 use Innobrain\Structure\Contracts\ConvertStrategy;
+use Innobrain\Structure\DTOs\Module;
 
 /**
- * @extends Collection<int, \Innobrain\Structure\DTOs\Module>
+ * @extends Collection<string, Module>
  */
 final class ModulesCollection extends Collection implements Convertible
 {
