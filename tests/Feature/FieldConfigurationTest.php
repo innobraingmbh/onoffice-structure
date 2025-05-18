@@ -170,3 +170,113 @@ it('should correctly convert retrieved field configuration to array using ArrayC
         ->and($gwgGeburtsdatumFieldDropEmpty)->not->toHaveKeys(['length', 'permittedValues', 'default', 'filters', 'dependencies', 'compoundFields', 'fieldMeasureFormat']);
 
 });
+
+it('should correctly convert retrieved field configuration from FieldsResponse_json to array using ArrayConvertStrategy', function () {
+    $file = file_get_contents(Pest\testDirectory('Stubs/FieldsResponse.json'));
+    $jsonResponse = json_decode($file, true);
+
+    Illuminate\Support\Facades\Http::fake([
+        'https://api.onoffice.de/api/stable/api.php/' => Illuminate\Support\Facades\Http::response($jsonResponse),
+    ]);
+
+    $modulesCollection = FieldConfiguration::retrieveForClient('test-token', 'test-secret');
+
+    // Test with dropEmpty: false
+    $strategyKeepEmpty = new ArrayConvertStrategy(dropEmpty: false);
+    $convertedArrayKeepEmpty = $modulesCollection->convert($strategyKeepEmpty);
+
+    expect($convertedArrayKeepEmpty)->toBeArray();
+
+    // Find the 'address' module in the converted array
+    $addressModuleKeepEmpty = collect($convertedArrayKeepEmpty)->firstWhere('key', FieldConfigurationModule::Address->value);
+    expect($addressModuleKeepEmpty)->not->toBeNull()
+        ->and($addressModuleKeepEmpty['key'])->toBe(FieldConfigurationModule::Address->value)
+        ->and($addressModuleKeepEmpty['label'])->toBe('Address'); // No explicit label in stub, so ucfirst(key)
+
+    // Check a simple field: KdNr (label will be KdNr as no explicit label in stub)
+    $kdNrFieldKeepEmpty = $addressModuleKeepEmpty['fields']['KdNr'];
+    expect($kdNrFieldKeepEmpty)->toBe([
+        'key' => 'KdNr',
+        'label' => 'KdNr', // Derived from key
+        'type' => 'integer',
+        'length' => null,
+        'permittedValues' => [],
+        'default' => null,
+        'filters' => [],
+        'dependencies' => [],
+        'compoundFields' => [],
+        'fieldMeasureFormat' => null,
+    ]);
+
+    // Check a multiselect field with permitted values (array of strings): Beziehung
+    $beziehungFieldKeepEmpty = $addressModuleKeepEmpty['fields']['Beziehung'];
+    expect($beziehungFieldKeepEmpty['key'])->toBe('Beziehung')
+        ->and($beziehungFieldKeepEmpty['label'])->toBe('Beziehung') // Derived from key
+        ->and($beziehungFieldKeepEmpty['type'])->toBe('multiselect')
+        ->and($beziehungFieldKeepEmpty['permittedValues'])->toBe([
+            '0' => ['key' => '0', 'label' => 'Kunde'],
+            '1' => ['key' => '1', 'label' => 'Verwandter'],
+            '2' => ['key' => '2', 'label' => 'Arbeitgeber'],
+            '3' => ['key' => '3', 'label' => 'Tippgeber'],
+        ]);
+
+    // Check a singleselect field with permitted values (array of strings) and default: Status2Adr
+    $status2AdrFieldKeepEmpty = $addressModuleKeepEmpty['fields']['Status2Adr'];
+    expect($status2AdrFieldKeepEmpty['key'])->toBe('Status2Adr')
+        ->and($status2AdrFieldKeepEmpty['label'])->toBe('Status2Adr') // Derived from key
+        ->and($status2AdrFieldKeepEmpty['type'])->toBe('singleselect')
+        ->and($status2AdrFieldKeepEmpty['default'])->toBe('status2adr_active')
+        ->and($status2AdrFieldKeepEmpty['permittedValues'])->toBe([
+            '0' => ['key' => '0', 'label' => 'status2adr_active'],
+            '1' => ['key' => '1', 'label' => 'status2adr_archive'],
+        ]);
+
+    // Check a field with compound fields: Anrede-Titel
+    $anredeTitelFieldKeepEmpty = $addressModuleKeepEmpty['fields']['Anrede-Titel'];
+    expect($anredeTitelFieldKeepEmpty['key'])->toBe('Anrede-Titel')
+        ->and($anredeTitelFieldKeepEmpty['label'])->toBe('Anrede-Titel') // Derived from key
+        ->and($anredeTitelFieldKeepEmpty['type'])->toBe('varchar')
+        ->and($anredeTitelFieldKeepEmpty['compoundFields'])->toBe(['Anrede', 'Titel']);
+
+    // Test with dropEmpty: true
+    $strategyDropEmpty = new ArrayConvertStrategy(dropEmpty: true);
+    $convertedArrayDropEmpty = $modulesCollection->convert($strategyDropEmpty);
+
+    expect($convertedArrayDropEmpty)->toBeArray();
+    $addressModuleDropEmpty = collect($convertedArrayDropEmpty)->firstWhere('key', FieldConfigurationModule::Address->value);
+
+    // Check KdNr field with dropEmpty: true
+    $kdNrFieldDropEmpty = $addressModuleDropEmpty['fields']['KdNr'];
+    expect($kdNrFieldDropEmpty)->toBe([
+        'key' => 'KdNr',
+        'label' => 'KdNr',
+        'type' => 'integer',
+    ])->and($kdNrFieldDropEmpty)->not->toHaveKeys(['length', 'permittedValues', 'default', 'filters', 'dependencies', 'compoundFields', 'fieldMeasureFormat']);
+
+    // Check Beziehung field with dropEmpty: true (permittedValues should remain as it's not empty)
+    $beziehungFieldDropEmpty = $addressModuleDropEmpty['fields']['Beziehung'];
+    expect($beziehungFieldDropEmpty)->toEqual([
+        'key' => 'Beziehung',
+        'label' => 'Beziehung',
+        'type' => 'multiselect',
+        'permittedValues' => [
+            '0' => ['key' => '0', 'label' => 'Kunde'],
+            '1' => ['key' => '1', 'label' => 'Verwandter'],
+            '2' => ['key' => '2', 'label' => 'Arbeitgeber'],
+            '3' => ['key' => '3', 'label' => 'Tippgeber'],
+        ],
+    ])
+        ->and($beziehungFieldDropEmpty)->not->toHaveKeys(['length', 'default', 'filters', 'dependencies', 'compoundFields', 'fieldMeasureFormat']);
+
+    // Check Anrede-Titel field with dropEmpty: true (compoundFields should remain)
+    $anredeTitelFieldDropEmpty = $addressModuleDropEmpty['fields']['Anrede-Titel'];
+    expect($anredeTitelFieldDropEmpty)->toEqual([
+        'key' => 'Anrede-Titel',
+        'label' => 'Anrede-Titel',
+        'type' => 'varchar',
+        'length' => 80, // Length is present in stub
+        'compoundFields' => ['Anrede', 'Titel'],
+    ])
+        ->and($anredeTitelFieldDropEmpty)->not->toHaveKeys(['permittedValues', 'default', 'filters', 'dependencies', 'fieldMeasureFormat']);
+
+});
