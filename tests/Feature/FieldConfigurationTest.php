@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 use Illuminate\Support\Collection;
 use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldDependency;
 use Innobrain\Structure\DTOs\FieldFilter;
 use Innobrain\Structure\DTOs\Module;
-use Innobrain\Structure\DTOs\PermittedValue;
 use Innobrain\Structure\Facades\FieldConfiguration;
 
 it('should be able to retrieve the field configuration', function () {
