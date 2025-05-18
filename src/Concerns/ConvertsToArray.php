@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Concerns;
 
+use Illuminate\Support\Collection;
+
 use function is_array;
 
 /**
@@ -16,7 +18,7 @@ trait ConvertsToArray
         $filtered = [];
 
         foreach ($data as $key => $value) {
-            if ($value instanceof \Illuminate\Support\Collection) {
+            if ($value instanceof Collection) {
                 $value = $this->filterEmptyRecursive($value->toArray());
             } elseif (is_array($value)) {
                 $value = $this->filterEmptyRecursive($value);

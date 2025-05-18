@@ -64,7 +64,7 @@ it('should correctly convert retrieved field configuration to array using ArrayC
     // Find the 'address' module in the converted array
     $addressModuleKeepEmpty = collect($convertedArrayKeepEmpty)->firstWhere('key', FieldConfigurationModule::Address->value);
     expect($addressModuleKeepEmpty)->not->toBeNull()
-        ->and($addressModuleKeepEmpty['label'])->toBe('Adressen');
+        ->and($addressModuleKeepEmpty['label'])->toBe('Address');
 
     // Check a simple field: KdNr
     $kdNrFieldKeepEmpty = $addressModuleKeepEmpty['fields']['KdNr'];
@@ -120,7 +120,7 @@ it('should correctly convert retrieved field configuration to array using ArrayC
     // Find the 'address' module in the converted array
     $addressModuleDropEmpty = collect($convertedArrayDropEmpty)->firstWhere('key', FieldConfigurationModule::Address->value);
     expect($addressModuleDropEmpty)->not->toBeNull()
-        ->and($addressModuleDropEmpty['label'])->toBe('Adressen');
+        ->and($addressModuleDropEmpty['label'])->toBe('Address');
 
     // Check a simple field where nulls/empties should be dropped: KdNr
     // Original: "KdNr":{"type":"integer","length":null,"permittedvalues":null,"default":null,"filters":[],"dependencies":[],"compoundFields":[],"label":"KdNr","fieldMeasureFormat":null}
@@ -154,7 +154,7 @@ it('should correctly convert retrieved field configuration to array using ArrayC
         ->and($anredeTitelFieldDropEmpty['filters']['Anrede-Titel'])->toBe([ // filters is not empty
             'name' => 'Anrede-Titel',
             'config' => [
-                'kontaktkategorien' => ['', 'businessCustomer', 'privateCustomer'],
+                'kontaktkategorien' => [1 => 'businessCustomer', 2 => 'privateCustomer'],
             ],
         ])
         ->and($anredeTitelFieldDropEmpty)->not->toHaveKeys(['permittedValues', 'default', 'dependencies', 'fieldMeasureFormat']);
