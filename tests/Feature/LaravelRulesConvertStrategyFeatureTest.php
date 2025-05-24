@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Http;
+use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\Structure\Converters\LaravelRulesConvertStrategy;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Facades\FieldConfiguration;
@@ -25,7 +26,7 @@ it('generates correct Laravel validation rules from the field configuration (Fie
     // ------------------------------------------------------------------
     // 2. Retrieve modules & convert with the strategy under test.
     // ------------------------------------------------------------------
-    $modules = FieldConfiguration::retrieveForClient('test-token', 'test-secret');
+    $modules = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
     $strategy = new LaravelRulesConvertStrategy;   // pipe syntax, include nullable
     $address = $modules->get(FieldConfigurationModule::Address->value);
     $estate = $modules->get(FieldConfigurationModule::Estate->value);
@@ -73,7 +74,7 @@ it('generates correct Laravel validation rules from FieldsResponse_json field co
     // ------------------------------------------------------------------
     // 2. Retrieve modules & convert with the strategy under test.
     // ------------------------------------------------------------------
-    $modules = FieldConfiguration::retrieveForClient('test-token', 'test-secret');
+    $modules = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
     $strategy = new LaravelRulesConvertStrategy(pipeSyntax: true, includeNullable: true);
     $addressModule = $modules->get(FieldConfigurationModule::Address->value);
     $estateModule = $modules->get(FieldConfigurationModule::Estate->value);

@@ -1,0 +1,2427 @@
+{
+"id": "estate",
+"type": "",
+"elements": {
+    "label": "Immobilien",
+    "projectStatus": {
+        "type": "varchar",
+        "length": 80,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "projectStatus": {
+                "stammobjekte": ["stammobjekt"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Projektstatus",
+        "fieldMeasureFormat": null
+    },
+    "transferStreetWithoutHouseNumber": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Stra\u00dfe ohne Hausnummer \u00fcbertragen",
+        "fieldMeasureFormat": null
+    },
+    "objektart": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "zimmer": "Zimmer",
+            "haus": "Haus",
+            "wohnung": "Wohnung",
+            "grundstueck": "Grundst\u00fcck",
+            "buero_praxen": "B\u00fcro\/Praxen",
+            "einzelhandel": "Laden\/Einzelhandel",
+            "gastgewerbe": "Gastgewerbe",
+            "hallen_lager_prod": "Hallen\/Lager\/Produktion",
+            "land_und_forstwirtschaft": "Land\/Forstwirtschaft",
+            "freizeitimmbilien_gewerblich": "Freizeitimmobilie (gewerblich)",
+            "sonstige": "Sonstige",
+            "hausbau": "Hausbau"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Objektart",
+        "fieldMeasureFormat": null
+    },
+    "strasse": {
+        "type": "varchar",
+        "length": 80,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Stra\u00dfe",
+        "fieldMeasureFormat": null
+    },
+    "wohnflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "wohnflaeche": {
+                "immobilienart": ["wohnung", "haus", "waz", "hallen_lager_prod", "zimmer"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Wohnfl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "waehrung": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "EUR": "\u20ac"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "W\u00e4hrung",
+        "fieldMeasureFormat": null
+    },
+    "befeuerung": {
+        "type": "multiselect",
+        "length": null,
+        "permittedvalues": {
+            "alternativ": "Alternativ",
+            "elektro": "Elektro",
+            "erdwaerme": "Erdw\u00e4rme",
+            "gas": "Gas",
+            "luftwp": "Luft\/Wasser W\u00e4rmepumpe",
+            "oel": "\u00d6l",
+            "pellet": "Pellet",
+            "solar": "Solar"
+        },
+        "default": null,
+        "filters": {
+            "befeuerung": {
+                "immobilienart": ["wohnung", "haus", "waz"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Befeuerung",
+        "fieldMeasureFormat": null
+    },
+    "baujahr": {
+        "type": "integer",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "baujahr": {
+                "immobilienart": ["wohnung", "haus", "buero_praxen", "einzelhandel", "gastgewerbe", "hallen_lager_prod", "land_und_forstwirtschaft", "zinshaus_renditeobjekt", "parken"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Baujahr",
+        "fieldMeasureFormat": null
+    },
+    "distanz_kindergarten": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Dist. Kindergarten (km)",
+        "fieldMeasureFormat": null
+    },
+    "verfuegbar_ab": {
+        "type": "varchar",
+        "length": 20,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Verf\u00fcgbar ab (Text)",
+        "fieldMeasureFormat": null
+    },
+    "objektbeschreibung": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Beschreibung",
+        "fieldMeasureFormat": null
+    },
+    "InterneBemerkung": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Diese Bemerkung wird nicht ver\u00f6ffentlicht",
+        "fieldMeasureFormat": null
+    },
+    "Id": {
+        "type": "integer",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Datensatznr",
+        "fieldMeasureFormat": null
+    },
+    "schaufensterTv_veroeffentlichen": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "ver\u00f6ffentlichen",
+        "fieldMeasureFormat": null
+    },
+    "objekttyp": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "stellplatz": "Stellplatz",
+            "carport": "Carport",
+            "doppelgarage": "Doppelgarage",
+            "duplex": "Duplex",
+            "tiefgarage": "Tiefgarage",
+            "bootsliegeplatz": "Bootsliegeplatz",
+            "rohdachboden": "Rohdachboden",
+            "seeliegenschaft": "Seeliegenschaft",
+            "jagdrevier": "Jagdrevier",
+            "parkplatz_strom": "Parkplatz mit Strom",
+            "hausbau_zweifamilienhaus": "Zweifamilienhaus",
+            "tiefgaragenstellplatz": "Tiefgaragenstellplatz",
+            "parken_parkhaus": "Parkhaus",
+            "einzelgarage": "Einzelgarage",
+            "freizeitanlage": "Freizeitanlage",
+            "einraumlokal": "Einraumlokal",
+            "raucherlokal": "Raucherlokal",
+            "praxisflaeche": "Praxisfl\u00e4che",
+            "gewerbepark": "Gewerbepark",
+            "buerozentrum": "B\u00fcrozentrum",
+            "bungalow": "Bungalow",
+            "einfamilienhausMitEinliegerwohnung": "Einfamilienhaus mit Einliegerwohnung",
+            "zimmer": "Zimmer",
+            "hochparterre": "Hochparterre",
+            "eigentumswohnung": "Eigentumswohnung",
+            "blockhaus": "Blockhaus",
+            "hausbau_reihenhaus": "Reihenhaus",
+            "hausbau_mehrfamilienhaus": "Mehrfamilienhaus",
+            "hausbau_landhaus": "Landhaus",
+            "holzhaus": "Holzhaus",
+            "fachwerkhaus": "Fachwerkhaus",
+            "hausbau_einfamilienhaus": "Einfamilienhaus",
+            "doppelhaus": "Doppelhaus",
+            "hausbau_bungalow": "Bungalow",
+            "hausbau_villa": "Villa",
+            "ausstellungsflaeche": "Ausstellungsfl\u00e4che",
+            "mehrfamilienhaus": "Mehrfamilienhaus",
+            "industriehalle": "Industriehalle",
+            "wohn_und_geschaeftshaus": "Wohn- und Gesch\u00e4ftshaus",
+            "industriehalle_und_freiflaeche": "Industriehalle und Freifl\u00e4che",
+            "geschaeftshaus": "Gesch\u00e4ftshaus",
+            "kuehlhaus": "K\u00fchlhaus",
+            "buerogebaeude": "B\u00fcrogeb\u00e4ude",
+            "sb_maerkte": "SB M\u00e4rkte",
+            "kuehlregallager": "K\u00fchlregallager",
+            "einkaufscentren": "Einkaufscentren",
+            "lager_mit_freiflaeche": "Lager mit Freifl\u00e4che",
+            "lagerflaeche": "Lagerfl\u00e4che",
+            "wohnanlagen": "Wohnanlagen",
+            "lagerhalle": "Lagerhalle",
+            "verbrauchermaerkte": "Verbraucherm\u00e4rkte",
+            "speditionslager": "Speditionslager",
+            "industrieanlagen": "Industrieanlagen",
+            "anwesen": "Anwesen",
+            "barbetrieb": "Barbetrieb",
+            "cafe": "Caf\u00e9",
+            "loft": "Loft",
+            "atelier": "Atelier",
+            "bueroetage": "B\u00fcroetage",
+            "buero_und_lager": "B\u00fcro und Lagergeb\u00e4ude",
+            "praxisetage": "Praxisetage",
+            "praxishaus": "Praxishaus",
+            "gewerbezentrum": "Gewerbezentrum",
+            "factory_outlet": "Factory Outlet",
+            "kaufhaus": "Kaufhaus",
+            "kiosk": "Kiosk",
+            "sb_markt": "SB-Markt",
+            "verkaufssflaeche": "Verkaufsfl\u00e4che",
+            "verkaufshalle": "Verkaufshalle",
+            "diskothek": "Diskothek",
+            "gaestehaus": "G\u00e4stehaus",
+            "gaststaette": "Gastst\u00e4tte",
+            "hotelanwesen": "Hotelanwesen",
+            "hotel_garni": "Hotel Garni",
+            "restaurant": "Restaurant",
+            "sportanlage": "Sportanlage",
+            "vergnuegungsparks_und_center": "Vergn\u00fcgungsparks und Center",
+            "halle": "Halle",
+            "lager": "Lager",
+            "produktion": "Produktion",
+            "werkstatt": "Werkstatt",
+            "hochregallager": "Hochregallager",
+            "service": "Service",
+            "freiflaechen": "Freifl\u00e4chen",
+            "dachgeschoss": "Dachgeschoss",
+            "maisonette": "Maisonette",
+            "loft-studio-atelier": "Loft\/Studio\/Atelier",
+            "penthouse": "Penthouse",
+            "terrassen": "Terrasse",
+            "etage": "Etagenwohnung",
+            "erdgeschoss": "Erdgeschoss",
+            "souterrain": "Souterrain",
+            "reihenhaus": "Reihenhaus",
+            "reihenend": "Reihenend",
+            "reihenmittel": "Reihenmittel",
+            "reiheneck": "Reiheneck",
+            "doppelhaushaelfte": "Doppelhaush\u00e4lfte",
+            "einfamilienhaus": "Einfamilienhaus",
+            "stadthaus": "Stadthaus",
+            "villa": "Villa",
+            "resthof": "Resthof",
+            "bauernhaus": "Bauernhaus",
+            "landhaus": "Landhaus",
+            "schloss": "Schloss",
+            "zweifamilienhaus": "Zweifamilienhaus",
+            "ferienhaus": "Ferienhaus",
+            "berghuette": "Bergh\u00fctte",
+            "chalet": "Chalet",
+            "strandhaus": "Strandhaus",
+            "wohnen": "Wohnen",
+            "gewerbe": "Gewerbe",
+            "industrie": "Industrie",
+            "land_forstwirtschaft": "Land\/Forstwirtschaft",
+            "freizeit": "Freizeit",
+            "gemischt": "Gemischt",
+            "sondernutzung": "Sondernutzung",
+            "bueroflaeche": "B\u00fcrofl\u00e4che",
+            "buerohaus": "B\u00fcrohaus",
+            "praxis": "Praxis",
+            "ladenlokal": "Ladenlokal",
+            "einzelhandelsladen": "Einzelhandelsladen",
+            "verbrauchermarkt": "Verbrauchermarkt",
+            "einkaufszentrum": "Einkaufszentrum",
+            "gastronomie": "Gastronomie",
+            "gastronomie_und_wohnung": "Gastronomie und Wohnen",
+            "pensionen": "Pension",
+            "hotels": "Hotels",
+            "weitere_beherbergungsbetriebe": "Weitere Beherbergungsbetriebe",
+            "landwirtschaftliche_betriebe": "Landwirtschaftliche Betriebe",
+            "bauernhof": "Bauernhof",
+            "aussiedlerhof": "Aussiedlerhof",
+            "viehwirtschaft": "Viehwirtschaft",
+            "jagd_und_forstwirtschaft": "Jagd und Forstwirtschaft",
+            "teich_und_fischwirtschaft": "Teich und Fischwirtschaft",
+            "scheunen": "Scheunen",
+            "reiterhoefe": "Reiterh\u00f6fe",
+            "sonstige_landwirtschaftsimmobilien": "Sonstige Landwirtschaftliche Immobilien",
+            "parkhaus": "Parkhaus",
+            "tankstelle": "Tankstelle",
+            "sonstige": "Sonstige",
+            "gewerbeeinheit": "Gewerbeeinheit",
+            "gewerbeanwesen": "Gewerbeanwesen",
+            "wohnanlage": "Wohnanlage",
+            "besondereImmobilie": "besondere Immobilie"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": {
+            "stellplatz": "parken",
+            "carport": "parken",
+            "doppelgarage": "parken",
+            "duplex": "parken",
+            "tiefgarage": "parken",
+            "bootsliegeplatz": "parken",
+            "rohdachboden": "wohnung",
+            "seeliegenschaft": "grundstueck",
+            "jagdrevier": "land_und_forstwirtschaft",
+            "parkplatz_strom": "parken",
+            "hausbau_zweifamilienhaus": "hausbau",
+            "tiefgaragenstellplatz": "parken",
+            "parken_parkhaus": "parken",
+            "einzelgarage": "parken",
+            "freizeitanlage": "freizeitimmbilien_gewerblich",
+            "einraumlokal": "gastgewerbe",
+            "raucherlokal": "gastgewerbe",
+            "praxisflaeche": "buero_praxen",
+            "gewerbepark": "grundstueck",
+            "buerozentrum": "buero_praxen",
+            "bungalow": "haus",
+            "einfamilienhausMitEinliegerwohnung": "hausbau",
+            "zimmer": "zimmer",
+            "hochparterre": "wohnung",
+            "eigentumswohnung": "zwangsversteigerung",
+            "blockhaus": "hausbau",
+            "hausbau_reihenhaus": "hausbau",
+            "hausbau_mehrfamilienhaus": "hausbau",
+            "hausbau_landhaus": "hausbau",
+            "holzhaus": "hausbau",
+            "fachwerkhaus": "hausbau",
+            "hausbau_einfamilienhaus": "hausbau",
+            "doppelhaus": "hausbau",
+            "hausbau_bungalow": "hausbau",
+            "hausbau_villa": "hausbau",
+            "ausstellungsflaeche": "einzelhandel",
+            "mehrfamilienhaus": "zinshaus_renditeobjekt",
+            "industriehalle": "hallen_lager_prod",
+            "wohn_und_geschaeftshaus": "zinshaus_renditeobjekt",
+            "industriehalle_und_freiflaeche": "hallen_lager_prod",
+            "geschaeftshaus": "zinshaus_renditeobjekt",
+            "kuehlhaus": "hallen_lager_prod",
+            "buerogebaeude": "zinshaus_renditeobjekt",
+            "sb_maerkte": "zinshaus_renditeobjekt",
+            "kuehlregallager": "hallen_lager_prod",
+            "einkaufscentren": "zinshaus_renditeobjekt",
+            "lager_mit_freiflaeche": "hallen_lager_prod",
+            "lagerflaeche": "hallen_lager_prod",
+            "wohnanlagen": "zinshaus_renditeobjekt",
+            "lagerhalle": "hallen_lager_prod",
+            "verbrauchermaerkte": "zinshaus_renditeobjekt",
+            "speditionslager": "hallen_lager_prod",
+            "industrieanlagen": "zinshaus_renditeobjekt",
+            "anwesen": "land_und_forstwirtschaft",
+            "barbetrieb": "gastgewerbe",
+            "cafe": "gastgewerbe",
+            "loft": "buero_praxen",
+            "atelier": "buero_praxen",
+            "bueroetage": "buero_praxen",
+            "buero_und_lager": "buero_praxen",
+            "praxisetage": "buero_praxen",
+            "praxishaus": "buero_praxen",
+            "gewerbezentrum": "buero_praxen",
+            "factory_outlet": "einzelhandel",
+            "kaufhaus": "einzelhandel",
+            "kiosk": "einzelhandel",
+            "sb_markt": "einzelhandel",
+            "verkaufssflaeche": "einzelhandel",
+            "verkaufshalle": "einzelhandel",
+            "diskothek": "gastgewerbe",
+            "gaestehaus": "gastgewerbe",
+            "gaststaette": "gastgewerbe",
+            "hotelanwesen": "gastgewerbe",
+            "hotel_garni": "gastgewerbe",
+            "restaurant": "gastgewerbe",
+            "sportanlage": "freizeitimmbilien_gewerblich",
+            "vergnuegungsparks_und_center": "freizeitimmbilien_gewerblich",
+            "halle": "hallen_lager_prod",
+            "lager": "hallen_lager_prod",
+            "produktion": "hallen_lager_prod",
+            "werkstatt": "hallen_lager_prod",
+            "hochregallager": "hallen_lager_prod",
+            "service": "hallen_lager_prod",
+            "freiflaechen": "hallen_lager_prod",
+            "dachgeschoss": "wohnung",
+            "maisonette": "wohnung",
+            "loft-studio-atelier": "wohnung",
+            "penthouse": "wohnung",
+            "terrassen": "wohnung",
+            "etage": "wohnung",
+            "erdgeschoss": "wohnung",
+            "souterrain": "wohnung",
+            "reihenhaus": "haus",
+            "reihenend": "haus",
+            "reihenmittel": "haus",
+            "reiheneck": "haus",
+            "doppelhaushaelfte": "haus",
+            "einfamilienhaus": "haus",
+            "stadthaus": "haus",
+            "villa": "haus",
+            "resthof": "haus",
+            "bauernhaus": "haus",
+            "landhaus": "haus",
+            "schloss": "haus",
+            "zweifamilienhaus": "haus",
+            "ferienhaus": "haus",
+            "berghuette": "haus",
+            "chalet": "haus",
+            "strandhaus": "haus",
+            "wohnen": "grundstueck",
+            "gewerbe": "grundstueck",
+            "industrie": "hallen_lager_prod",
+            "land_forstwirtschaft": "grundstueck",
+            "freizeit": "freizeitimmbilien_gewerblich",
+            "gemischt": "grundstueck",
+            "sondernutzung": "grundstueck",
+            "bueroflaeche": "buero_praxen",
+            "buerohaus": "buero_praxen",
+            "praxis": "buero_praxen",
+            "ladenlokal": "einzelhandel",
+            "einzelhandelsladen": "einzelhandel",
+            "verbrauchermarkt": "einzelhandel",
+            "einkaufszentrum": "einzelhandel",
+            "gastronomie": "gastgewerbe",
+            "gastronomie_und_wohnung": "gastgewerbe",
+            "pensionen": "gastgewerbe",
+            "hotels": "gastgewerbe",
+            "weitere_beherbergungsbetriebe": "gastgewerbe",
+            "landwirtschaftliche_betriebe": "land_und_forstwirtschaft",
+            "bauernhof": "land_und_forstwirtschaft",
+            "aussiedlerhof": "land_und_forstwirtschaft",
+            "viehwirtschaft": "land_und_forstwirtschaft",
+            "jagd_und_forstwirtschaft": "land_und_forstwirtschaft",
+            "teich_und_fischwirtschaft": "land_und_forstwirtschaft",
+            "scheunen": "land_und_forstwirtschaft",
+            "reiterhoefe": "land_und_forstwirtschaft",
+            "sonstige_landwirtschaftsimmobilien": "land_und_forstwirtschaft",
+            "parkhaus": "sonstige",
+            "tankstelle": "sonstige",
+            "sonstige": "sonstige",
+            "gewerbeeinheit": "sonstige",
+            "gewerbeanwesen": "sonstige",
+            "wohnanlage": "haus",
+            "besondereImmobilie": "haus"
+        },
+        "compoundFields": [],
+        "label": "Objekttyp",
+        "fieldMeasureFormat": null
+    },
+    "hausnummer": {
+        "type": "varchar",
+        "length": 20,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Hausnummer",
+        "fieldMeasureFormat": null
+    },
+    "nutzflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "nutzflaeche": {
+                "immobilienart": ["wohnung", "haus", "einzelhandel", "gastgewerbe", "land_und_forstwirtschaft", "sonstige"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Nutzfl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "kaufpreis": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "kaufpreis": {
+                "vermarktungsarten": ["kauf"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Kaufpreis",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "boden": {
+        "type": "multiselect",
+        "length": null,
+        "permittedvalues": {
+            "beton": "Beton",
+            "dielen": "Dielen",
+            "doppelboden": "Doppelboden",
+            "epoxidharzboden": "Epoxidharzboden",
+            "estrich": "Estrich",
+            "fertigparkett": "Fertigparkett",
+            "fliesen": "Fliesen",
+            "laminat": "Laminat",
+            "marmor": "Marmor",
+            "nach_mieterwunsch": "Nach Mieterwunsch",
+            "parkett": "Parkett",
+            "pvc": "PVC",
+            "stein": "Stein",
+            "teppichboden": "Teppichboden",
+            "terrakotta": "Terrakotta"
+        },
+        "default": null,
+        "filters": {
+            "boden": {
+                "nutzungsarten": ["gewerbe"],
+                "immobilienart": ["wohnung", "haus", "waz", "buero_praxen", "einzelhandel", "gastgewerbe", "hallen_lager_prod", "land_und_forstwirtschaft", "nutzungsart_anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Boden",
+        "fieldMeasureFormat": null
+    },
+    "zustand": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "abrissobjekt": "Abrissobjekt",
+            "baufaellig": "bauf\u00e4llig",
+            "entkernt": "entkernt",
+            "projektiert": "projektiert",
+            "neuwertig": "Neuwertig",
+            "vollstaendig_renoviert": "Vollst\u00e4ndig renoviert",
+            "renovierungsbeduerftig": "Renovierungsbed\u00fcrftig",
+            "modernisiert": "Modernisiert",
+            "rohbau": "Rohbau",
+            "erstbezug": "Erstbezug",
+            "gepflegt": "Gepflegt",
+            "saniert": "Saniert",
+            "nach_vereinbarung": "Nach Vereinbarung",
+            "erstbezug_nach_sanierung": "Erstbezug nach Sanierung"
+        },
+        "default": null,
+        "filters": {
+            "zustand": {
+                "immobilienart": ["wohnung", "haus", "waz", "buero_praxen", "einzelhandel", "gastgewerbe", "hallen_lager_prod", "land_und_forstwirtschaft", "zimmer"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Zustand",
+        "fieldMeasureFormat": null
+    },
+    "distanz_grundschule": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Dist. Grundschule (km)",
+        "fieldMeasureFormat": null
+    },
+    "abdatum": {
+        "type": "date",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "abdatum": {
+                "nutzungsarten": ["waz"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "verf\u00fcgbar ab (Datum)",
+        "fieldMeasureFormat": null
+    },
+    "ausstatt_beschr": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Ausstattung",
+        "fieldMeasureFormat": null
+    },
+    "erstellt_am": {
+        "type": "date",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "erstellt am",
+        "fieldMeasureFormat": null
+    },
+    "nutzungsart": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "wohnen": "Wohnen",
+            "gewerbe": "Gewerbe",
+            "anlage": "Anlage",
+            "waz": "WAZ (Wohnen auf Zeit)"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Nutzungsart",
+        "fieldMeasureFormat": null
+    },
+    "plz": {
+        "type": "varchar",
+        "length": 20,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "PLZ",
+        "fieldMeasureFormat": null
+    },
+    "gesamtflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "gesamtflaeche": {
+                "immobilienart": ["buero_praxen", "einzelhandel", "gastgewerbe", "hallen_lager_prod", "land_und_forstwirtschaft", "nutzungsart_anlage", "zimmer"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Gesamtfl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "aussen_courtage": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Au\u00dfen-Provision",
+        "fieldMeasureFormat": null
+    },
+    "heizungsart": {
+        "type": "multiselect",
+        "length": null,
+        "permittedvalues": {
+            "nachtspeicherheizung": "Nachtspeicherheizung",
+            "block": "Blockheizkraftwerk",
+            "keineAngabe": "keine Angabe",
+            "etage": "Etagenheizung",
+            "ofen": "Ofenheizung",
+            "zentral": "Zentralheizung",
+            "fussboden": "Fu\u00dfbodenheizung",
+            "fern": "Fernw\u00e4rme",
+            "waermepumpe": "W\u00e4rmepumpe",
+            "gas": "Gasheizung",
+            "zentral_oel": "Zentralheizung (\u00d6l)",
+            "electricHeating": "Elektro-Heizung",
+            "woodPelletHeating": "Holz-Pelletheizung",
+            "solarHeating": "Solar-Heizung"
+        },
+        "default": null,
+        "filters": {
+            "heizungsart": {
+                "nutzungsarten": ["wohnen"],
+                "immobilienart": ["wohnung", "haus", "waz"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Heizungsart",
+        "fieldMeasureFormat": null
+    },
+    "erschliessung": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "erschlossen": "Erschlossen",
+            "teilerschlossen": "Teilerschlossen",
+            "unerschlossen": "Unerschlossen"
+        },
+        "default": null,
+        "filters": {
+            "erschliessung": {
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Erschliessung",
+        "fieldMeasureFormat": null
+    },
+    "distanz_realschule": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Dist. Realschule (km)",
+        "fieldMeasureFormat": null
+    },
+    "haustiere": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "1": "Ja",
+            "0": "Nein",
+            "2": "nach Vereinbarung"
+        },
+        "default": null,
+        "filters": {
+            "haustiere": {
+                "immobilienart": ["wohnung", "haus", "waz"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Haustiere",
+        "fieldMeasureFormat": null
+    },
+    "lage": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Lage",
+        "fieldMeasureFormat": null
+    },
+    "letzte_aktion": {
+        "type": "date",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Letzte Aktion",
+        "fieldMeasureFormat": null
+    },
+    "objektnr_extern": {
+        "type": "varchar",
+        "length": 20,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "ImmoNr",
+        "fieldMeasureFormat": null
+    },
+    "vermarktungsart": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "kauf": "Kauf",
+            "miete": "Miete",
+            "pacht": "Pacht",
+            "erbpacht": "Erbpacht"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Vermarktungsart",
+        "fieldMeasureFormat": null
+    },
+    "ort": {
+        "type": "varchar",
+        "length": 50,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Ort",
+        "fieldMeasureFormat": null
+    },
+    "anzahl_zimmer": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "anzahl_zimmer": {
+                "nutzungsarten": ["wohnen", "gewerbe"],
+                "immobilienart": ["wohnung", "haus", "buero_praxen", "einzelhandel", "gastgewerbe", "hallen_lager_prod", "land_und_forstwirtschaft", "sonstige", "zinshaus_renditeobjekt", "freizeitimmbilien_gewerblich", "zimmer", "hausbau", "zwangsversteigerung", "parken"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Anzahl Zimmer",
+        "fieldMeasureFormat": "DATA_TYPE_NUMERIC"
+    },
+    "innen_courtage": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Innen-Provision",
+        "fieldMeasureFormat": null
+    },
+    "bebaubar_nach": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "aussengebiet": "Aussengebiet (\u00a735BauGB)",
+            "b_plan": "B Plan",
+            "bauerwartungsland": "Bauerwartungsland",
+            "bauland_ohne_b_plan": "Bauland ohne B Plan",
+            "bebauungsplan": "Bebauungsplan (\u00a730BauGB)",
+            "kein_bauland": "kein Bauland",
+            "laenderspezifisch": "l\u00e4nderspezifisch",
+            "nachbarbebauung": "Nachbarbebauung (\u00a734BauGB)"
+        },
+        "default": null,
+        "filters": {
+            "bebaubar_nach": {
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Bebaubar nach",
+        "fieldMeasureFormat": null
+    },
+    "distanz_gymnasium": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Dist. Gymnasium (km)",
+        "fieldMeasureFormat": null
+    },
+    "vermietet": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "vermietet": {
+                "vermarktungsarten": ["kauf"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Vermietet",
+        "fieldMeasureFormat": null
+    },
+    "sonstige_angaben": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Sonstige Angaben",
+        "fieldMeasureFormat": null
+    },
+    "etagen_zahl": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "etagen_zahl": {
+                "immobilienart": ["wohnung", "haus", "waz"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Etagenzahl",
+        "fieldMeasureFormat": "DATA_TYPE_NUMERIC"
+    },
+    "land": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "AUT": "\u00d6sterreich",
+            "BEL": "Belgien",
+            "DEU": "Deutschland",
+            "FRA": "Frankreich"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Land",
+        "fieldMeasureFormat": null
+    },
+    "anzahl_schlafzimmer": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "anzahl_schlafzimmer": {
+                "nutzungsarten": ["wohnen"],
+                "immobilienart": ["wohnung", "haus"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Anzahl Schlafzimmer",
+        "fieldMeasureFormat": "DATA_TYPE_NUMERIC"
+    },
+    "hausgeld": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "hausgeld": {
+                "nutzungsarten": ["wohnen", "anlage"],
+                "vermarktungsarten": ["kauf"],
+                "immobilienart": ["wohnung", "zimmer"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Hausgeld",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "fahrstuhl": {
+        "type": "multiselect",
+        "length": null,
+        "permittedvalues": {
+            "personen": "Personenaufzug",
+            "lasten": "Lastenfahrstuhl",
+            "kein_fahrstuhl": "Kein Fahrstuhl"
+        },
+        "default": null,
+        "filters": {
+            "fahrstuhl": {
+                "immobilienart": ["wohnung", "waz", "buero_praxen", "einzelhandel", "gastgewerbe", "zimmer"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Fahrstuhl",
+        "fieldMeasureFormat": null
+    },
+    "bebaubar_mit": {
+        "type": "multiselect",
+        "length": null,
+        "permittedvalues": {
+            "ackerland": "Ackerland",
+            "bauerwartungsland": "Bauerwartungsland",
+            "bootsstaende": "Bootsst\u00e4nde",
+            "buero": "B\u00fcro",
+            "camping": "Camping",
+            "doppelhaus": "Doppelhaus",
+            "einfamilienhaus": "Einfamilienhaus",
+            "einzelhandelgross": "Einzelhandelgross",
+            "einzelhandelklein": "Einzelhandelklein",
+            "garagen": "Garagen",
+            "garten": "Garten",
+            "gastronomie": "Gastronomie",
+            "gewerbe": "Gewerbe",
+            "hotel": "Hotel",
+            "industrie": "Industrie",
+            "keinebebauung": "Keine_Bebauung",
+            "kleingewerbe": "Kleingewerbe",
+            "lager": "Lager",
+            "mehrfamilienhaus": "Mehrfamilienhaus",
+            "obstpflanzung": "Obstpflanzung",
+            "parkhaus": "Parkhaus",
+            "produktion": "Produktion",
+            "reihenhaus": "Reihenhaus",
+            "stellplaetze": "Stellpl\u00e4tze",
+            "villa": "Villa",
+            "wald": "Wald"
+        },
+        "default": null,
+        "filters": {
+            "bebaubar_mit": {
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Bebaubar mit",
+        "fieldMeasureFormat": null
+    },
+    "distanz_autobahn": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Dist. Autobahn (km)",
+        "fieldMeasureFormat": null
+    },
+    "gewerbliche_nutzung": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Gewerbliche Nutzung",
+        "fieldMeasureFormat": null
+    },
+    "objekttitel": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Objekttitel",
+        "fieldMeasureFormat": null
+    },
+    "status2": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "status2obj_inaktiv": "Inaktiv",
+            "status2obj_aktiv": "Aktiv",
+            "status2obj_archiviert": "Archiviert"
+        },
+        "default": "status2obj_aktiv",
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Status",
+        "fieldMeasureFormat": null
+    },
+    "etage": {
+        "type": "integer",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "etage": {
+                "immobilienart": ["wohnung", "waz", "buero_praxen", "einzelhandel", "gastgewerbe", "hallen_lager_prod", "land_und_forstwirtschaft", "zimmer"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Etage",
+        "fieldMeasureFormat": null
+    },
+    "anzahl_badezimmer": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "anzahl_badezimmer": {
+                "nutzungsarten": ["wohnen"],
+                "immobilienart": ["wohnung", "haus", "waz"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Anzahl Badezimmer",
+        "fieldMeasureFormat": "DATA_TYPE_NUMERIC"
+    },
+    "erbpacht": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "erbpacht": {
+                "vermarktungsarten": ["erbpacht"],
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Erbpacht",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "kabel_sat_tv": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "kabel_sat_tv": {
+                "nutzungsarten": ["wohnen"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Kabel Sat TV",
+        "fieldMeasureFormat": null
+    },
+    "distanz_zentrum": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Dist. Zentrum (km)",
+        "fieldMeasureFormat": null
+    },
+    "denkmalgeschuetzt": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "denkmalgeschuetzt": {
+                "immobilienart": ["haus"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Denkmalgesch\u00fctzt",
+        "fieldMeasureFormat": null
+    },
+    "benutzer": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Betreuer",
+        "fieldMeasureFormat": null
+    },
+    "energieausweistyp": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "Endenergiebedarf": "Bedarfsausweis",
+            "Energieverbrauchskennwert": "Verbrauchsausweis",
+            "Bedarfsausweis Gewerbe": "Bedarfsausweis Gewerbe",
+            "Verbrauchsausweis Gewerbe": "Verbrauchsausweis Gewerbe",
+            "es besteht keine Pflicht!": "es besteht keine Pflicht!",
+            "ohne Energieausweis": "ohne Energieausweis"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Energieausweis",
+        "fieldMeasureFormat": null
+    },
+    "ind_1946_Feld_ObjFreitexte8": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "notiz",
+        "fieldMeasureFormat": null
+    },
+    "grundstuecksflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "grundstuecksflaeche": {
+                "immobilienart": ["haus", "grundstueck", "land_und_forstwirtschaft", "nutzungsart_anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Grundst\u00fccksgr\u00f6\u00dfe",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "erschliessungskosten": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "erschliessungskosten": {
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Erschlie\u00dfungskosten",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "auftragsart": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "exklusiv": "Exklusiv",
+            "normal": "Normal"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Auftragsart",
+        "fieldMeasureFormat": null
+    },
+    "scout_region": {
+        "type": "varchar",
+        "length": 100,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Scout Region",
+        "fieldMeasureFormat": null
+    },
+    "multiParkingLot": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "multiParkingLot": {
+                "immobilienart": ["wohnung", "haus"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Stellpl\u00e4tze",
+        "fieldMeasureFormat": null
+    },
+    "endenergiebedarf": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Endenergiebedarf",
+        "fieldMeasureFormat": "DATA_TYPE_ENERGY_REQUIRED"
+    },
+    "ind_1948_Feld_ObjFreitexte9": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Verkaufsgrund",
+        "fieldMeasureFormat": null
+    },
+    "ind_1966_Feld_ObjVerwaltung17": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "ind_Schl_3081": "Sonstiges",
+            "ind_Schl_3079": "Verkauf",
+            "ind_Schl_3077": "Kauf",
+            "ind_Schl_3075": "Neugier"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Bewerungsanlass",
+        "fieldMeasureFormat": null
+    },
+    "wohnungsnr": {
+        "type": "varchar",
+        "length": 20,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "wohnungsnr": {
+                "stammobjekte": ["einheit"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Wohnungsnr.",
+        "fieldMeasureFormat": null
+    },
+    "bueroflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "bueroflaeche": {
+                "immobilienart": ["buero_praxen"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "B\u00fcrofl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "nettokaltmiete": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "nettokaltmiete": {
+                "nutzungsarten": ["gewerbe", "anlage"],
+                "vermarktungsarten": ["miete"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Netto Kaltmiete",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "auftragbis": {
+        "type": "date",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Auftrag bis",
+        "fieldMeasureFormat": "DATA_TYPE_DATE"
+    },
+    "balkon": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "balkon": {
+                "immobilienart": ["wohnung", "haus"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Balkon",
+        "fieldMeasureFormat": null
+    },
+    "energieverbrauchskennwert": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Endenergieverbrauch",
+        "fieldMeasureFormat": "DATA_TYPE_ENERGY_REQUIRED"
+    },
+    "ind_1952_Feld_ObjFreitexte11": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Kommentar",
+        "fieldMeasureFormat": null
+    },
+    "flur": {
+        "type": "varchar",
+        "length": 30,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "flur": {
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Flur",
+        "fieldMeasureFormat": null
+    },
+    "lagerflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "lagerflaeche": {
+                "nutzungsarten": ["gewerbe"],
+                "immobilienart": ["hallen_lager_prod", "nutzungsart_anlage", "einzelhandel", "gastgewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Lagerfl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "heizkosten_in_nebenkosten": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "J": "Ja",
+            "N": "Nein"
+        },
+        "default": null,
+        "filters": {
+            "heizkosten_in_nebenkosten": {
+                "vermarktungsarten": ["miete"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Heizkosten in Nebenkosten enthalten",
+        "fieldMeasureFormat": null
+    },
+    "verkauft_am": {
+        "type": "date",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Verkauft am",
+        "fieldMeasureFormat": "DATA_TYPE_DATE"
+    },
+    "terrasse": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "terrasse": {
+                "immobilienart": ["wohnung", "haus", "freizeitimmbilien_gewerblich"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Terrasse",
+        "fieldMeasureFormat": null
+    },
+    "energieausweis_gueltig_bis": {
+        "type": "date",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Energieausweis g\u00fcltig bis",
+        "fieldMeasureFormat": "DATA_TYPE_DATE"
+    },
+    "ind_1950_Feld_ObjFreitexte10": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Verkaufsaktivit\u00e4ten",
+        "fieldMeasureFormat": null
+    },
+    "flurstueck": {
+        "type": "varchar",
+        "length": 250,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "flurstueck": {
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Flurst\u00fcck",
+        "fieldMeasureFormat": null
+    },
+    "vermietbare_flaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "vermietbare_flaeche": {
+                "nutzungsarten": ["anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Vermietbare Fl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "nebenkosten": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "nebenkosten": {
+                "vermarktungsarten": ["miete"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Nebenkosten",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "wintergarten": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Wintergarten",
+        "fieldMeasureFormat": null
+    },
+    "energieausweisBaujahr": {
+        "type": "integer",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Baujahr lt. Energieausweis",
+        "fieldMeasureFormat": null
+    },
+    "stammobjekt": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Stammobjekt",
+        "fieldMeasureFormat": null
+    },
+    "gemarkung": {
+        "type": "varchar",
+        "length": 30,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "gemarkung": {
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Gemarkung",
+        "fieldMeasureFormat": null
+    },
+    "verkaufsflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "verkaufsflaeche": {
+                "nutzungsarten": ["gewerbe"],
+                "immobilienart": ["einzelhandel"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Verkaufsfl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "warmmiete": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "warmmiete": {
+                "vermarktungsarten": ["miete"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Warmmiete",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "sauna": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "sauna": {
+                "nutzungsarten": ["wohnen"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Sauna",
+        "fieldMeasureFormat": null
+    },
+    "energietraeger": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "wasser-elektro": "Erg\u00e4nzendes dezentrales Warmwasser",
+            "solar": "Solar",
+            "pelletheizung": "Pelletheizung",
+            "pellet": "Pellet",
+            "oel": "\u00d6l",
+            "luftwp": "Luft\/Wasser W\u00e4rmepumpe",
+            "kohle": "Kohle",
+            "gas": "Gas",
+            "fernwaerme": "Fernw\u00e4rme",
+            "erdwaerme": "Erdw\u00e4rme",
+            "elektro": "Elektro",
+            "block": "Blockheizkraftwerk",
+            "alternativ": "Alternativ",
+            "acidGas": "Erdgas leicht",
+            "sourGas": "Erdgas schwer",
+            "fluessiggas": "Fl\u00fcssiggas",
+            "steamDistrictHeating": "Fernw\u00e4rme Dampf",
+            "holz": "Holz",
+            "localHeating": "Nahw\u00e4rme",
+            "heatSupply": "W\u00e4rmelieferung",
+            "bioEnergy": "Bioenergie",
+            "windEnergy": "Windenergie",
+            "waterEnergy": "Wasserenergie",
+            "environmentalThermalEnergy": "Umweltw\u00e4rme",
+            "combinedHeatAndPowerFossilFuels": "KWK fossil",
+            "combinedHeatAndPowerRenewableEnergy": "KWK erneuerbar",
+            "combinedHeatAndPowerRegenerativeEnergy": "KWK regenerativ",
+            "combinedHeatAndPowerBioEnergy": "KWK Bio"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "wesentlicher Energietr\u00e4ger",
+        "fieldMeasureFormat": null
+    },
+    "ind_1984_Feld_ObjTech23": {
+        "type": "varchar",
+        "length": 80,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "MANDT_BUKRS_Objekt_Einheit",
+        "fieldMeasureFormat": null
+    },
+    "regionaler_zusatz": {
+        "type": "multiselect",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Regionaler Zusatz",
+        "fieldMeasureFormat": null
+    },
+    "pacht": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "pacht": {
+                "vermarktungsarten": ["pacht"],
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Pacht",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "nebenflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "nebenflaeche": {
+                "nutzungsarten": ["gewerbe"],
+                "immobilienart": ["buero_praxen", "einzelhandel", "gastgewerbe", "hallen_lager_prod", "land_und_forstwirtschaft"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Nebenfl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "unterkellert": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "JA": "Ja",
+            "NEIN": "Nein",
+            "TEIL": "Teilweise"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Unterkellert",
+        "fieldMeasureFormat": null
+    },
+    "placeholderEnergy": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "placeholderEnergy": {
+                "nutzungsarten": ["gewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Gewerbe",
+        "fieldMeasureFormat": null
+    },
+    "grz": {
+        "type": "varchar",
+        "length": 80,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "grz": {
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "GRZ",
+        "fieldMeasureFormat": null
+    },
+    "kaution": {
+        "type": "varchar",
+        "length": 80,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "kaution": {
+                "vermarktungsarten": ["miete"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Kaution",
+        "fieldMeasureFormat": null
+    },
+    "kamin": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "kamin": {
+                "nutzungsarten": ["wohnen"],
+                "immobilienart": ["wohnung", "haus", "waz"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Kamin",
+        "fieldMeasureFormat": null
+    },
+    "endenergiebedarfWaerme": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "endenergiebedarfWaerme": {
+                "nutzungsarten": ["gewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Endenergiebedarf (W\u00e4rme)",
+        "fieldMeasureFormat": null
+    },
+    "gfz": {
+        "type": "varchar",
+        "length": 80,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "gfz": {
+                "immobilienart": ["grundstueck"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "GFZ",
+        "fieldMeasureFormat": null
+    },
+    "zzgl_mehrwertsteuer": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "1": "Ja",
+            "0": "Nein"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "zzgl. MwSt. auf Provision",
+        "fieldMeasureFormat": null
+    },
+    "angeschl_gastronomie": {
+        "type": "multiselect",
+        "length": null,
+        "permittedvalues": {
+            "bar": "Bar",
+            "hotelrestaurant": "Hotel\/Restaurant"
+        },
+        "default": null,
+        "filters": {
+            "angeschl_gastronomie": {
+                "nutzungsarten": ["gewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Angeschl. Gastronomie",
+        "fieldMeasureFormat": null
+    },
+    "endenergieverbrauchWaerme": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "endenergieverbrauchWaerme": {
+                "nutzungsarten": ["gewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Endenergieverbrauch (W\u00e4rme)",
+        "fieldMeasureFormat": null
+    },
+    "ladenflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "ladenflaeche": {
+                "nutzungsarten": ["gewerbe"],
+                "immobilienart": ["einzelhandel"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Ladenfl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "kaltmiete": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "kaltmiete": {
+                "vermarktungsarten": ["miete"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Kaltmiete",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "fahrradraum": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Fahrradraum",
+        "fieldMeasureFormat": null
+    },
+    "endenergiebedarfStrom": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "endenergiebedarfStrom": {
+                "nutzungsarten": ["gewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Endenergiebedarf (Strom)",
+        "fieldMeasureFormat": null
+    },
+    "gastroflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "gastroflaeche": {
+                "immobilienart": ["gastgewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Gastrofl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "heizkosten": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "heizkosten": {
+                "vermarktungsarten": ["miete"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Heizkosten",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "endenergieverbrauchStrom": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "endenergieverbrauchStrom": {
+                "nutzungsarten": ["gewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Endenergieverbrauch (Strom)",
+        "fieldMeasureFormat": null
+    },
+    "gewerbeflaeche": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "gewerbeflaeche": {
+                "nutzungsarten": ["gewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Gewerbefl\u00e4che",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "miete_pauschal": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "miete_pauschal": {
+                "nutzungsarten": ["waz"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Pauschalmiete",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "energyClass": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "A": "A",
+            "A+": "A+",
+            "B": "B",
+            "C": "C",
+            "D": "D",
+            "E": "E",
+            "F": "F",
+            "G": "G",
+            "H": "H"
+        },
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Energieeffizienzklasse",
+        "fieldMeasureFormat": null
+    },
+    "anzahl_sep_wc": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "anzahl_sep_wc": {
+                "nutzungsarten": ["wohnen"],
+                "immobilienart": ["wohnung", "haus", "waz"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Anzahl sep. WC",
+        "fieldMeasureFormat": "DATA_TYPE_NUMERIC"
+    },
+    "miete_pauschal_pro": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "T": "Tag",
+            "W": "Woche",
+            "M": "Monat"
+        },
+        "default": null,
+        "filters": {
+            "miete_pauschal_pro": {
+                "nutzungsarten": ["waz"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Pauschalmiete pro",
+        "fieldMeasureFormat": null
+    },
+    "warmwasserEnthalten": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Warmwasser enthalten",
+        "fieldMeasureFormat": null
+    },
+    "anzahl_wohneinheiten": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "anzahl_wohneinheiten": {
+                "nutzungsarten": ["anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Anzahl Wohneinheiten",
+        "fieldMeasureFormat": "DATA_TYPE_NUMERIC"
+    },
+    "x_fache": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "x_fache": {
+                "nutzungsarten": ["anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "x fache (Ist)",
+        "fieldMeasureFormat": null
+    },
+    "einliegerwohnung": {
+        "type": "boolean",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "einliegerwohnung": {
+                "immobilienart": ["haus"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Einliegerwohnung",
+        "fieldMeasureFormat": null
+    },
+    "x_fache_soll": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "x_fache_soll": {
+                "nutzungsarten": ["anlage"],
+                "immobilienart": ["nutzungsart_anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "x fache (Soll)",
+        "fieldMeasureFormat": null
+    },
+    "mieteinnahmen_pro_monat": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "mieteinnahmen_pro_monat": {
+                "nutzungsarten": ["anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Mieteinnahmen pro Monat",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "anzahl_balkone": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "anzahl_balkone": {
+                "immobilienart": ["wohnung", "haus"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Anzahl Balkone",
+        "fieldMeasureFormat": "DATA_TYPE_NUMERIC"
+    },
+    "mieteinnahmen_ist": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "mieteinnahmen_ist": {
+                "nutzungsarten": ["anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "mtl. Mieteinnahmen (Ist)",
+        "fieldMeasureFormat": null
+    },
+    "anzahl_terrassen": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "anzahl_terrassen": {
+                "immobilienart": ["wohnung", "haus"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Anzahl Terrassen",
+        "fieldMeasureFormat": "DATA_TYPE_NUMERIC"
+    },
+    "teilbar_ab": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "teilbar_ab": {
+                "immobilienart": ["buero_praxen", "einzelhandel", "hallen_lager_prod", "land_und_forstwirtschaft"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "teilbar ab",
+        "fieldMeasureFormat": "DATA_TYPE_AREA"
+    },
+    "mieteinnahmen_soll": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "mieteinnahmen_soll": {
+                "nutzungsarten": ["anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "mtl. Mieteinnahmen (Soll)",
+        "fieldMeasureFormat": null
+    },
+    "anzahl_betten": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "anzahl_betten": {
+                "nutzungsarten": ["gewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Anzahl Betten",
+        "fieldMeasureFormat": "DATA_TYPE_NUMERIC"
+    },
+    "mieteinnahmen_pro_jahr_ist": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "mieteinnahmen_pro_jahr_ist": {
+                "nutzungsarten": ["anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Jahresmiete (Ist)",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "anzahl_tagungsraeume": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "anzahl_tagungsraeume": {
+                "nutzungsarten": ["gewerbe"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Anzahl Tagungsr\u00e4ume",
+        "fieldMeasureFormat": "DATA_TYPE_NUMERIC"
+    },
+    "mieteinnahmen_pro_jahr_soll": {
+        "type": "float",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": {
+            "mieteinnahmen_pro_jahr_soll": {
+                "nutzungsarten": ["anlage"]
+            }
+        },
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Jahresmiete (Soll)",
+        "fieldMeasureFormat": "DATA_TYPE_MONETARY"
+    },
+    "provisionsAbgabe": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "5": "5 %",
+            "10": "10 %",
+            "15": "15 %",
+            "20": "20 %",
+            "25": "25 %",
+            "30": "30 %",
+            "35": "35 %",
+            "40": "40 %",
+            "45": "45 %",
+            "50": "50 %",
+            "55": "55 %",
+            "60": "60 %",
+            "65": "65 %",
+            "70": "70 %",
+            "75": "75 %",
+            "80": "80 %",
+            "85": "85 %",
+            "90": "90 %",
+            "95": "95 %",
+            "100": "100 %"
+        },
+        "default": "50",
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "MLS Abgabe Au\u00dfenprovision",
+        "fieldMeasureFormat": null
+    },
+    "ind_1956_Feld_ObjFlaeche13": {
+        "type": "integer",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Parkpl\u00e4tze",
+        "fieldMeasureFormat": null
+    },
+    "provisionsAbgabe_innen": {
+        "type": "singleselect",
+        "length": null,
+        "permittedvalues": {
+            "0": "0 %",
+            "5": "5 %",
+            "10": "10 %",
+            "15": "15 %",
+            "20": "20 %",
+            "25": "25 %",
+            "30": "30 %",
+            "35": "35 %",
+            "40": "40 %",
+            "45": "45 %",
+            "50": "50 %",
+            "55": "55 %",
+            "60": "60 %",
+            "65": "65 %",
+            "70": "70 %",
+            "75": "75 %",
+            "80": "80 %",
+            "85": "85 %",
+            "90": "90 %",
+            "95": "95 %",
+            "100": "100 %"
+        },
+        "default": "50",
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "MLS Abgabe Innenprovision",
+        "fieldMeasureFormat": null
+    },
+    "ind_1960_Feld_ObjFlaeche14": {
+        "type": "varchar",
+        "length": 80,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "Wohnungsnummer",
+        "fieldMeasureFormat": null
+    },
+    "mls_provisionsAbgabe_beschreibung": {
+        "type": "text",
+        "length": null,
+        "permittedvalues": null,
+        "default": null,
+        "filters": [],
+        "dependencies": [],
+        "compoundFields": [],
+        "label": "MLS Abgabe Beschreibung",
+        "fieldMeasureFormat": null
+    }
+}

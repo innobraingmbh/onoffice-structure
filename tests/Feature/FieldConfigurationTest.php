@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Collection;
+use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\Structure\Collections\ModulesCollection;
 use Innobrain\Structure\Converters\ArrayConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
@@ -19,7 +20,7 @@ it('should be able to retrieve the field configuration', function () {
         'https://api.onoffice.de/api/stable/api.php/' => Illuminate\Support\Facades\Http::response($json),
     ]);
 
-    $modules = FieldConfiguration::retrieveForClient('test', 'test');
+    $modules = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
 
     expect($modules)->toBeInstanceOf(ModulesCollection::class) // Changed from Collection::class to ModulesCollection::class
         ->and($modules->first())->toBeInstanceOf(Module::class)
@@ -36,7 +37,7 @@ it('should be able to retrieve the field configuration for client 2', function (
         'https://api.onoffice.de/api/stable/api.php/' => Illuminate\Support\Facades\Http::response($json),
     ]);
 
-    $modules = FieldConfiguration::retrieveForClient('test', 'test');
+    $modules = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
 
     expect($modules)->toBeInstanceOf(ModulesCollection::class) // Changed from Collection::class to ModulesCollection::class
         ->and($modules->first())->toBeInstanceOf(Module::class)
@@ -53,7 +54,7 @@ it('should correctly convert retrieved field configuration to array using ArrayC
         'https://api.onoffice.de/api/stable/api.php/' => Illuminate\Support\Facades\Http::response($jsonResponse),
     ]);
 
-    $modulesCollection = FieldConfiguration::retrieveForClient('test-token', 'test-secret');
+    $modulesCollection = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
 
     // Test with dropEmpty: false
     $strategyKeepEmpty = new ArrayConvertStrategy(dropEmpty: false);
@@ -179,7 +180,7 @@ it('should correctly convert retrieved field configuration from FieldsResponse_j
         'https://api.onoffice.de/api/stable/api.php/' => Illuminate\Support\Facades\Http::response($jsonResponse),
     ]);
 
-    $modulesCollection = FieldConfiguration::retrieveForClient('test-token', 'test-secret');
+    $modulesCollection = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
 
     // Test with dropEmpty: false
     $strategyKeepEmpty = new ArrayConvertStrategy(dropEmpty: false);

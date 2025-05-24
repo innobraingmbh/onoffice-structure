@@ -6,6 +6,7 @@ namespace Innobrain\Structure;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\OnOfficeAdapter\Facades\FieldRepository;
 use Innobrain\Structure\Collections\ModulesCollection;
 use Innobrain\Structure\DTOs\Field;
@@ -25,7 +26,7 @@ class FieldConfiguration
     /**
      * Retrieve the field configuration for a given client.
      */
-    public function retrieveForClient(string $token, string $secret, string $apiClaim = ''): ModulesCollection
+    public function retrieveForClient(OnOfficeApiCredentials $credentials): ModulesCollection
     {
         $moduleCases = FieldConfigurationModule::cases();
         $moduleValues = collect($moduleCases)
@@ -33,7 +34,7 @@ class FieldConfiguration
             ->toArray();
 
         $rawModulesData = FieldRepository::query()
-            ->withCredentials($token, $secret, $apiClaim)
+            ->withCredentials($credentials)
             ->withModules($moduleValues)
             ->parameters([
                 'labels' => true,
