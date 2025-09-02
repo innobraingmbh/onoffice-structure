@@ -20,7 +20,7 @@ it('generates correct Laravel validation rules from the field configuration (Fie
     $json = json_decode($file, true);
 
     Http::fake([
-        'https://api.onoffice.de/api/stable/api.php/' => Http::response($json),
+        'https://api.onoffice.de/api/stable/api.php' => Http::response($json),
     ]);
 
     // ------------------------------------------------------------------
@@ -68,7 +68,7 @@ it('generates correct Laravel validation rules from FieldsResponse_json field co
     $json = json_decode($file, true);
 
     Http::fake([
-        'https://api.onoffice.de/api/stable/api.php/' => Http::response($json),
+        'https://api.onoffice.de/api/stable/api.php' => Http::response($json),
     ]);
 
     // ------------------------------------------------------------------

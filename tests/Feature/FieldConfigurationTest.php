@@ -17,7 +17,7 @@ it('should be able to retrieve the field configuration', function () {
     $json = json_decode($file, true);
 
     Illuminate\Support\Facades\Http::fake([
-        'https://api.onoffice.de/api/stable/api.php/' => Illuminate\Support\Facades\Http::response($json),
+        'https://api.onoffice.de/api/stable/api.php' => Illuminate\Support\Facades\Http::response($json),
     ]);
 
     $modules = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
@@ -34,7 +34,7 @@ it('should be able to retrieve the field configuration for client 2', function (
     $json = json_decode($file, true);
 
     Illuminate\Support\Facades\Http::fake([
-        'https://api.onoffice.de/api/stable/api.php/' => Illuminate\Support\Facades\Http::response($json),
+        'https://api.onoffice.de/api/stable/api.php' => Illuminate\Support\Facades\Http::response($json),
     ]);
 
     $modules = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
@@ -51,7 +51,7 @@ it('should correctly convert retrieved field configuration to array using ArrayC
     $jsonResponse = json_decode($file, true);
 
     Illuminate\Support\Facades\Http::fake([
-        'https://api.onoffice.de/api/stable/api.php/' => Illuminate\Support\Facades\Http::response($jsonResponse),
+        'https://api.onoffice.de/api/stable/api.php' => Illuminate\Support\Facades\Http::response($jsonResponse),
     ]);
 
     $modulesCollection = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
@@ -177,7 +177,7 @@ it('should correctly convert retrieved field configuration from FieldsResponse_j
     $jsonResponse = json_decode($file, true);
 
     Illuminate\Support\Facades\Http::fake([
-        'https://api.onoffice.de/api/stable/api.php/' => Illuminate\Support\Facades\Http::response($jsonResponse),
+        'https://api.onoffice.de/api/stable/api.php' => Illuminate\Support\Facades\Http::response($jsonResponse),
     ]);
 
     $modulesCollection = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
