@@ -65,8 +65,8 @@ class FieldConfiguration
             $parsedFields = $this->parseFields(Arr::get($moduleData, 'elements', []));
 
             $modules->put($moduleEnum->value, new Module(
-                key   : $moduleEnum,
-                label : $moduleLabel,
+                key: $moduleEnum,
+                label: $moduleLabel,
                 fields: $parsedFields,
             ));
         }
@@ -96,15 +96,15 @@ class FieldConfiguration
             }
 
             $fields->put((string) $fieldKey, new Field(
-                key               : (string) $fieldKey,
-                label             : (string) Arr::get($fieldData, 'label', ucfirst((string) $fieldKey)),
-                type              : $fieldType,
-                length            : Arr::get($fieldData, 'length') ? (int) Arr::get($fieldData, 'length') : null,
-                permittedValues   : $this->parsePermittedValues(Arr::get($fieldData, 'permittedvalues', [])),
-                default           : Arr::get($fieldData, 'default') ? (string) Arr::get($fieldData, 'default') : null,
-                filters           : $this->parseFieldFilters(Arr::get($fieldData, 'filters', [])),
-                dependencies      : $this->parseFieldDependencies(Arr::get($fieldData, 'dependencies', [])),
-                compoundFields    : collect(Arr::get($fieldData, 'compoundFields', [])),
+                key: (string) $fieldKey,
+                label: (string) Arr::get($fieldData, 'label', ucfirst((string) $fieldKey)),
+                type: $fieldType,
+                length: Arr::get($fieldData, 'length') ? (int) Arr::get($fieldData, 'length') : null,
+                permittedValues: $this->parsePermittedValues(Arr::get($fieldData, 'permittedvalues', [])),
+                default: Arr::get($fieldData, 'default') ? (string) Arr::get($fieldData, 'default') : null,
+                filters: $this->parseFieldFilters(Arr::get($fieldData, 'filters', [])),
+                dependencies: $this->parseFieldDependencies(Arr::get($fieldData, 'dependencies', [])),
+                compoundFields: collect(Arr::get($fieldData, 'compoundFields', [])),
                 fieldMeasureFormat: Arr::get($fieldData, 'fieldMeasureFormat') ? (string) Arr::get($fieldData, 'fieldMeasureFormat') : null,
             ));
         }
@@ -125,7 +125,7 @@ class FieldConfiguration
 
         foreach ($permittedValuesData as $key => $label) {
             $permittedValues->put((string) $key, new PermittedValue(
-                key  : (string) $key,
+                key: (string) $key,
                 label: (string) $label,
             ));
         }
@@ -170,7 +170,7 @@ class FieldConfiguration
             foreach ($dependenciesData as $key => $value) {
                 if (is_string($key) && is_string($value)) {
                     $dependencies->add(new FieldDependency(
-                        dependentFieldKey  : $key,
+                        dependentFieldKey: $key,
                         dependentFieldValue: $value,
                     ));
                 }
