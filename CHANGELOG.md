@@ -2,6 +2,10 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v0.1.3 - 2025-09-19
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v0.0.2...v0.1.3
+
 ## v0.0.2 - 2025-09-19
 
 ### What's Changed
