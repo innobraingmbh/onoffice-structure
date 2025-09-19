@@ -26,7 +26,7 @@ class FieldConfiguration
     /**
      * Retrieve the field configuration for a given client.
      */
-    public function retrieveForClient(OnOfficeApiCredentials $credentials, array $only): ModulesCollection
+    public function retrieveForClient(OnOfficeApiCredentials $credentials, array $only = []): ModulesCollection
     {
         $moduleCases = FieldConfigurationModule::cases();
         $moduleValues = collect($moduleCases)
