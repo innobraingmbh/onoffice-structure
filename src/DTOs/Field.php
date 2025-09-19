@@ -31,4 +31,23 @@ class Field implements Convertible
         public readonly Collection $compoundFields,
         public readonly ?string $fieldMeasureFormat
     ) {}
+
+    /**
+     * @param  Collection<string, PermittedValue>  $permittedValues
+     */
+    public function withPermittedValues(Collection $permittedValues): self
+    {
+        return new self(
+            key: $this->key,
+            label: $this->label,
+            type: $this->type,
+            length: $this->length,
+            permittedValues: $permittedValues,
+            default: $this->default,
+            filters: $this->filters,
+            dependencies: $this->dependencies,
+            compoundFields: $this->compoundFields,
+            fieldMeasureFormat: $this->fieldMeasureFormat
+        );
+    }
 }
