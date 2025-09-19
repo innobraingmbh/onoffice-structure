@@ -20,6 +20,6 @@ final class ModulesCollection extends Collection implements Convertible
     public function convert(ConvertStrategy $strategy): array
     {
         // Override default trait behaviour: convert every module inside.
-        return $this->map(fn ($module) => $module->convert($strategy))->toArray();
+        return $this->map(fn (Module $module) => $module->convert($strategy))->toArray();
     }
 }

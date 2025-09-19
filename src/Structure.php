@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure;
 
+use Illuminate\Support\Arr;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\Structure\Collections\ModulesCollection;
 
@@ -21,8 +22,8 @@ class Structure
         return $this;
     }
 
-    public function get(): ModulesCollection
+    public function getModules(string|array $only = []): ModulesCollection
     {
-        return $this->fieldConfiguration->retrieveForClient($this->onOfficeApiCredentials);
+        return $this->fieldConfiguration->retrieveForClient($this->onOfficeApiCredentials, Arr::wrap($only));
     }
 }

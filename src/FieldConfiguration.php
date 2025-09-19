@@ -26,12 +26,16 @@ class FieldConfiguration
     /**
      * Retrieve the field configuration for a given client.
      */
-    public function retrieveForClient(OnOfficeApiCredentials $credentials): ModulesCollection
+    public function retrieveForClient(OnOfficeApiCredentials $credentials, array $only): ModulesCollection
     {
         $moduleCases = FieldConfigurationModule::cases();
         $moduleValues = collect($moduleCases)
             ->map(fn (FieldConfigurationModule $module) => $module->value)
             ->toArray();
+
+        if (count($only) > 0) {
+            $moduleValues = array_filter($moduleValues, fn (string $value) => in_array($value, $only, true));
+        }
 
         $rawModulesData = FieldRepository::query()
             ->withCredentials($credentials)
@@ -54,6 +58,7 @@ class FieldConfiguration
             if (! is_array($moduleData['elements'])) {
                 continue;
             }
+
             $moduleKey = $moduleData['id'] ?? $moduleKey;
             $moduleEnum = FieldConfigurationModule::tryFrom((string) $moduleKey);
 
@@ -154,7 +159,7 @@ class FieldConfiguration
             }
 
             $filters->put((string) $filterName, new FieldFilter(
-                name  : (string) $filterName,
+                name: (string) $filterName,
                 config: $configCollection,
             ));
         }

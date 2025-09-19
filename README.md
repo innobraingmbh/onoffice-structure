@@ -64,7 +64,7 @@ use Innobrain\Structure\Collections\ModulesCollection;
 $credentials = new OnOfficeApiCredentials('your-token', 'your-secret');
 
 // Fetch the structure
-$modulesCollection = Structure::forClient($credentials)->get();
+$modulesCollection = Structure::forClient($credentials)->getModules();
 
 // $modulesCollection is an instance of Innobrain\Structure\Collections\ModulesCollection
 // which extends Illuminate\Support\Collection. It contains Module DTOs.
@@ -171,6 +171,51 @@ $emailFieldRules = $emailField->convert($strategyPipe); // e.g., 'string|max:100
 Constructor options for `LaravelRulesConvertStrategy`:
 *   `bool $pipeSyntax` (default `true`): If `true`, rules are returned as a pipe-separated string (e.g., `'string|max:80|nullable'`). If `false`, rules are an array (e.g., `['string', 'max:80', 'nullable']`).
 *   `bool $includeNullable` (default `true`): If `true`, the `'nullable'` rule is automatically added to fields that do not have a default value defined in the onOffice configuration.
+
+#### 3. Prism Schema Conversion (`PrismSchemaConvertStrategy`)
+
+This strategy converts module or field DTOs into [Prism PHP](https://prismphp.com/) schemas, which can be used for structured data generation with AI providers.
+
+```php
+use Innobrain\Structure\Converters\PrismSchemaConvertStrategy;
+use Prism\Prism\Schema\ObjectSchema;
+
+// Convert an entire module to a Prism ObjectSchema
+$addressModule = $modulesCollection->get(FieldConfigurationModule::Address->value);
+$strategy = new PrismSchemaConvertStrategy(
+    includeNullable: true,     // Mark fields without defaults as nullable
+    includeDescriptions: true   // Include field labels as descriptions
+);
+$addressSchema = $addressModule->convert($strategy);
+// Returns an ObjectSchema with properties for each field
+
+// Convert a single field to its appropriate Prism schema
+$emailField = $addressModule->fields->get('Email');
+$emailSchema = $emailField->convert($strategy);
+// Returns a StringSchema with max length constraint in description
+
+// Use the schema with Prism for AI-powered data generation
+use Prism\Prism;
+use Prism\Providers\OpenRouter\OpenRouter;
+
+$prism = Prism::using(OpenRouter::instance())
+    ->withStructuredOutput($addressSchema);
+
+$response = $prism->generate('Create a realistic address entry');
+```
+
+The `PrismSchemaConvertStrategy` maps field types as follows:
+*   `VarChar/Text/Blob` → `StringSchema` (with length constraint in description)
+*   `Integer` → `NumberSchema`
+*   `Float` → `NumberSchema`
+*   `Boolean` → `BooleanSchema`
+*   `Date/DateTime` → `StringSchema` (with format hint in description)
+*   `SingleSelect` → `EnumSchema` (with permitted values as options)
+*   `MultiSelect` → `ArraySchema` (containing `EnumSchema` items)
+
+Constructor options for `PrismSchemaConvertStrategy`:
+*   `bool $includeNullable` (default `true`): If `true`, fields without default values are marked as nullable.
+*   `bool $includeDescriptions` (default `true`): If `true`, field labels are included as schema descriptions.
 
 ## Data Transfer Objects (DTOs)
 
