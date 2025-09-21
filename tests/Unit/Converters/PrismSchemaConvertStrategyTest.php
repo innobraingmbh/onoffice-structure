@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Converters\PrismSchemaConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldDependency;
@@ -222,7 +223,7 @@ describe('PrismSchemaConvertStrategy', function () {
             $module = new Module(
                 key: FieldConfigurationModule::Address,
                 label: 'Address Information',
-                fields: collect([
+                fields: new FieldCollection([
                     'street' => new Field(
                         key: 'street',
                         label: 'Street',

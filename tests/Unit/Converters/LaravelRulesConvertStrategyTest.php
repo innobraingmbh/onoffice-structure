@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Innobrain\Structure\Tests\Unit\Converters;
 
 use Illuminate\Support\Collection;
+use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Converters\LaravelRulesConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldDependency;
@@ -91,7 +92,7 @@ describe('LaravelRulesConvertStrategy', function () {
             $module = new Module(
                 key: FieldConfigurationModule::Address,
                 label: 'Address',
-                fields: new Collection(['tags' => $multiselect]),
+                fields: new FieldCollection(['tags' => $multiselect]),
             );
 
             $strategy = new LaravelRulesConvertStrategy(pipeSyntax: true, includeNullable: true);

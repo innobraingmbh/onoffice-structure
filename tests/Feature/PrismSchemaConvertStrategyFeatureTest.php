@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Collection;
+use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;
 use Innobrain\Structure\Converters\PrismSchemaConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
@@ -24,7 +25,7 @@ describe('PrismSchemaConvertStrategy Feature Tests', function () {
         $module = new Module(
             key: FieldConfigurationModule::Estate,
             label: 'Real Estate Properties',
-            fields: collect([
+            fields: new FieldCollection([
                 'objekttitel' => new Field(
                     key: 'objekttitel',
                     label: 'Property Title',
@@ -200,7 +201,7 @@ describe('PrismSchemaConvertStrategy Feature Tests', function () {
         $collection->put('contact', new Module(
             key: FieldConfigurationModule::Address,
             label: 'Contact Information',
-            fields: collect([
+            fields: new FieldCollection([
                 'email' => new Field(
                     key: 'email',
                     label: 'Email Address',
@@ -242,7 +243,7 @@ describe('PrismSchemaConvertStrategy Feature Tests', function () {
         $module = new Module(
             key: FieldConfigurationModule::Estate,
             label: 'Complex Module',
-            fields: collect([
+            fields: new FieldCollection([
                 'varchar_field' => new Field(
                     key: 'varchar_field',
                     label: 'VarChar Field',
@@ -407,7 +408,7 @@ describe('PrismSchemaConvertStrategy Feature Tests', function () {
         $module = new Module(
             key: FieldConfigurationModule::Estate,
             label: 'Test Module',
-            fields: collect([
+            fields: new FieldCollection([
                 'field1' => new Field(
                     key: 'field1',
                     label: 'Field 1',

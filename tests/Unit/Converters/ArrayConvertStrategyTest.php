@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Innobrain\Structure\Tests\Unit\Converters;
 
 use Illuminate\Support\Collection;
+use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;
 use Innobrain\Structure\Converters\ArrayConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
@@ -202,7 +203,7 @@ describe('ArrayConvertStrategy', function () {
             $module = new Module(
                 key: FieldConfigurationModule::Address,
                 label: 'Address Module',
-                fields: new Collection(['field1' => $field])
+                fields: new FieldCollection(['field1' => $field])
             );
             $strategy = new ArrayConvertStrategy(dropEmpty: false);
             $result = $module->convert($strategy);
@@ -231,7 +232,7 @@ describe('ArrayConvertStrategy', function () {
             $module = new Module(
                 key: FieldConfigurationModule::Address,
                 label: 'Address Module',
-                fields: new Collection // empty fields
+                fields: new FieldCollection // empty fields
             );
             $strategy = new ArrayConvertStrategy(dropEmpty: true);
             $result = $module->convert($strategy);
@@ -248,7 +249,7 @@ describe('ArrayConvertStrategy', function () {
             $module = new Module(
                 key: FieldConfigurationModule::Address,
                 label: 'Address Module',
-                fields: new Collection // empty fields
+                fields: new FieldCollection // empty fields
             );
             $strategy = new ArrayConvertStrategy(dropEmpty: false);
             $result = $module->convert($strategy);
@@ -271,7 +272,7 @@ describe('ArrayConvertStrategy', function () {
             $module1 = new Module(
                 key: FieldConfigurationModule::Address,
                 label: 'Address Module',
-                fields: new Collection(['field1' => $module1Field])
+                fields: new FieldCollection(['field1' => $module1Field])
             );
 
             $module2Field = new Field(
@@ -282,7 +283,7 @@ describe('ArrayConvertStrategy', function () {
             $module2 = new Module(
                 key: FieldConfigurationModule::Estate,
                 label: 'Estate Module',
-                fields: new Collection(['field2' => $module2Field])
+                fields: new FieldCollection(['field2' => $module2Field])
             );
 
             $modulesCollection = new ModulesCollection([$module1, $module2]);
@@ -323,13 +324,13 @@ describe('ArrayConvertStrategy', function () {
             $module1 = new Module(
                 key: FieldConfigurationModule::Address,
                 label: 'Address Module',
-                fields: new Collection(['field1' => $module1Field])
+                fields: new FieldCollection(['field1' => $module1Field])
             );
 
             $module2 = new Module( // Module with empty fields
                 key: FieldConfigurationModule::Estate,
                 label: 'Estate Module',
-                fields: new Collection
+                fields: new FieldCollection
             );
 
             $modulesCollection = new ModulesCollection([$module1, $module2]);
