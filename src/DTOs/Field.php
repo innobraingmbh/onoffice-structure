@@ -64,6 +64,7 @@ class Field implements Convertible
 
         // Check each filter on this field
         foreach ($this->filters as $filter) {
+            /** @phpstan-ignore-next-line */
             if (! $filter instanceof FieldFilter) {
                 continue;
             }
