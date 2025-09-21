@@ -50,4 +50,34 @@ class Field implements Convertible
             fieldMeasureFormat: $this->fieldMeasureFormat
         );
     }
+
+    /**
+     * Check if this field matches the provided filter values
+     *
+     * @param  array<string, string>  $filterValues  Array of filter keys and their values
+     */
+    public function matchesFilters(array $filterValues): bool
+    {
+        if ($this->filters->isEmpty()) {
+            return true;
+        }
+
+        // Check each filter on this field
+        foreach ($this->filters as $filter) {
+            if (! $filter instanceof FieldFilter) {
+                continue;
+            }
+
+            // Check each filter configuration
+            foreach ($filter->config as $filterKey => $allowedValues) {
+                // If we have a value for this filter key
+                // Check if the current value is in the allowed values
+                if (isset($filterValues[$filterKey]) && ! in_array($filterValues[$filterKey], $allowedValues, true)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }

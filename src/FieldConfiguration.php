@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\OnOfficeAdapter\Facades\FieldRepository;
+use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;
 use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldDependency;
@@ -81,11 +82,10 @@ class FieldConfiguration
 
     /**
      * @param  array<string, mixed>  $fieldsData
-     * @return Collection<string, Field>
      */
-    private function parseFields(array $fieldsData): Collection
+    private function parseFields(array $fieldsData): FieldCollection
     {
-        $fields = new Collection;
+        $fields = new FieldCollection;
 
         foreach ($fieldsData as $fieldKey => $fieldData) {
             if (! is_array($fieldData)) {
