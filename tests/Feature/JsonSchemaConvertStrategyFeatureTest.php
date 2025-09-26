@@ -2,13 +2,7 @@
 
 declare(strict_types=1);
 
-use Illuminate\JsonSchema\JsonSchema;
-use Illuminate\JsonSchema\Types\ArrayType;
-use Illuminate\JsonSchema\Types\BooleanType;
-use Illuminate\JsonSchema\Types\IntegerType;
-use Illuminate\JsonSchema\Types\NumberType;
 use Illuminate\JsonSchema\Types\ObjectType;
-use Illuminate\JsonSchema\Types\StringType;
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;

@@ -31,15 +31,13 @@ use Innobrain\Structure\Enums\FieldType;
 final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
 {
     /**
-     * @param bool $includeNullable true ➜ mark fields as nullable when they have no default
-     * @param bool $includeDescriptions true ➜ include field labels as descriptions
+     * @param  bool  $includeNullable  true ➜ mark fields as nullable when they have no default
+     * @param  bool  $includeDescriptions  true ➜ include field labels as descriptions
      */
     public function __construct(
         private bool $includeNullable = true,
         private bool $includeDescriptions = true,
-    )
-    {
-    }
+    ) {}
 
     /* ---------------------------------------------------------------------
      * ConvertStrategy – leaf DTOs
@@ -119,8 +117,8 @@ final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
             FieldType::Integer => $this->createStandardSchema($field, 'integer', $name, $description, $nullable),
             FieldType::Float => $this->createStandardSchema($field, 'number', $name, $description, $nullable),
             FieldType::Boolean => $this->createStandardSchema($field, 'boolean', $name, $description, $nullable),
-            FieldType::Date => $this->createStandardSchema($field, 'string', $name, $description ? $description . ' (Date format: YYYY-MM-DD)' : 'Date format: YYYY-MM-DD', $nullable),
-            FieldType::DateTime => $this->createStandardSchema($field, 'string', $name, $description ? $description . ' (DateTime format: ISO 8601)' : 'DateTime format: ISO 8601', $nullable),
+            FieldType::Date => $this->createStandardSchema($field, 'string', $name, $description ? $description.' (Date format: YYYY-MM-DD)' : 'Date format: YYYY-MM-DD', $nullable),
+            FieldType::DateTime => $this->createStandardSchema($field, 'string', $name, $description ? $description.' (DateTime format: ISO 8601)' : 'DateTime format: ISO 8601', $nullable),
             FieldType::SingleSelect => $this->createEnumSchema($field, $name, $description, $nullable),
             FieldType::MultiSelect => $this->createMultiSelectSchema($field, $name, $description, $nullable),
         };
@@ -151,7 +149,7 @@ final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
         $finalDescription = $description ?? '';
         if ($field->length && $this->includeDescriptions) {
             $lengthInfo = " (max length: $field->length)";
-            $jsonSchema->description($finalDescription !== '' && $finalDescription !== '0' ? $finalDescription . $lengthInfo : $lengthInfo);
+            $jsonSchema->description($finalDescription !== '' && $finalDescription !== '0' ? $finalDescription.$lengthInfo : $lengthInfo);
         }
 
         if ($field->length) {
@@ -211,7 +209,7 @@ final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
                 ->title($name)
                 ->items(
                     JsonSchema::string()
-                        ->title($name . '_item')
+                        ->title($name.'_item')
                         ->description('Item value')
                         ->required()
                 )
