@@ -10,7 +10,6 @@ use RectorLaravel\Rector\Class_\RemoveModelPropertyFromFactoriesRector;
 use RectorLaravel\Rector\ClassMethod\AddGenericReturnTypeToRelationsRector;
 use RectorLaravel\Rector\Coalesce\ApplyDefaultInsteadOfNullCoalesceRector;
 use RectorLaravel\Rector\Empty_\EmptyToBlankAndFilledFuncRector;
-use RectorLaravel\Rector\Expr\AppEnvironmentComparisonToParameterRector;
 use RectorLaravel\Rector\Expr\SubStrToStartsWithOrEndsWithStaticMethodCallRector\SubStrToStartsWithOrEndsWithStaticMethodCallRector;
 use RectorLaravel\Rector\FuncCall\FactoryFuncCallToStaticCallRector;
 use RectorLaravel\Rector\FuncCall\NotFilledBlankFuncCallToBlankFilledFuncCallRector;
@@ -62,7 +61,6 @@ return RectorConfig::configure()
     ])
     ->withRules(rules: [
         AddGenericReturnTypeToRelationsRector::class,
-        AppEnvironmentComparisonToParameterRector::class,
         ApplyDefaultInsteadOfNullCoalesceRector::class,
         AssertStatusToAssertMethodRector::class,
         CarbonSetTestNowToTravelToRector::class,
