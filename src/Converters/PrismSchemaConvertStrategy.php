@@ -120,12 +120,7 @@ final readonly class PrismSchemaConvertStrategy implements ConvertStrategy
 
         return match ($field->type) {
             FieldType::VarChar, FieldType::Text, FieldType::Blob => $this->createStringSchema($field, $name, $description, $nullable),
-            FieldType::Integer => new NumberSchema(
-                name: $name,
-                description: $description ?? '',
-                nullable: $nullable
-            ),
-            FieldType::Float => new NumberSchema(
+            FieldType::Integer, FieldType::Float => new NumberSchema(
                 name: $name,
                 description: $description ?? '',
                 nullable: $nullable

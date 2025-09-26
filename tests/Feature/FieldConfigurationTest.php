@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\Structure\Collections\ModulesCollection;
 use Innobrain\Structure\Converters\ArrayConvertStrategy;
@@ -12,12 +13,14 @@ use Innobrain\Structure\DTOs\Module;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Facades\FieldConfiguration;
 
+use function Pest\testDirectory;
+
 it('should be able to retrieve the field configuration', function () {
-    $file = file_get_contents(Pest\testDirectory('Stubs/FieldsResponse.json'));
+    $file = file_get_contents(testDirectory('Stubs/FieldsResponse.json'));
     $json = json_decode($file, true);
 
-    Illuminate\Support\Facades\Http::fake([
-        'https://api.onoffice.de/api/stable/api.php' => Illuminate\Support\Facades\Http::response($json),
+    Http::fake([
+        'https://api.onoffice.de/api/stable/api.php' => Http::response($json),
     ]);
 
     $modules = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
@@ -30,11 +33,11 @@ it('should be able to retrieve the field configuration', function () {
 });
 
 it('should be able to retrieve the field configuration for client 2', function () {
-    $file = file_get_contents(Pest\testDirectory('Stubs/FieldsResponse2.json'));
+    $file = file_get_contents(testDirectory('Stubs/FieldsResponse2.json'));
     $json = json_decode($file, true);
 
-    Illuminate\Support\Facades\Http::fake([
-        'https://api.onoffice.de/api/stable/api.php' => Illuminate\Support\Facades\Http::response($json),
+    Http::fake([
+        'https://api.onoffice.de/api/stable/api.php' => Http::response($json),
     ]);
 
     $modules = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
@@ -47,11 +50,11 @@ it('should be able to retrieve the field configuration for client 2', function (
 });
 
 it('should correctly convert retrieved field configuration to array using ArrayConvertStrategy', function () {
-    $file = file_get_contents(Pest\testDirectory('Stubs/FieldsResponse2.json'));
+    $file = file_get_contents(testDirectory('Stubs/FieldsResponse2.json'));
     $jsonResponse = json_decode($file, true);
 
-    Illuminate\Support\Facades\Http::fake([
-        'https://api.onoffice.de/api/stable/api.php' => Illuminate\Support\Facades\Http::response($jsonResponse),
+    Http::fake([
+        'https://api.onoffice.de/api/stable/api.php' => Http::response($jsonResponse),
     ]);
 
     $modulesCollection = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));
@@ -176,8 +179,8 @@ it('should correctly convert retrieved field configuration from FieldsResponse_j
     $file = file_get_contents(Pest\testDirectory('Stubs/FieldsResponse.json'));
     $jsonResponse = json_decode($file, true);
 
-    Illuminate\Support\Facades\Http::fake([
-        'https://api.onoffice.de/api/stable/api.php' => Illuminate\Support\Facades\Http::response($jsonResponse),
+    Http::fake([
+        'https://api.onoffice.de/api/stable/api.php' => Http::response($jsonResponse),
     ]);
 
     $modulesCollection = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'));

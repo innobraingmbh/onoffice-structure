@@ -8,6 +8,8 @@ use Innobrain\Structure\Converters\LaravelRulesConvertStrategy;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Facades\FieldConfiguration;
 
+use function Pest\testDirectory;
+
 /**
  * Feature-level test: ensure LaravelRulesConvertStrategy processes the real
  * onOffice field configuration correctly.
@@ -16,7 +18,7 @@ it('generates correct Laravel validation rules from the field configuration (Fie
     // ------------------------------------------------------------------
     // 1. Fake onOffice API response with FieldsResponse2.json.
     // ------------------------------------------------------------------
-    $file = file_get_contents(Pest\testDirectory('Stubs/FieldsResponse2.json'));
+    $file = file_get_contents(testDirectory('Stubs/FieldsResponse2.json'));
     $json = json_decode($file, true);
 
     Http::fake([
@@ -64,7 +66,7 @@ it('generates correct Laravel validation rules from FieldsResponse_json field co
     // ------------------------------------------------------------------
     // 1. Fake onOffice API response with FieldsResponse.json.
     // ------------------------------------------------------------------
-    $file = file_get_contents(Pest\testDirectory('Stubs/FieldsResponse.json'));
+    $file = file_get_contents(testDirectory('Stubs/FieldsResponse.json'));
     $json = json_decode($file, true);
 
     Http::fake([
