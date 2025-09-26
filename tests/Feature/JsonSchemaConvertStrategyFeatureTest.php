@@ -7,19 +7,12 @@ use Illuminate\Support\Collection;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;
 use Innobrain\Structure\Converters\JsonSchemaConvertStrategy;
-use Innobrain\Structure\Converters\PrismSchemaConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldDependency;
 use Innobrain\Structure\DTOs\Module;
 use Innobrain\Structure\DTOs\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldType;
-use Prism\Prism\Schema\ArraySchema;
-use Prism\Prism\Schema\BooleanSchema;
-use Prism\Prism\Schema\EnumSchema;
-use Prism\Prism\Schema\NumberSchema;
-use Prism\Prism\Schema\ObjectSchema;
-use Prism\Prism\Schema\StringSchema;
 
 describe('JsonSchemaConvertStrategy Feature Tests', function () {
     it('converts a complete real-world module structure', function () {
@@ -195,10 +188,10 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
             ->and($properties['beschreibung']['type'])->toBe('string')
             // Check required fields
             ->and($schema['required'])->toBeArray()
-            ->and($schema['required'])->toContain('zimmer')
-            ->and($schema['required'])->toContain('verfuegbar')
-            ->and($schema['required'])->not->toContain('objekttitel')
-            ->and($schema['required'])->not->toContain('verfuegbar_ab');
+            ->toContain('zimmer')
+            ->toContain('verfuegbar')
+            ->not->toContain('objekttitel')
+            ->not->toContain('verfuegbar_ab');
     });
 
     it('handles ModulesCollection conversion', function () {
@@ -236,14 +229,14 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
             ])
         ));
 
-        $strategy = new PrismSchemaConvertStrategy;
+        $strategy = new JsonSchemaConvertStrategy;
 
         // Convert each module in the collection
         $schemas = $collection->map(fn ($module) => $module->convert($strategy));
 
         expect($schemas)->toHaveCount(1)
-            ->and($schemas->first())->toBeInstanceOf(ObjectSchema::class)
-            ->and($schemas->first()->properties)->toHaveCount(2);
+            ->and($schemas->first())->toBeInstanceOf(ObjectType::class)
+            ->and($schemas->first()->toArray()['properties'])->toHaveCount(2);
     });
 
     it('converts complex nested structure with all field types', function () {
@@ -381,34 +374,36 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
             ])
         );
 
-        $strategy = new PrismSchemaConvertStrategy;
+        $strategy = new JsonSchemaConvertStrategy;
         $schema = $module->convert($strategy);
 
-        expect($schema)->toBeInstanceOf(ObjectSchema::class)
-            ->and($schema->properties)->toHaveCount(10);
+        expect($schema)->toBeInstanceOf(ObjectType::class)
+            ->and($schema->toArray()['properties'])->toHaveCount(10);
 
         // Verify all field types are converted correctly
-        $propertyTypes = array_map(fn ($prop) => $prop::class, $schema->properties);
+        $propertyTypes = array_map(fn ($prop) => $prop['type'], $schema->toArray()['properties']);
 
         expect($propertyTypes)->toBe([
-            StringSchema::class,  // varchar
-            StringSchema::class,  // text
-            StringSchema::class,  // blob
-            NumberSchema::class,  // integer
-            NumberSchema::class,  // float
-            BooleanSchema::class, // boolean
-            StringSchema::class,  // date
-            StringSchema::class,  // datetime
-            EnumSchema::class,    // single select
-            ArraySchema::class,   // multi select
+            'varchar_field' => 'string',
+            'text_field' => 'string',
+            'blob_field' => 'string',
+            'integer_field' => 'integer',
+            'float_field' => 'number',
+            'boolean_field' => 'boolean',
+            'date_field' => 'string',
+            'datetime_field' => 'string',
+            'single_select_field' => 'array',
+            'multi_select_field' => 'array',
         ]);
 
+        $schema = $schema->toArray();
+
         // Check required fields (those with defaults)
-        expect($schema->requiredFields)->toContain('varchar_field')
-            ->and($schema->requiredFields)->toContain('integer_field')
-            ->and($schema->requiredFields)->toContain('float_field')
-            ->and($schema->requiredFields)->toContain('boolean_field')
-            ->and($schema->requiredFields)->toContain('single_select_field');
+        expect($schema['required'])->toContain('varchar_field')
+            ->toContain('integer_field')
+            ->toContain('float_field')
+            ->toContain('boolean_field')
+            ->toContain('single_select_field');
     });
 
     it('respects configuration options', function () {
@@ -432,25 +427,25 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
         );
 
         // Test with descriptions disabled
-        $strategyNoDesc = new PrismSchemaConvertStrategy(
+        $strategyNoDesc = new JsonSchemaConvertStrategy(
             includeNullable: true,
             includeDescriptions: false
         );
 
-        $schemaNoDesc = $module->convert($strategyNoDesc);
+        $schemaNoDesc = $module->convert($strategyNoDesc)->toArray();
 
-        expect($schemaNoDesc->description)->toBe('')
-            ->and($schemaNoDesc->properties[0]->description)->toBe('');
+        expect($schemaNoDesc['description'])->toBe('')
+            ->and($schemaNoDesc['properties']['field1'])->not->toHaveKey('description');
 
         // Test with nullable disabled
-        $strategyNoNull = new PrismSchemaConvertStrategy(
+        $strategyNoNull = new JsonSchemaConvertStrategy(
             includeNullable: false,
             includeDescriptions: true
         );
 
-        $schemaNoNull = $module->convert($strategyNoNull);
+        $schemaNoNull = $module->convert($strategyNoNull)->toArray();
 
-        expect($schemaNoNull->properties[0]->nullable ?? false)->toBeFalse()
-            ->and($schemaNoNull->requiredFields)->toBe([]);
+        expect($schemaNoNull['properties']['field1']['nullable'] ?? false)->toBeFalse()
+            ->and($schemaNoNull['required'])->toBe(['field1']);
     });
 });

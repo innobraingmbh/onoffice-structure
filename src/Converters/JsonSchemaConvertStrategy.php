@@ -114,17 +114,17 @@ final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
 
         return match ($field->type) {
             FieldType::VarChar, FieldType::Text, FieldType::Blob => $this->createStringSchema($field, $name, $description, $nullable),
-            FieldType::Integer => $this->createStandardSchema($field, 'integer', $name, $description, $nullable),
-            FieldType::Float => $this->createStandardSchema($field, 'number', $name, $description, $nullable),
-            FieldType::Boolean => $this->createStandardSchema($field, 'boolean', $name, $description, $nullable),
-            FieldType::Date => $this->createStandardSchema($field, 'string', $name, $description ? $description.' (Date format: YYYY-MM-DD)' : 'Date format: YYYY-MM-DD', $nullable),
-            FieldType::DateTime => $this->createStandardSchema($field, 'string', $name, $description ? $description.' (DateTime format: ISO 8601)' : 'DateTime format: ISO 8601', $nullable),
+            FieldType::Integer => $this->createStandardSchema('integer', $name, $description, $nullable),
+            FieldType::Float => $this->createStandardSchema('number', $name, $description, $nullable),
+            FieldType::Boolean => $this->createStandardSchema('boolean', $name, $description, $nullable),
+            FieldType::Date => $this->createStandardSchema('string', $name, $description ? $description.' (Date format: YYYY-MM-DD)' : 'Date format: YYYY-MM-DD', $nullable),
+            FieldType::DateTime => $this->createStandardSchema('string', $name, $description ? $description.' (DateTime format: ISO 8601)' : 'DateTime format: ISO 8601', $nullable),
             FieldType::SingleSelect => $this->createEnumSchema($field, $name, $description, $nullable),
             FieldType::MultiSelect => $this->createMultiSelectSchema($field, $name, $description, $nullable),
         };
     }
 
-    private function createStandardSchema(Field $field, string $type, string $name, ?string $description, bool $nullable): array
+    private function createStandardSchema(string $type, string $name, ?string $description, bool $nullable): array
     {
         $jsonSchema = JsonSchema::{$type}()
             ->title($name)
