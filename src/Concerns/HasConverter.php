@@ -19,7 +19,7 @@ trait HasConverter
     {
         $method = 'convert'.class_basename(static::class);
 
-        throw_unless(method_exists($strategy, $method), LogicException::class, "Strategy missing {$method}() for ".static::class);
+        throw_unless(method_exists($strategy, $method), LogicException::class, "Strategy missing $method() for ".static::class);
 
         return $strategy->{$method}($this);
     }
