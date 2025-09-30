@@ -9,7 +9,6 @@ use Illuminate\JsonSchema\Types\ObjectType;
 use Illuminate\JsonSchema\Types\StringType;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
-use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\FieldDependency;
 use Innobrain\Structure\Dtos\FieldFilter;
@@ -17,12 +16,6 @@ use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldType;
-use Prism\Prism\Schema\ArraySchema;
-use Prism\Prism\Schema\BooleanSchema;
-use Prism\Prism\Schema\EnumSchema;
-use Prism\Prism\Schema\NumberSchema;
-use Prism\Prism\Schema\ObjectSchema;
-use Prism\Prism\Schema\StringSchema;
 
 describe('JsonSchemaConvertStrategy', function () {
     beforeEach(function () {

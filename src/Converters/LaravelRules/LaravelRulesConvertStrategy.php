@@ -39,7 +39,6 @@ final readonly class LaravelRulesConvertStrategy implements ConvertStrategy
 
     /**
      * @param  string[]  $rules
-     *
      * @return string|array<int, string>
      */
     private function pipeOrArray(array $rules): string|array

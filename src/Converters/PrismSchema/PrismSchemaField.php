@@ -81,6 +81,9 @@ trait PrismSchemaField
             );
         }
 
+        /**
+         * @var array<int, string> $options
+         */
         $options = $field->permittedValues
             ->map(fn (PermittedValue $pv) => $pv->key)
             ->values()
@@ -104,7 +107,11 @@ trait PrismSchemaField
                 nullable: false
             );
         } else {
-            // Create enum schema for array items
+            /**
+             * Create enum schema for array items
+             *
+             * @var array<int, string> $options
+             */
             $options = $field->permittedValues
                 ->map(fn (PermittedValue $pv) => $pv->key)
                 ->values()

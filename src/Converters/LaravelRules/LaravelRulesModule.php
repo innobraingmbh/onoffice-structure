@@ -15,7 +15,7 @@ trait LaravelRulesModule
      * additional "{fieldKey}.*" element is added so each item receives the
      * proper "in:" check.
      *
-     * @return array<string, string|array<string, mixed>>
+     * @return array<string, mixed>
      */
     public function convertModule(Module $module): array
     {

@@ -22,7 +22,7 @@ final readonly class ArrayConvertStrategy implements ConvertStrategy
     public function __construct(private bool $dropEmpty = false) {}
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      * @return array<string, mixed>
      */
     private function normalize(array $payload): array

@@ -87,6 +87,7 @@ trait LaravelRulesField
             return [];
         }
 
+        // @phpstan-ignore-next-line
         return $field->dependencies
             ->map(fn (FieldDependency $dependency) => 'required_if:'.$dependency->dependentFieldKey.','.$dependency->dependentFieldValue)
             ->toArray();

@@ -28,7 +28,7 @@ class FieldConfiguration
     /**
      * Retrieve the field configuration for a given client.
      *
-     * @param array<int, string> $only
+     * @param  array<int, string>  $only
      *
      * @throws OnOfficeException
      */
@@ -113,7 +113,7 @@ class FieldConfiguration
                     : null,
                 filters: $this->parseFieldFilters(Arr::get($fieldData, 'filters', [])),
                 dependencies: $this->parseFieldDependencies(Arr::get($fieldData, 'dependencies', [])),
-                compoundFields:  collect($compoundFields),
+                compoundFields: collect($compoundFields),
                 fieldMeasureFormat: Arr::get($fieldData, 'fieldMeasureFormat')
                     ? (string) Arr::get($fieldData, 'fieldMeasureFormat')
                     : null,

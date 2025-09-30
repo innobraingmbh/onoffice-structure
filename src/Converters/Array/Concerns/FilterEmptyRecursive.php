@@ -14,7 +14,7 @@ use function is_array;
 trait FilterEmptyRecursive
 {
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      * @return array<string, mixed>
      */
     private function filterEmptyRecursive(array $data): array
