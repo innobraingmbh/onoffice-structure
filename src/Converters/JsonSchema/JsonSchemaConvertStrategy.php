@@ -30,7 +30,7 @@ final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
      * @param  bool  $includeDescriptions  true ➜ include field labels as descriptions
      */
     public function __construct(
-        private bool $includeNullable = true, // @phpstan-ignore-line
-        private bool $includeDescriptions = true, // @phpstan-ignore-line
+        private bool $includeNullable = true,
+        private bool $includeDescriptions = true,
     ) {}
 }

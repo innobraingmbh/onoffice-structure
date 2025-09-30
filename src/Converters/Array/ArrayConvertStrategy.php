@@ -21,7 +21,6 @@ final readonly class ArrayConvertStrategy implements ConvertStrategy
 
     public function __construct(private bool $dropEmpty = false) {}
 
-    // @phpstan-ignore-next-line
     private function normalize(array $payload): array
     {
         return $this->dropEmpty ? $this->filterEmptyRecursive($payload) : $payload;

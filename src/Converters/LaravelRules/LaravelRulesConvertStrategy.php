@@ -34,13 +34,13 @@ final readonly class LaravelRulesConvertStrategy implements ConvertStrategy
      */
     public function __construct(
         private bool $pipeSyntax = true,
-        private bool $includeNullable = true, // @phpstan-ignore-line
+        private bool $includeNullable = true,
     ) {}
 
     /**
      * @param  string[]  $rules
      */
-    private function pipeOrArray(array $rules): string|array // @phpstan-ignore-line
+    private function pipeOrArray(array $rules): string|array
     {
         return $this->pipeSyntax ? implode('|', $rules) : $rules;
     }
