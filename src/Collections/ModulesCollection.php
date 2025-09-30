@@ -7,7 +7,7 @@ namespace Innobrain\Structure\Collections;
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
-use Innobrain\Structure\Contracts\ConvertStrategy;
+use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
 use Innobrain\Structure\DTOs\Module;
 
 /**

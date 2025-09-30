@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Innobrain\Structure\Collections\FieldCollection;
-use Innobrain\Structure\Converters\PrismSchemaConvertStrategy;
+use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldDependency;
 use Innobrain\Structure\DTOs\FieldFilter;

@@ -2,77 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure\Converters;
+namespace Innobrain\Structure\Converters\JsonSchema;
 
 use Illuminate\JsonSchema\JsonSchema;
 use Illuminate\JsonSchema\Types\ArrayType;
-use Illuminate\JsonSchema\Types\ObjectType;
 use Illuminate\JsonSchema\Types\StringType;
 use Illuminate\JsonSchema\Types\Type;
-use Innobrain\Structure\Contracts\ConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldDependency;
-use Innobrain\Structure\DTOs\FieldFilter;
-use Innobrain\Structure\DTOs\Module;
 use Innobrain\Structure\DTOs\PermittedValue;
 use Innobrain\Structure\Enums\FieldType;
 
-/**
- * Convert the package's DTOs into Prism PHP schemas.
- *
- * Typical usage:
- *   $schema = $module->convert(new JsonSchemaConvertStrategy());
- *   $fieldSchema = $field->convert(new JsonSchemaConvertStrategy());
- *
- * The strategy returns:
- *   • Module   ⇒ ObjectType with properties for each field
- *   • Field    ⇒ Type (type depends on field type)
- */
-final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
+trait JsonSchemaField
 {
-    /**
-     * @param  bool  $includeNullable  true ➜ mark fields as nullable when they have no default
-     * @param  bool  $includeDescriptions  true ➜ include field labels as descriptions
-     */
-    public function __construct(
-        private bool $includeNullable = true,
-        private bool $includeDescriptions = true,
-    ) {}
-
-    /* ---------------------------------------------------------------------
-     * ConvertStrategy – leaf DTOs
-     * ------------------------------------------------------------------- */
-
-    public function convertPermittedValue(PermittedValue $pv): string
-    {
-        // Permitted values are handled at the Field level as enum options
-        return $pv->key;
-    }
-
-    public function convertFieldDependency(FieldDependency $fd): array
-    {
-        // Dependencies could be used to determine required fields
-        // For now, we'll return metadata that can be used later
-        return [
-            'field' => $fd->dependentFieldKey,
-            'value' => $fd->dependentFieldValue,
-        ];
-    }
-
-    public function convertFieldFilter(FieldFilter $ff): array
-    {
-        // Filters aren't directly represented in Prism schemas
-        // Return metadata for potential future use
-        return [
-            'name' => $ff->name,
-            'config' => $ff->config->toArray(),
-        ];
-    }
-
-    /* ---------------------------------------------------------------------
-     * ConvertStrategy – aggregates
-     * ------------------------------------------------------------------- */
-
     /**
      * @return array<string, Type>
      */
@@ -80,28 +21,6 @@ final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
     {
         return $this->createBaseSchema($field);
     }
-
-    public function convertModule(Module $module): ObjectType
-    {
-        $properties = [];
-
-        foreach ($module->fields as $field) {
-            /** @var Field $field */
-            $schema = $this->convertField($field);
-
-            $properties = array_merge($properties, $schema);
-        }
-
-        $description = $this->includeDescriptions ? $module->label : '';
-
-        return JsonSchema::object($properties)
-            ->title($module->key->value)
-            ->description($description);
-    }
-
-    /* ---------------------------------------------------------------------
-     * Internal helpers
-     * ------------------------------------------------------------------- */
 
     /**
      * @return array<string, Type>

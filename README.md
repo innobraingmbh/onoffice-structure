@@ -109,7 +109,7 @@ The DTOs and `ModulesCollection` implement the `Convertible` interface, allowing
 This strategy converts the DTOs into nested arrays.
 
 ```php
-use Innobrain\Structure\Converters\ArrayConvertStrategy;
+use Innobrain\Structure\Converters\Array\ArrayConvertStrategy;
 
 // Convert the entire collection of modules
 $strategy = new ArrayConvertStrategy(dropEmpty: false); // or true to remove null/empty values
@@ -130,7 +130,7 @@ The `ArrayConvertStrategy` constructor accepts a `bool $dropEmpty` (default `fal
 This strategy converts module or field DTOs into Laravel validation rules.
 
 ```php
-use Innobrain\Structure\Converters\LaravelRulesConvertStrategy;
+use Innobrain\Structure\Converters\LaravelRules\LaravelRulesConvertStrategy;
 
 // For a specific module (e.g., Address)
 $addressModule = $modulesCollection->get(FieldConfigurationModule::Address->value);
@@ -177,8 +177,7 @@ Constructor options for `LaravelRulesConvertStrategy`:
 This strategy converts module or field DTOs into [Prism PHP](https://prismphp.com/) schemas, which can be used for structured data generation with AI providers.
 
 ```php
-use Innobrain\Structure\Converters\PrismSchemaConvertStrategy;
-use Prism\Prism\Schema\ObjectSchema;
+use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;use Prism\Prism;use Prism\Providers\OpenRouter\OpenRouter;
 
 // Convert an entire module to a Prism ObjectSchema
 $addressModule = $modulesCollection->get(FieldConfigurationModule::Address->value);
@@ -195,8 +194,6 @@ $emailSchema = $emailField->convert($strategy);
 // Returns a StringSchema with max length constraint in description
 
 // Use the schema with Prism for AI-powered data generation
-use Prism\Prism;
-use Prism\Providers\OpenRouter\OpenRouter;
 
 $prism = Prism::using(OpenRouter::instance())
     ->withStructuredOutput($addressSchema);

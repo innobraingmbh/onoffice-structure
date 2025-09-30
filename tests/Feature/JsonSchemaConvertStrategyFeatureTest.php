@@ -3,10 +3,9 @@
 declare(strict_types=1);
 
 use Illuminate\JsonSchema\Types\ObjectType;
-use Illuminate\Support\Collection;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;
-use Innobrain\Structure\Converters\JsonSchemaConvertStrategy;
+use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldDependency;
 use Innobrain\Structure\DTOs\Module;

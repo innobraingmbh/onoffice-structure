@@ -11,7 +11,7 @@ use Innobrain\Structure\DTOs\Field;
 /**
  * @extends Collection<string, Field>
  */
-class FieldCollection extends Collection
+final class FieldCollection extends Collection
 {
     public function whereMatchesFilters(): FieldFilterBuilder
     {

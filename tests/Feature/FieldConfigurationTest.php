@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\Structure\Collections\ModulesCollection;
-use Innobrain\Structure\Converters\ArrayConvertStrategy;
+use Innobrain\Structure\Converters\Array\ArrayConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldFilter;
 use Innobrain\Structure\DTOs\Module;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure\Contracts;
+namespace Innobrain\Structure\Converters\Concerns;
 
 use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldDependency;

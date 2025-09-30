@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Concerns;
 
-use Innobrain\Structure\Contracts\ConvertStrategy;
+use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
 use LogicException;
 
 use function class_basename;

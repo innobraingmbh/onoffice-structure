@@ -7,7 +7,7 @@ namespace Innobrain\Structure\Tests\Unit\Converters;
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;
-use Innobrain\Structure\Converters\ArrayConvertStrategy;
+use Innobrain\Structure\Converters\Array\ArrayConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldDependency;
 use Innobrain\Structure\DTOs\FieldFilter;

@@ -6,7 +6,7 @@ namespace Innobrain\Structure\Tests\Unit\Converters;
 
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Collections\FieldCollection;
-use Innobrain\Structure\Converters\LaravelRulesConvertStrategy;
+use Innobrain\Structure\Converters\LaravelRules\LaravelRulesConvertStrategy;
 use Innobrain\Structure\DTOs\Field;
 use Innobrain\Structure\DTOs\FieldDependency;
 use Innobrain\Structure\DTOs\Module;
