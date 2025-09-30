@@ -19,9 +19,6 @@ class StructureServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('onoffice-structure')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_onoffice_structure_table')
-            ->hasCommand(StructureCommand::class);
+            ->hasConfigFile();
     }
 }

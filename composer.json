@@ -37,8 +37,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Innobrain\\Structure\\": "src/",
-            "Innobrain\\Structure\\Database\\Factories\\": "database/factories/"
+            "Innobrain\\Structure\\": "src/"
         }
     },
     "autoload-dev": {
