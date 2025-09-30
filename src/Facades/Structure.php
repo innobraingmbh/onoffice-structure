@@ -13,7 +13,7 @@ use Innobrain\Structure\Services\Structure as ServiceStructure;
  * @see ServiceStructure
  *
  * @method static ServiceStructure forClient(OnOfficeApiCredentials $onOfficeApiCredentials)
- * @method static ModulesCollection getModules(string|array $only = [])
+ * @method static ModulesCollection getModules(string|array<int, string> $only = [])
  */
 class Structure extends Facade
 {

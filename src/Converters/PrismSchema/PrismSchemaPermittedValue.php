@@ -8,7 +8,7 @@ use Innobrain\Structure\Dtos\PermittedValue;
 
 trait PrismSchemaPermittedValue
 {
-    public function convertPermittedValue(PermittedValue $permittedValue): mixed
+    public function convertPermittedValue(PermittedValue $permittedValue): string
     {
         // Permitted values are handled at the Field level as enum options
         return $permittedValue->key;

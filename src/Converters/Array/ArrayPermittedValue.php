@@ -8,6 +8,9 @@ use Innobrain\Structure\Dtos\PermittedValue;
 
 trait ArrayPermittedValue
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function convertPermittedValue(PermittedValue $permittedValue): array
     {
         return $this->normalize([

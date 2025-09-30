@@ -24,6 +24,7 @@ class Structure
     }
 
     /**
+     * @param string|array<int, string> $only
      * @throws OnOfficeException
      */
     public function getModules(string|array $only = []): ModulesCollection

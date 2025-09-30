@@ -18,6 +18,10 @@ enum FieldConfigurationModule: string
     case Task = 'task';
     case User = 'user';
 
+    /**
+     * @param  array<int, string>  $only
+     * @return array<int, string>
+     */
     public static function values(array $only = []): array
     {
         $all = array_map(static fn (self $element) => $element->value, self::cases());

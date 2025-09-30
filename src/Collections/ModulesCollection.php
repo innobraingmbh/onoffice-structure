@@ -17,6 +17,9 @@ final class ModulesCollection extends Collection implements Convertible
 {
     use HasConverter;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function convert(ConvertStrategy $strategy): array
     {
         // Override default trait behaviour: convert every module inside.

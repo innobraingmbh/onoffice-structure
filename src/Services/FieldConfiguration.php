@@ -28,6 +28,8 @@ class FieldConfiguration
     /**
      * Retrieve the field configuration for a given client.
      *
+     * @param array<int, string> $only
+     *
      * @throws OnOfficeException
      */
     public function retrieveForClient(OnOfficeApiCredentials $credentials, array $only = []): ModulesCollection
@@ -95,6 +97,9 @@ class FieldConfiguration
                 continue; // unknown field type
             }
 
+            /** @var array<int, string> $compoundFields */
+            $compoundFields = Arr::get($fieldData, 'compoundFields', []);
+
             $fields->put($fieldKey, new Field(
                 key: $fieldKey,
                 label: (string) Arr::get($fieldData, 'label', ucfirst($fieldKey)),
@@ -108,7 +113,7 @@ class FieldConfiguration
                     : null,
                 filters: $this->parseFieldFilters(Arr::get($fieldData, 'filters', [])),
                 dependencies: $this->parseFieldDependencies(Arr::get($fieldData, 'dependencies', [])),
-                compoundFields: collect(Arr::get($fieldData, 'compoundFields', [])),
+                compoundFields:  collect($compoundFields),
                 fieldMeasureFormat: Arr::get($fieldData, 'fieldMeasureFormat')
                     ? (string) Arr::get($fieldData, 'fieldMeasureFormat')
                     : null,
@@ -139,6 +144,9 @@ class FieldConfiguration
         return $permittedValues;
     }
 
+    /**
+     * @return Collection<string, FieldFilter>
+     */
     private function parseFieldFilters(mixed $filtersData): Collection
     {
         if (! is_array($filtersData)) {
@@ -168,6 +176,9 @@ class FieldConfiguration
         return $filters;
     }
 
+    /**
+     * @return Collection<int, FieldDependency>
+     */
     private function parseFieldDependencies(mixed $dependenciesData): Collection
     {
         $dependencies = new Collection;

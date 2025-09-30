@@ -8,6 +8,9 @@ use Innobrain\Structure\Dtos\FieldDependency;
 
 trait JsonSchemaFieldDependency
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function convertFieldDependency(FieldDependency $fieldDependency): array
     {
         // Dependencies could be used to determine required fields

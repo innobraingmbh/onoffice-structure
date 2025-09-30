@@ -8,6 +8,9 @@ use Innobrain\Structure\Dtos\FieldFilter;
 
 trait ArrayFieldFilter
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function convertFieldFilter(FieldFilter $fieldFilter): array
     {
         return $this->normalize([

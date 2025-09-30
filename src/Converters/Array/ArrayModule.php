@@ -8,6 +8,9 @@ use Innobrain\Structure\Dtos\Module;
 
 trait ArrayModule
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function convertModule(Module $module): array
     {
         return $this->normalize([

@@ -12,7 +12,7 @@ use Innobrain\Structure\Services\FieldConfiguration as ServiceFieldConfiguration
 /**
  * @see ServiceFieldConfiguration
  *
- * @method static ModulesCollection retrieveForClient(OnOfficeApiCredentials $credentials, array $only = [])
+ * @method static ModulesCollection retrieveForClient(OnOfficeApiCredentials $credentials, array<int, string> $only = [])
  */
 class FieldConfiguration extends Facade
 {

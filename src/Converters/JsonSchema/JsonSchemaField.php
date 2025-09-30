@@ -43,6 +43,9 @@ trait JsonSchemaField
         };
     }
 
+    /**
+     * @return array<string, Type>
+     */
     private function createStandardSchema(string $type, string $name, ?string $description, bool $nullable): array
     {
         $jsonSchema = JsonSchema::{$type}()

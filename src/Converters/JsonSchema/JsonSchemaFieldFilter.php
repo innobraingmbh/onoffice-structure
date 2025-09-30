@@ -8,6 +8,9 @@ use Innobrain\Structure\Dtos\FieldFilter;
 
 trait JsonSchemaFieldFilter
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function convertFieldFilter(FieldFilter $fieldFilter): array
     {
         // Filters aren't directly represented in Prism schemas

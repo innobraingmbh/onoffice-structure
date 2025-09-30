@@ -8,6 +8,9 @@ use Innobrain\Structure\Dtos\Field;
 
 trait ArrayField
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function convertField(Field $field): array
     {
         return $this->normalize([
