@@ -7,8 +7,8 @@ namespace Innobrain\Structure\Tests\Unit\Collections;
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Builders\FieldFilterBuilder;
 use Innobrain\Structure\Collections\FieldCollection;
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldFilter;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\FieldFilter;
 use Innobrain\Structure\Enums\FieldType;
 
 describe('FieldCollection', function () {

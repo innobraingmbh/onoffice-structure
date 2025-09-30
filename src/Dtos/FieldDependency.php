@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure\DTOs;
+namespace Innobrain\Structure\Dtos;
 
 use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
 
-class PermittedValue implements Convertible
+class FieldDependency implements Convertible
 {
     use HasConverter;
 
     public function __construct(
-        public readonly string $key,
-        public readonly string $label,
+        public readonly string $dependentFieldKey,
+        public readonly string $dependentFieldValue,
     ) {}
 }

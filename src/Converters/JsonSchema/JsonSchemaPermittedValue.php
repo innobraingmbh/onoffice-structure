@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\JsonSchema;
 
-use Innobrain\Structure\DTOs\PermittedValue;
+use Innobrain\Structure\Dtos\PermittedValue;
 
 trait JsonSchemaPermittedValue
 {

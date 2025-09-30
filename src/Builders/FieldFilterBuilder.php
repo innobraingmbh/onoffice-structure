@@ -6,7 +6,7 @@ namespace Innobrain\Structure\Builders;
 
 use Illuminate\Support\Traits\Conditionable;
 use Innobrain\Structure\Collections\FieldCollection;
-use Innobrain\Structure\DTOs\Field;
+use Innobrain\Structure\Dtos\Field;
 
 class FieldFilterBuilder
 {

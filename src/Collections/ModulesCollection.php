@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
 use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
-use Innobrain\Structure\DTOs\Module;
+use Innobrain\Structure\Dtos\Module;
 
 /**
  * @extends Collection<string, Module>

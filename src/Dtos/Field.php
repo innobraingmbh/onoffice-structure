@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure\DTOs;
+namespace Innobrain\Structure\Dtos;
 
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Concerns\HasConverter;

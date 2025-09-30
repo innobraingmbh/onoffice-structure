@@ -8,8 +8,8 @@ use Illuminate\JsonSchema\JsonSchema;
 use Illuminate\JsonSchema\Types\ArrayType;
 use Illuminate\JsonSchema\Types\StringType;
 use Illuminate\JsonSchema\Types\Type;
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\PermittedValue;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldType;
 
 trait JsonSchemaField

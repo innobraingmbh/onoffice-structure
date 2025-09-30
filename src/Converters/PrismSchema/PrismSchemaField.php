@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\PrismSchema;
 
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\PermittedValue;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldType;
 use Prism\Prism\Contracts\Schema;
 use Prism\Prism\Schema\ArraySchema;

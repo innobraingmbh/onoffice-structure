@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\Array;
 
-use Innobrain\Structure\DTOs\FieldFilter;
+use Innobrain\Structure\Dtos\FieldFilter;
 
 trait ArrayFieldFilter
 {

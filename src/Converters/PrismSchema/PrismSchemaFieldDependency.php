@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\PrismSchema;
 
-use Innobrain\Structure\DTOs\FieldDependency;
+use Innobrain\Structure\Dtos\FieldDependency;
 
 trait PrismSchemaFieldDependency
 {

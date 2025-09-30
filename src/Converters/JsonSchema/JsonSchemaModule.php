@@ -6,8 +6,8 @@ namespace Innobrain\Structure\Converters\JsonSchema;
 
 use Illuminate\JsonSchema\JsonSchema;
 use Illuminate\JsonSchema\Types\ObjectType;
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\Module;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\Module;
 
 trait JsonSchemaModule
 {

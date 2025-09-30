@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\Array;
 
-use Innobrain\Structure\DTOs\Module;
+use Innobrain\Structure\Dtos\Module;
 
 trait ArrayModule
 {

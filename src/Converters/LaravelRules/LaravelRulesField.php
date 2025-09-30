@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\LaravelRules;
 
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldDependency;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\FieldDependency;
 use Innobrain\Structure\Enums\FieldType;
 
 trait LaravelRulesField

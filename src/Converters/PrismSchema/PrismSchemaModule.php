@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\PrismSchema;
 
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\Module;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\Module;
 use Prism\Prism\Schema\ObjectSchema;
 
 trait PrismSchemaModule

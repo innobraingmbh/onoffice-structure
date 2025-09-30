@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Http;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\Structure\Collections\ModulesCollection;
 use Innobrain\Structure\Converters\Array\ArrayConvertStrategy;
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldFilter;
-use Innobrain\Structure\DTOs\Module;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\FieldFilter;
+use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Facades\FieldConfiguration;
 
