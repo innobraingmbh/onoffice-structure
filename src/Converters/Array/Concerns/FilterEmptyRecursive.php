@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure\Concerns;
+namespace Innobrain\Structure\Converters\Array\Concerns;
 
 use Illuminate\Support\Collection;
 
@@ -11,7 +11,7 @@ use function is_array;
 /**
  * Helper to strip null / empty values recursively from an array payload.
  */
-trait ConvertsToArray
+trait FilterEmptyRecursive
 {
     private function filterEmptyRecursive(array $data): array
     {

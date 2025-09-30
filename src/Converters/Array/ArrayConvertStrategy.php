@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\Array;
 
-use Innobrain\Structure\Concerns\ConvertsToArray;
+use Innobrain\Structure\Converters\Array\Concerns\FilterEmptyRecursive;
 use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
 
 /**
@@ -17,7 +17,7 @@ final readonly class ArrayConvertStrategy implements ConvertStrategy
     use ArrayFieldFilter;
     use ArrayModule;
     use ArrayPermittedValue;
-    use ConvertsToArray;
+    use FilterEmptyRecursive;
 
     public function __construct(private bool $dropEmpty = false) {}
 

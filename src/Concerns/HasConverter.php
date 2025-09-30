@@ -6,6 +6,7 @@ namespace Innobrain\Structure\Concerns;
 
 use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
 use LogicException;
+use Throwable;
 
 use function class_basename;
 use function method_exists;
@@ -15,6 +16,9 @@ use function method_exists;
  */
 trait HasConverter
 {
+    /**
+     * @throws Throwable<LogicException>
+     */
     public function convert(ConvertStrategy $strategy): mixed
     {
         $method = 'convert'.class_basename(static::class);
