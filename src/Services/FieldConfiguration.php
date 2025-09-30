@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure;
+namespace Innobrain\Structure\Services;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;

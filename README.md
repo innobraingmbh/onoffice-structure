@@ -49,7 +49,7 @@ php artisan vendor:publish --provider="Innobrain\Structure\StructureServiceProvi
 
 ## Usage
 
-The primary way to interact with the package is through the `Structure` facade or by injecting the `Innobrain\Structure\Structure` class.
+The primary way to interact with the package is through the `Structure` facade or by injecting the `Innobrain\Structure\Services\Structure` class.
 
 ### Fetching Structure Data
 
