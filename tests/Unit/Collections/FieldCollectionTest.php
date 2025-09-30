@@ -55,15 +55,15 @@ describe('FieldCollection', function () {
 
     describe('inheritance', function () {
         it('extends Laravel Collection', function () {
-            expect($this->fields)->toBeInstanceOf(Collection::class);
-            expect($this->fields)->toBeInstanceOf(FieldCollection::class);
+            expect($this->fields)->toBeInstanceOf(Collection::class)
+                ->and($this->fields)->toBeInstanceOf(FieldCollection::class);
         });
 
         it('retains all Collection methods', function () {
-            expect($this->fields->count())->toBe(2);
-            expect($this->fields->first())->toBe($this->field1);
-            expect($this->fields->get('field2'))->toBe($this->field2);
-            expect($this->fields->has('field1'))->toBeTrue();
+            expect($this->fields->count())->toBe(2)
+                ->and($this->fields->first())->toBe($this->field1)
+                ->and($this->fields->get('field2'))->toBe($this->field2)
+                ->and($this->fields->has('field1'))->toBeTrue();
         });
     });
 
@@ -79,8 +79,9 @@ describe('FieldCollection', function () {
                 ->where('type', 'estate')
                 ->get();
 
-            expect($result)->toBeInstanceOf(FieldCollection::class);
-            expect($result->count())->toBe(2); // field1 matches, field2 has no filters
+            // field1 matches, field2 has no filters
+            expect($result)->toBeInstanceOf(FieldCollection::class)
+                ->and($result->count())->toBe(2);
         });
 
         it('can chain filter operations', function () {
@@ -99,8 +100,8 @@ describe('FieldCollection', function () {
                 ->where('type', 'nonexistent')
                 ->get();
 
-            expect($this->fields->count())->toBe($originalCount);
-            expect($filtered)->not->toBe($this->fields);
+            expect($this->fields->count())->toBe($originalCount)
+                ->and($filtered)->not->toBe($this->fields);
         });
     });
 
@@ -115,9 +116,9 @@ describe('FieldCollection', function () {
         });
 
         it('works with string keys', function () {
-            expect($this->fields->get('field1'))->toBe($this->field1);
-            expect($this->fields->get('field2'))->toBe($this->field2);
-            expect($this->fields->get('nonexistent'))->toBeNull();
+            expect($this->fields->get('field1'))->toBe($this->field1)
+                ->and($this->fields->get('field2'))->toBe($this->field2)
+                ->and($this->fields->get('nonexistent'))->toBeNull();
         });
     });
 });

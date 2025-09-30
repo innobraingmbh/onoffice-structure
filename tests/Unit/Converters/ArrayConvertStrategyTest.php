@@ -241,8 +241,8 @@ describe('ArrayConvertStrategy', function () {
                 'key' => 'address',
                 'label' => 'Address Module',
                 // 'fields' key should be absent
-            ]);
-            expect($result)->not->toHaveKey('fields');
+            ])
+                ->and($result)->not->toHaveKey('fields');
         });
 
         it('converts Module to array and keeps empty fields collection when dropEmpty is false', function () {
@@ -290,29 +290,29 @@ describe('ArrayConvertStrategy', function () {
             $strategy = new ArrayConvertStrategy(dropEmpty: false);
             $result = $modulesCollection->convert($strategy);
 
-            expect($result)->toBeArray()->toHaveCount(2);
-            expect($result[0])->toBe([
-                'key' => 'address',
-                'label' => 'Address Module',
-                'fields' => [
-                    'field1' => [
-                        'key' => 'field1', 'label' => 'Field 1', 'type' => 'text', 'length' => null,
-                        'permittedValues' => [], 'default' => null, 'filters' => [],
-                        'dependencies' => [], 'compoundFields' => [], 'fieldMeasureFormat' => null,
+            expect($result)->toBeArray()->toHaveCount(2)
+                ->and($result[0])->toBe([
+                    'key' => 'address',
+                    'label' => 'Address Module',
+                    'fields' => [
+                        'field1' => [
+                            'key' => 'field1', 'label' => 'Field 1', 'type' => 'text', 'length' => null,
+                            'permittedValues' => [], 'default' => null, 'filters' => [],
+                            'dependencies' => [], 'compoundFields' => [], 'fieldMeasureFormat' => null,
+                        ],
                     ],
-                ],
-            ]);
-            expect($result[1])->toBe([
-                'key' => 'estate',
-                'label' => 'Estate Module',
-                'fields' => [
-                    'field2' => [
-                        'key' => 'field2', 'label' => 'Field 2', 'type' => 'integer', 'length' => 10,
-                        'permittedValues' => [], 'default' => '0', 'filters' => [],
-                        'dependencies' => [], 'compoundFields' => [], 'fieldMeasureFormat' => null,
+                ])
+                ->and($result[1])->toBe([
+                    'key' => 'estate',
+                    'label' => 'Estate Module',
+                    'fields' => [
+                        'field2' => [
+                            'key' => 'field2', 'label' => 'Field 2', 'type' => 'integer', 'length' => 10,
+                            'permittedValues' => [], 'default' => '0', 'filters' => [],
+                            'dependencies' => [], 'compoundFields' => [], 'fieldMeasureFormat' => null,
+                        ],
                     ],
-                ],
-            ]);
+                ]);
         });
 
         it('converts ModulesCollection to array and drops empty values when dropEmpty is true', function () {
@@ -337,23 +337,23 @@ describe('ArrayConvertStrategy', function () {
             $strategy = new ArrayConvertStrategy(dropEmpty: true);
             $result = $modulesCollection->convert($strategy);
 
-            expect($result)->toBeArray()->toHaveCount(2);
-            // Module 1: field1 should only have key, label, type
-            expect($result[0])->toBe([
-                'key' => 'address',
-                'label' => 'Address Module',
-                'fields' => [
-                    'field1' => [
-                        'key' => 'field1', 'label' => 'Field 1', 'type' => 'text',
+            expect($result)->toBeArray()->toHaveCount(2)
+                // Module 1: field1 should only have key, label, type
+                ->and($result[0])->toBe([
+                    'key' => 'address',
+                    'label' => 'Address Module',
+                    'fields' => [
+                        'field1' => [
+                            'key' => 'field1', 'label' => 'Field 1', 'type' => 'text',
+                        ],
                     ],
-                ],
-            ]);
-            // Module 2: fields collection itself should be dropped
-            expect($result[1])->toBe([
-                'key' => 'estate',
-                'label' => 'Estate Module',
-            ]);
-            expect($result[1])->not->toHaveKey('fields');
+                ])
+                ->and($result[1])->toBe([
+                    'key' => 'estate',
+                    'label' => 'Estate Module',
+                ])
+                // Module 2: fields collection itself should be dropped
+                ->and($result[1])->not->toHaveKey('fields');
         });
 
         it('converts an empty ModulesCollection to an empty array', function () {

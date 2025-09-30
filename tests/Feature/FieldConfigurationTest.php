@@ -282,5 +282,4 @@ it('should correctly convert retrieved field configuration from FieldsResponse_j
         'compoundFields' => ['Anrede', 'Titel'],
     ])
         ->and($anredeTitelFieldDropEmpty)->not->toHaveKeys(['permittedValues', 'default', 'filters', 'dependencies', 'fieldMeasureFormat']);
-
 });

@@ -12,7 +12,7 @@ use function class_basename;
 use function method_exists;
 
 /**
- * Implements Convertible::convert() once for every DTO via reflection.
+ * Implements Convertible::convert()
  */
 trait HasConverter
 {
