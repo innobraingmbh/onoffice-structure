@@ -9,7 +9,7 @@ use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
 use Innobrain\Structure\Enums\FieldType;
 
-class Field implements Convertible
+readonly class Field implements Convertible
 {
     use HasConverter;
 
@@ -20,16 +20,16 @@ class Field implements Convertible
      * @param  Collection<int, string>  $compoundFields
      */
     public function __construct(
-        public readonly string $key,
-        public readonly string $label,
-        public readonly FieldType $type,
-        public readonly ?int $length,
-        public readonly Collection $permittedValues,
-        public readonly ?string $default,
-        public readonly Collection $filters,
-        public readonly Collection $dependencies,
-        public readonly Collection $compoundFields,
-        public readonly ?string $fieldMeasureFormat
+        public string $key,
+        public string $label,
+        public FieldType $type,
+        public ?int $length,
+        public Collection $permittedValues,
+        public ?string $default,
+        public Collection $filters,
+        public Collection $dependencies,
+        public Collection $compoundFields,
+        public ?string $fieldMeasureFormat
     ) {}
 
     /**

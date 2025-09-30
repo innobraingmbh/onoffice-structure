@@ -7,12 +7,12 @@ namespace Innobrain\Structure\Dtos;
 use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
 
-class FieldDependency implements Convertible
+readonly class FieldDependency implements Convertible
 {
     use HasConverter;
 
     public function __construct(
-        public readonly string $dependentFieldKey,
-        public readonly string $dependentFieldValue,
+        public string $dependentFieldKey,
+        public string $dependentFieldValue,
     ) {}
 }

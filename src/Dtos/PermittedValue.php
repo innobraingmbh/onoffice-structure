@@ -7,12 +7,12 @@ namespace Innobrain\Structure\Dtos;
 use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
 
-class PermittedValue implements Convertible
+readonly class PermittedValue implements Convertible
 {
     use HasConverter;
 
     public function __construct(
-        public readonly string $key,
-        public readonly string $label,
+        public string $key,
+        public string $label,
     ) {}
 }
