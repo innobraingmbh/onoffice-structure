@@ -6,7 +6,7 @@ namespace Innobrain\Structure\Converters\Array;
 
 use Innobrain\Structure\Dtos\Module;
 
-trait ArrayModule
+trait ConvertsModuleToArray
 {
     /**
      * @return array<string, mixed>

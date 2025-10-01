@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure\Converters\PrismSchema;
+namespace Innobrain\Structure\Converters\JsonSchema;
 
 use Innobrain\Structure\Dtos\FieldDependency;
 
-trait PrismSchemaFieldDependency
+trait ConvertsFieldDependencyToJsonSchema
 {
     /**
      * @return array<string, mixed>

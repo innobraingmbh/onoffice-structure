@@ -6,7 +6,7 @@ namespace Innobrain\Structure\Converters\PrismSchema;
 
 use Innobrain\Structure\Dtos\PermittedValue;
 
-trait PrismSchemaPermittedValue
+trait ConvertsPermittedValueToPrismSchema
 {
     public function convertPermittedValue(PermittedValue $permittedValue): string
     {

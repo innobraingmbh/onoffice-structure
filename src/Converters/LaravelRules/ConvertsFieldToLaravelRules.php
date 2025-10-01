@@ -8,7 +8,7 @@ use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\FieldDependency;
 use Innobrain\Structure\Enums\FieldType;
 
-trait LaravelRulesField
+trait ConvertsFieldToLaravelRules
 {
     public function convertField(Field $field): mixed
     {

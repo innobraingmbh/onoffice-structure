@@ -2,22 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure\Converters\JsonSchema;
+namespace Innobrain\Structure\Converters\Array;
 
 use Innobrain\Structure\Dtos\FieldFilter;
 
-trait JsonSchemaFieldFilter
+trait ConvertsFieldFilterToArray
 {
     /**
      * @return array<string, mixed>
      */
     public function convertFieldFilter(FieldFilter $fieldFilter): array
     {
-        // Filters aren't directly represented in Prism schemas
-        // Return metadata for potential future use
-        return [
+        return $this->normalize([
             'name' => $fieldFilter->name,
             'config' => $fieldFilter->config->toArray(),
-        ];
+        ]);
     }
 }

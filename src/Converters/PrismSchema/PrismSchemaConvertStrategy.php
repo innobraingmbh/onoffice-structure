@@ -19,11 +19,11 @@ use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
  */
 final readonly class PrismSchemaConvertStrategy implements ConvertStrategy
 {
-    use PrismSchemaField;
-    use PrismSchemaFieldDependency;
-    use PrismSchemaFieldFilter;
-    use PrismSchemaModule;
-    use PrismSchemaPermittedValue;
+    use ConvertsFieldDependencyToPrismSchema;
+    use ConvertsFieldFilterToPrismSchema;
+    use ConvertsFieldToPrismSchema;
+    use ConvertsModuleToPrismSchema;
+    use ConvertsPermittedValueToPrismSchema;
 
     /**
      * @param  bool  $includeNullable  true ➜ mark fields as nullable when they have no default

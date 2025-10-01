@@ -9,7 +9,7 @@ use Illuminate\JsonSchema\Types\ObjectType;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\Module;
 
-trait JsonSchemaModule
+trait ConvertsModuleToJsonSchema
 {
     public function convertModule(Module $module): ObjectType
     {

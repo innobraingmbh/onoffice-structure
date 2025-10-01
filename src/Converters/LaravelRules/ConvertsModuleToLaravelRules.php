@@ -8,7 +8,7 @@ use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Enums\FieldType;
 
-trait LaravelRulesModule
+trait ConvertsModuleToLaravelRules
 {
     /**
      * The returned array is keyed by field key. For multi-select fields an

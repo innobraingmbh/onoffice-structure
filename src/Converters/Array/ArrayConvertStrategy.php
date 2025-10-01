@@ -12,11 +12,11 @@ use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
  */
 final readonly class ArrayConvertStrategy implements ConvertStrategy
 {
-    use ArrayField;
-    use ArrayFieldDependency;
-    use ArrayFieldFilter;
-    use ArrayModule;
-    use ArrayPermittedValue;
+    use ConvertsFieldDependencyToArray;
+    use ConvertsFieldFilterToArray;
+    use ConvertsFieldToArray;
+    use ConvertsModuleToArray;
+    use ConvertsPermittedValueToArray;
     use FilterEmptyRecursive;
 
     public function __construct(private bool $dropEmpty = false) {}

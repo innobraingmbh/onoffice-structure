@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure\Converters\PrismSchema;
+namespace Innobrain\Structure\Converters\JsonSchema;
 
 use Innobrain\Structure\Dtos\FieldFilter;
 
-trait PrismSchemaFieldFilter
+trait ConvertsFieldFilterToJsonSchema
 {
     /**
      * @return array<string, mixed>

@@ -14,7 +14,7 @@ use Prism\Prism\Schema\EnumSchema;
 use Prism\Prism\Schema\NumberSchema;
 use Prism\Prism\Schema\StringSchema;
 
-trait PrismSchemaField
+trait ConvertsFieldToPrismSchema
 {
     public function convertField(Field $field): Schema
     {

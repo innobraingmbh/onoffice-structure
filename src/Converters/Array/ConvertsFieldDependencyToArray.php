@@ -6,7 +6,7 @@ namespace Innobrain\Structure\Converters\Array;
 
 use Innobrain\Structure\Dtos\FieldDependency;
 
-trait ArrayFieldDependency
+trait ConvertsFieldDependencyToArray
 {
     /**
      * @return array<string, mixed>

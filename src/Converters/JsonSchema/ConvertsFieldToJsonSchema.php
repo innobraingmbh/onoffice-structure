@@ -12,7 +12,7 @@ use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldType;
 
-trait JsonSchemaField
+trait ConvertsFieldToJsonSchema
 {
     /**
      * @return array<string, Type>

@@ -9,7 +9,7 @@ use Innobrain\Structure\Dtos\FieldDependency;
 use Innobrain\Structure\Dtos\FieldFilter;
 use Innobrain\Structure\Dtos\PermittedValue;
 
-trait ArrayField
+trait ConvertsFieldToArray
 {
     /**
      * @return array<string, mixed>

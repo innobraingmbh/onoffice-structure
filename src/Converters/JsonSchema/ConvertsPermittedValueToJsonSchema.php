@@ -6,7 +6,7 @@ namespace Innobrain\Structure\Converters\JsonSchema;
 
 use Innobrain\Structure\Dtos\PermittedValue;
 
-trait JsonSchemaPermittedValue
+trait ConvertsPermittedValueToJsonSchema
 {
     public function convertPermittedValue(PermittedValue $permittedValue): string
     {

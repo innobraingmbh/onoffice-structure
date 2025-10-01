@@ -22,11 +22,11 @@ use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
  */
 final readonly class LaravelRulesConvertStrategy implements ConvertStrategy
 {
-    use LaravelRulesField;
-    use LaravelRulesFieldDependency;
-    use LaravelRulesFieldFilter;
-    use LaravelRulesModule;
-    use LaravelRulesPermittedValue;
+    use ConvertsFieldDependencyToLaravelRules;
+    use ConvertsFieldFilterToLaravelRules;
+    use ConvertsFieldToLaravelRules;
+    use ConvertsModuleToLaravelRules;
+    use ConvertsPermittedValueToLaravelRules;
 
     /**
      * @param  bool  $pipeSyntax  true ➜ 'string|max:80|nullable',  false ➜ ['string', 'max:80', 'nullable']

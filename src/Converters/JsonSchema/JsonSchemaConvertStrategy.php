@@ -19,11 +19,11 @@ use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
  */
 final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
 {
-    use JsonSchemaField;
-    use JsonSchemaFieldDependency;
-    use JsonSchemaFieldFilter;
-    use JsonSchemaModule;
-    use JsonSchemaPermittedValue;
+    use ConvertsFieldDependencyToJsonSchema;
+    use ConvertsFieldFilterToJsonSchema;
+    use ConvertsFieldToJsonSchema;
+    use ConvertsModuleToJsonSchema;
+    use ConvertsPermittedValueToJsonSchema;
 
     /**
      * @param  bool  $includeNullable  true ➜ mark fields as nullable when they have no default

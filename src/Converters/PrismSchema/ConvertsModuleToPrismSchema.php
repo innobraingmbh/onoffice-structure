@@ -8,7 +8,7 @@ use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\Module;
 use Prism\Prism\Schema\ObjectSchema;
 
-trait PrismSchemaModule
+trait ConvertsModuleToPrismSchema
 {
     public function convertModule(Module $module): ObjectSchema
     {

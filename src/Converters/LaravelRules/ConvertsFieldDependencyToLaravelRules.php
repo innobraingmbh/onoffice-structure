@@ -6,7 +6,7 @@ namespace Innobrain\Structure\Converters\LaravelRules;
 
 use Innobrain\Structure\Dtos\FieldDependency;
 
-trait LaravelRulesFieldDependency
+trait ConvertsFieldDependencyToLaravelRules
 {
     /**
      * @return array<string, mixed>
