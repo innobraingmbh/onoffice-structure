@@ -2,6 +2,19 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v1.0.0 - 2025-10-01
+
+### What's Changed
+
+* Add JsonSchema Converter by @Katalam in https://github.com/innobraingmbh/onoffice-structure/pull/6
+* [1.x] Structure changes by @Katalam in https://github.com/innobraingmbh/onoffice-structure/pull/7
+
+### New Contributors
+
+* @Katalam made their first contribution in https://github.com/innobraingmbh/onoffice-structure/pull/6
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v0.2.0...v1.0.0
+
 ## v0.2.0 - 2025-09-21
 
 * feat: filter fields
