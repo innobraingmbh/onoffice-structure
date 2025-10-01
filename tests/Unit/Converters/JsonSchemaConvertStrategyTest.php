@@ -327,8 +327,8 @@ describe('JsonSchemaConvertStrategy', function () {
             $schemaNullable = $strategyNullable->convertField($field);
             $schemaNotNullable = $strategyNotNullable->convertField($field);
 
-            expect($schemaNullable->nullable)->toBeTrue()
-                ->and($schemaNotNullable->nullable ?? false)->toBeFalse();
-        })->skip('nullable handling is not released yet');
+            expect($schemaNullable['optional']->toArray()['type'])->toBe(['string', 'null'])
+                ->and($schemaNotNullable['optional']->toArray()['type'])->toBe('string');
+        });
     });
 });

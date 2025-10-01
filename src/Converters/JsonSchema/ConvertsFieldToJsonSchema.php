@@ -50,11 +50,9 @@ trait ConvertsFieldToJsonSchema
     {
         $jsonSchema = JsonSchema::{$type}()
             ->title($name)
-            ->description($description ?? '');
-
-        if (! $nullable) {
-            $jsonSchema->required();
-        }
+            ->description($description ?? '')
+            ->required(! $nullable)
+            ->nullable($nullable);
 
         return [$name => $jsonSchema];
     }
@@ -65,7 +63,9 @@ trait ConvertsFieldToJsonSchema
     private function createStringSchema(Field $field, string $name, ?string $description, bool $nullable): array
     {
         $jsonSchema = JsonSchema::string()
-            ->title($name);
+            ->title($name)
+            ->required(! $nullable)
+            ->nullable($nullable);
 
         // Add length constraint info to description if available
         $finalDescription = $description ?? '';
@@ -76,10 +76,6 @@ trait ConvertsFieldToJsonSchema
 
         if ($field->length) {
             $jsonSchema->max($field->length);
-        }
-
-        if (! $nullable) {
-            $jsonSchema->required();
         }
 
         return [$name => $jsonSchema];
@@ -94,11 +90,9 @@ trait ConvertsFieldToJsonSchema
             // If no permitted values, fall back to StringSchema
             $jsonSchema = JsonSchema::string()
                 ->title($name)
-                ->description($description ?? '');
-
-            if (! $nullable) {
-                $jsonSchema->required();
-            }
+                ->description($description ?? '')
+                ->required(! $nullable)
+                ->nullable($nullable);
 
             return [$name => $jsonSchema];
         }
@@ -111,11 +105,9 @@ trait ConvertsFieldToJsonSchema
         $jsonSchema = JsonSchema::array()
             ->title($name)
             ->enum($options)
-            ->description($description ?? '');
-
-        if (! $nullable) {
-            $jsonSchema->required();
-        }
+            ->description($description ?? '')
+            ->required(! $nullable)
+            ->nullable($nullable);
 
         return [$name => $jsonSchema];
     }
@@ -135,11 +127,9 @@ trait ConvertsFieldToJsonSchema
                         ->description('Item value')
                         ->required()
                 )
-                ->description($description ?? '');
-
-            if (! $nullable) {
-                $jsonSchema->required();
-            }
+                ->description($description ?? '')
+                ->required(! $nullable)
+                ->nullable($nullable);
 
             return [$name => $jsonSchema];
         }
@@ -153,11 +143,9 @@ trait ConvertsFieldToJsonSchema
         $jsonSchema = JsonSchema::array()
             ->title($name)
             ->enum($options)
-            ->description($description ?? '');
-
-        if (! $nullable) {
-            $jsonSchema->required();
-        }
+            ->description($description ?? '')
+            ->required(! $nullable)
+            ->nullable($nullable);
 
         return [$name => $jsonSchema];
     }
