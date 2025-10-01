@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Http;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
-use Innobrain\Structure\Converters\LaravelRulesConvertStrategy;
+use Innobrain\Structure\Converters\LaravelRules\LaravelRulesConvertStrategy;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Facades\FieldConfiguration;
 

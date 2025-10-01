@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure\DTOs;
+namespace Innobrain\Structure\Dtos;
 
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
 
-class FieldFilter implements Convertible
+readonly class FieldFilter implements Convertible
 {
     use HasConverter;
 
@@ -16,7 +16,7 @@ class FieldFilter implements Convertible
      * @param  Collection<string, string[]>  $config
      */
     public function __construct(
-        public readonly string $name,
-        public readonly Collection $config,
+        public string $name,
+        public Collection $config,
     ) {}
 }

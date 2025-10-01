@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Collection;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;
-use Innobrain\Structure\Converters\PrismSchemaConvertStrategy;
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldDependency;
-use Innobrain\Structure\DTOs\Module;
-use Innobrain\Structure\DTOs\PermittedValue;
+use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\FieldDependency;
+use Innobrain\Structure\Dtos\Module;
+use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldType;
 use Prism\Prism\Schema\ArraySchema;

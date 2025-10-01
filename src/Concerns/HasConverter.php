@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Concerns;
 
-use Innobrain\Structure\Contracts\ConvertStrategy;
+use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
 use LogicException;
+use Throwable;
 
 use function class_basename;
 use function method_exists;
 
 /**
- * Implements Convertible::convert() once for every DTO via reflection.
+ * Implements Convertible::convert()
  */
 trait HasConverter
 {
+    /**
+     * @throws Throwable<LogicException>
+     */
     public function convert(ConvertStrategy $strategy): mixed
     {
         $method = 'convert'.class_basename(static::class);

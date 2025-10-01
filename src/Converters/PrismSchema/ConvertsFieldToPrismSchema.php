@@ -2,115 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure\Converters;
+namespace Innobrain\Structure\Converters\PrismSchema;
 
-use Innobrain\Structure\Contracts\ConvertStrategy;
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldDependency;
-use Innobrain\Structure\DTOs\FieldFilter;
-use Innobrain\Structure\DTOs\Module;
-use Innobrain\Structure\DTOs\PermittedValue;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldType;
 use Prism\Prism\Contracts\Schema;
 use Prism\Prism\Schema\ArraySchema;
 use Prism\Prism\Schema\BooleanSchema;
 use Prism\Prism\Schema\EnumSchema;
 use Prism\Prism\Schema\NumberSchema;
-use Prism\Prism\Schema\ObjectSchema;
 use Prism\Prism\Schema\StringSchema;
 
-/**
- * Convert the package's DTOs into Prism PHP schemas.
- *
- * Typical usage:
- *   $schema = $module->convert(new PrismSchemaConvertStrategy());
- *   $fieldSchema = $field->convert(new PrismSchemaConvertStrategy());
- *
- * The strategy returns:
- *   • Module   ⇒ ObjectSchema with properties for each field
- *   • Field    ⇒ Schema (type depends on field type)
- */
-final readonly class PrismSchemaConvertStrategy implements ConvertStrategy
+trait ConvertsFieldToPrismSchema
 {
-    /**
-     * @param  bool  $includeNullable  true ➜ mark fields as nullable when they have no default
-     * @param  bool  $includeDescriptions  true ➜ include field labels as descriptions
-     */
-    public function __construct(
-        private bool $includeNullable = true,
-        private bool $includeDescriptions = true,
-    ) {}
-
-    /* ---------------------------------------------------------------------
-     * ConvertStrategy – leaf DTOs
-     * ------------------------------------------------------------------- */
-
-    public function convertPermittedValue(PermittedValue $pv): mixed
-    {
-        // Permitted values are handled at the Field level as enum options
-        return $pv->key;
-    }
-
-    public function convertFieldDependency(FieldDependency $fd): mixed
-    {
-        // Dependencies could be used to determine required fields
-        // For now, we'll return metadata that can be used later
-        return [
-            'field' => $fd->dependentFieldKey,
-            'value' => $fd->dependentFieldValue,
-        ];
-    }
-
-    public function convertFieldFilter(FieldFilter $ff): mixed
-    {
-        // Filters aren't directly represented in Prism schemas
-        // Return metadata for potential future use
-        return [
-            'name' => $ff->name,
-            'config' => $ff->config->toArray(),
-        ];
-    }
-
-    /* ---------------------------------------------------------------------
-     * ConvertStrategy – aggregates
-     * ------------------------------------------------------------------- */
-
-    public function convertField(Field $field): mixed
+    public function convertField(Field $field): Schema
     {
         return $this->createBaseSchema($field);
     }
-
-    /**
-     * @return ObjectSchema
-     */
-    public function convertModule(Module $module): mixed
-    {
-        $properties = [];
-        $requiredFields = [];
-
-        foreach ($module->fields as $fieldKey => $field) {
-            /** @var Field $field */
-            $properties[] = $this->convertField($field);
-
-            // Mark field as required if it has a default value
-            if ($field->default !== null) {
-                $requiredFields[] = $fieldKey;
-            }
-        }
-
-        $description = $this->includeDescriptions ? $module->label : '';
-
-        return new ObjectSchema(
-            name: $module->key->value,
-            description: $description,
-            properties: $properties,
-            requiredFields: $requiredFields
-        );
-    }
-
-    /* ---------------------------------------------------------------------
-     * Internal helpers
-     * ------------------------------------------------------------------- */
 
     private function createBaseSchema(Field $field): Schema
     {
@@ -172,6 +81,9 @@ final readonly class PrismSchemaConvertStrategy implements ConvertStrategy
             );
         }
 
+        /**
+         * @var array<int, string> $options
+         */
         $options = $field->permittedValues
             ->map(fn (PermittedValue $pv) => $pv->key)
             ->values()
@@ -195,7 +107,11 @@ final readonly class PrismSchemaConvertStrategy implements ConvertStrategy
                 nullable: false
             );
         } else {
-            // Create enum schema for array items
+            /**
+             * Create enum schema for array items
+             *
+             * @var array<int, string> $options
+             */
             $options = $field->permittedValues
                 ->map(fn (PermittedValue $pv) => $pv->key)
                 ->values()

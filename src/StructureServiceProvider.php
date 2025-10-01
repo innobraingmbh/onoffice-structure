@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure;
 
-use Innobrain\Structure\Commands\StructureCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -19,9 +18,6 @@ class StructureServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('onoffice-structure')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_onoffice_structure_table')
-            ->hasCommand(StructureCommand::class);
+            ->hasConfigFile();
     }
 }

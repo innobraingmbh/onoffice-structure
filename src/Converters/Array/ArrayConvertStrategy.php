@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Innobrain\Structure\Converters\Array;
+
+use Innobrain\Structure\Converters\Array\Concerns\FilterEmptyRecursive;
+use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
+
+/**
+ * Concrete converter that turns DTOs into nested arrays.
+ */
+final readonly class ArrayConvertStrategy implements ConvertStrategy
+{
+    use ConvertsFieldDependencyToArray;
+    use ConvertsFieldFilterToArray;
+    use ConvertsFieldToArray;
+    use ConvertsModuleToArray;
+    use ConvertsPermittedValueToArray;
+    use FilterEmptyRecursive;
+
+    public function __construct(private bool $dropEmpty = false) {}
+
+    /**
+     * @param  array<string, mixed>  $payload
+     * @return array<string, mixed>
+     */
+    private function normalize(array $payload): array
+    {
+        return $this->dropEmpty ? $this->filterEmptyRecursive($payload) : $payload;
+    }
+}

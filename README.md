@@ -36,20 +36,9 @@ php artisan vendor:publish --provider="Innobrain\Structure\StructureServiceProvi
 
 This will publish the `onoffice-structure.php` file to your `config` directory. Currently, this file is a placeholder for future configuration options.
 
-You can publish the migration file using:
-```bash
-php artisan vendor:publish --provider="Innobrain\Structure\StructureServiceProvider" --tag="onoffice-structure-migrations"
-```
-This will publish the `create_onoffice_structure_table.php.stub` migration. _(Note: The package's current functionality does not heavily rely on this table, but it's provided for potential future use or custom extensions.)_
-
-You can publish the views (currently a `.gitkeep` placeholder) using:
-```bash
-php artisan vendor:publish --provider="Innobrain\Structure\StructureServiceProvider" --tag="onoffice-structure-views"
-```
-
 ## Usage
 
-The primary way to interact with the package is through the `Structure` facade or by injecting the `Innobrain\Structure\Structure` class.
+The primary way to interact with the package is through the `Structure` facade or by injecting the `Innobrain\Structure\Services\Structure` class.
 
 ### Fetching Structure Data
 
@@ -109,7 +98,7 @@ The DTOs and `ModulesCollection` implement the `Convertible` interface, allowing
 This strategy converts the DTOs into nested arrays.
 
 ```php
-use Innobrain\Structure\Converters\ArrayConvertStrategy;
+use Innobrain\Structure\Converters\Array\ArrayConvertStrategy;
 
 // Convert the entire collection of modules
 $strategy = new ArrayConvertStrategy(dropEmpty: false); // or true to remove null/empty values
@@ -130,7 +119,7 @@ The `ArrayConvertStrategy` constructor accepts a `bool $dropEmpty` (default `fal
 This strategy converts module or field DTOs into Laravel validation rules.
 
 ```php
-use Innobrain\Structure\Converters\LaravelRulesConvertStrategy;
+use Innobrain\Structure\Converters\LaravelRules\LaravelRulesConvertStrategy;
 
 // For a specific module (e.g., Address)
 $addressModule = $modulesCollection->get(FieldConfigurationModule::Address->value);
@@ -177,8 +166,9 @@ Constructor options for `LaravelRulesConvertStrategy`:
 This strategy converts module or field DTOs into [Prism PHP](https://prismphp.com/) schemas, which can be used for structured data generation with AI providers.
 
 ```php
-use Innobrain\Structure\Converters\PrismSchemaConvertStrategy;
-use Prism\Prism\Schema\ObjectSchema;
+use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;
+use Prism\Prism;
+use Prism\Providers\OpenRouter\OpenRouter;
 
 // Convert an entire module to a Prism ObjectSchema
 $addressModule = $modulesCollection->get(FieldConfigurationModule::Address->value);
@@ -195,8 +185,6 @@ $emailSchema = $emailField->convert($strategy);
 // Returns a StringSchema with max length constraint in description
 
 // Use the schema with Prism for AI-powered data generation
-use Prism\Prism;
-use Prism\Providers\OpenRouter\OpenRouter;
 
 $prism = Prism::using(OpenRouter::instance())
     ->withStructuredOutput($addressSchema);
@@ -216,6 +204,28 @@ The `PrismSchemaConvertStrategy` maps field types as follows:
 Constructor options for `PrismSchemaConvertStrategy`:
 *   `bool $includeNullable` (default `true`): If `true`, fields without default values are marked as nullable.
 *   `bool $includeDescriptions` (default `true`): If `true`, field labels are included as schema descriptions.
+
+#### 4. JsonSchema Conversion (`JsonSchemaConvertStrategy`)
+
+This strategy converts module or field DTOs into JsonSchema Laravel format.
+
+```php
+use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
+
+// Convert an entire module to a JsonSchema ObjectType
+$addressModule = $modulesCollection->get(FieldConfigurationModule::Address->value);
+$strategy = new JsonSchemaConvertStrategy(
+    includeNullable: true,     // Mark fields without defaults as nullable
+    includeDescriptions: true   // Include field labels as descriptions
+);
+$addressSchema = $addressModule->convert($strategy);
+// Returns an ObjectType with properties for each field
+
+// Convert a single field to its appropriate JsonSchema
+$emailField = $addressModule->fields->get('Email');
+$emailSchema = $emailField->convert($strategy);
+// Returns a StringType with max length constraint, also mentioned in the description
+```
 
 ## Data Transfer Objects (DTOs)
 
@@ -256,15 +266,6 @@ All DTOs implement `Innobrain\Structure\Contracts\Convertible`.
 ## Collections
 
 *   `Innobrain\Structure\Collections\ModulesCollection`: A custom collection that extends `Illuminate\Support\Collection` and holds `Module` DTOs. It also implements `Convertible`.
-
-## Artisan Command
-
-The package includes a basic Artisan command:
-
-```bash
-php artisan onoffice-structure
-```
-Currently, this command has a placeholder implementation.
 
 ## Testing
 

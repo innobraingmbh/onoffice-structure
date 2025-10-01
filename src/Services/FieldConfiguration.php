@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Innobrain\Structure;
+namespace Innobrain\Structure\Services;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
+use Innobrain\OnOfficeAdapter\Exceptions\OnOfficeException;
 use Innobrain\OnOfficeAdapter\Facades\FieldRepository;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldDependency;
-use Innobrain\Structure\DTOs\FieldFilter;
-use Innobrain\Structure\DTOs\Module;
-use Innobrain\Structure\DTOs\PermittedValue;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\FieldDependency;
+use Innobrain\Structure\Dtos\FieldFilter;
+use Innobrain\Structure\Dtos\Module;
+use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldType;
 
@@ -26,17 +27,14 @@ class FieldConfiguration
 {
     /**
      * Retrieve the field configuration for a given client.
+     *
+     * @param  array<int, string>  $only
+     *
+     * @throws OnOfficeException
      */
     public function retrieveForClient(OnOfficeApiCredentials $credentials, array $only = []): ModulesCollection
     {
-        $moduleCases = FieldConfigurationModule::cases();
-        $moduleValues = collect($moduleCases)
-            ->map(fn (FieldConfigurationModule $module) => $module->value)
-            ->toArray();
-
-        if (count($only) > 0) {
-            $moduleValues = array_filter($moduleValues, fn (string $value) => in_array($value, $only, true));
-        }
+        $moduleValues = FieldConfigurationModule::values($only);
 
         $rawModulesData = FieldRepository::query()
             ->withCredentials($credentials)
@@ -59,7 +57,6 @@ class FieldConfiguration
             if (! is_array($moduleData['elements'])) {
                 continue;
             }
-
             $moduleKey = $moduleData['id'] ?? $moduleKey;
             $moduleEnum = FieldConfigurationModule::tryFrom((string) $moduleKey);
 
@@ -100,17 +97,26 @@ class FieldConfiguration
                 continue; // unknown field type
             }
 
-            $fields->put((string) $fieldKey, new Field(
-                key: (string) $fieldKey,
-                label: (string) Arr::get($fieldData, 'label', ucfirst((string) $fieldKey)),
+            /** @var array<int, string> $compoundFields */
+            $compoundFields = Arr::get($fieldData, 'compoundFields', []);
+
+            $fields->put($fieldKey, new Field(
+                key: $fieldKey,
+                label: (string) Arr::get($fieldData, 'label', ucfirst($fieldKey)),
                 type: $fieldType,
-                length: Arr::get($fieldData, 'length') ? (int) Arr::get($fieldData, 'length') : null,
+                length: Arr::get($fieldData, 'length')
+                    ? (int) Arr::get($fieldData, 'length')
+                    : null,
                 permittedValues: $this->parsePermittedValues(Arr::get($fieldData, 'permittedvalues', [])),
-                default: Arr::get($fieldData, 'default') ? (string) Arr::get($fieldData, 'default') : null,
+                default: Arr::get($fieldData, 'default')
+                    ? (string) Arr::get($fieldData, 'default')
+                    : null,
                 filters: $this->parseFieldFilters(Arr::get($fieldData, 'filters', [])),
                 dependencies: $this->parseFieldDependencies(Arr::get($fieldData, 'dependencies', [])),
-                compoundFields: collect(Arr::get($fieldData, 'compoundFields', [])),
-                fieldMeasureFormat: Arr::get($fieldData, 'fieldMeasureFormat') ? (string) Arr::get($fieldData, 'fieldMeasureFormat') : null,
+                compoundFields: collect($compoundFields),
+                fieldMeasureFormat: Arr::get($fieldData, 'fieldMeasureFormat')
+                    ? (string) Arr::get($fieldData, 'fieldMeasureFormat')
+                    : null,
             ));
         }
 
@@ -138,6 +144,9 @@ class FieldConfiguration
         return $permittedValues;
     }
 
+    /**
+     * @return Collection<string, FieldFilter>
+     */
     private function parseFieldFilters(mixed $filtersData): Collection
     {
         if (! is_array($filtersData)) {
@@ -167,6 +176,9 @@ class FieldConfiguration
         return $filters;
     }
 
+    /**
+     * @return Collection<int, FieldDependency>
+     */
     private function parseFieldDependencies(mixed $dependenciesData): Collection
     {
         $dependencies = new Collection;

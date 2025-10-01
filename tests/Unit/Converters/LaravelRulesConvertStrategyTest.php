@@ -6,11 +6,11 @@ namespace Innobrain\Structure\Tests\Unit\Converters;
 
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Collections\FieldCollection;
-use Innobrain\Structure\Converters\LaravelRulesConvertStrategy;
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldDependency;
-use Innobrain\Structure\DTOs\Module;
-use Innobrain\Structure\DTOs\PermittedValue;
+use Innobrain\Structure\Converters\LaravelRules\LaravelRulesConvertStrategy;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\FieldDependency;
+use Innobrain\Structure\Dtos\Module;
+use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldType;
 

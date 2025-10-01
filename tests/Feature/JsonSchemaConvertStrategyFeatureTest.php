@@ -3,14 +3,13 @@
 declare(strict_types=1);
 
 use Illuminate\JsonSchema\Types\ObjectType;
-use Illuminate\Support\Collection;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;
-use Innobrain\Structure\Converters\JsonSchemaConvertStrategy;
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldDependency;
-use Innobrain\Structure\DTOs\Module;
-use Innobrain\Structure\DTOs\PermittedValue;
+use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\FieldDependency;
+use Innobrain\Structure\Dtos\Module;
+use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldType;
 
@@ -147,19 +146,19 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
             ->and($properties['objekttitel']['title'])->toBe('objekttitel')
             ->and($properties['objekttitel']['description'])->toContain('Property Title')
             ->and($properties['objekttitel']['description'])->toContain('max length: 200')
-            ->and($properties['objekttitel']['type'])->toBe('string')
+            ->and($properties['objekttitel']['type'])->toBe(['string', 'null'])
             ->and($properties['objekttitel']['maxLength'])->toBe(200)
             // Enum field (single select)
             ->and($properties['objektart'])->toBeArray()
             ->and($properties['objektart']['title'])->toBe('objektart')
             ->and($properties['objektart']['description'])->toContain('Property Type')
-            ->and($properties['objektart']['type'])->toBe('array')
+            ->and($properties['objektart']['type'])->toBe(['array', 'null'])
             ->and($properties['objektart']['enum'])->toBe(['haus', 'wohnung', 'grundstueck'])
             // Number field (float)
             ->and($properties['kaufpreis'])->toBeArray()
             ->and($properties['kaufpreis']['title'])->toBe('kaufpreis')
             ->and($properties['kaufpreis']['description'])->toContain('Purchase Price')
-            ->and($properties['kaufpreis']['type'])->toBe('number')
+            ->and($properties['kaufpreis']['type'])->toBe(['number', 'null'])
             // Integer field
             ->and($properties['zimmer'])->toBeArray()
             ->and($properties['zimmer']['title'])->toBe('zimmer')
@@ -169,7 +168,7 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
             ->and($properties['ausstattung'])->toBeArray()
             ->and($properties['ausstattung']['title'])->toBe('ausstattung')
             ->and($properties['ausstattung']['description'])->toContain('Features')
-            ->and($properties['ausstattung']['type'])->toBe('array')
+            ->and($properties['ausstattung']['type'])->toBe(['array', 'null'])
             ->and($properties['ausstattung']['enum'])->toBe(['balkon', 'garten', 'garage', 'keller', 'aufzug'])
             // Boolean field
             ->and($properties['verfuegbar'])->toBeArray()
@@ -181,11 +180,11 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
             ->and($properties['verfuegbar_ab']['title'])->toBe('verfuegbar_ab')
             ->and($properties['verfuegbar_ab']['description'])->toContain('Available From')
             ->and($properties['verfuegbar_ab']['description'])->toContain('YYYY-MM-DD')
-            ->and($properties['verfuegbar_ab']['type'])->toBe('string')
+            ->and($properties['verfuegbar_ab']['type'])->toBe(['string', 'null'])
             // Text field
             ->and($properties['beschreibung'])->toBeArray()
             ->and($properties['beschreibung']['title'])->toBe('beschreibung')
-            ->and($properties['beschreibung']['type'])->toBe('string')
+            ->and($properties['beschreibung']['type'])->toBe(['string', 'null'])
             // Check required fields
             ->and($schema['required'])->toBeArray()
             ->toContain('zimmer')
@@ -385,15 +384,15 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
 
         expect($propertyTypes)->toBe([
             'varchar_field' => 'string',
-            'text_field' => 'string',
-            'blob_field' => 'string',
+            'text_field' => ['string', 'null'],
+            'blob_field' => ['string', 'null'],
             'integer_field' => 'integer',
             'float_field' => 'number',
             'boolean_field' => 'boolean',
-            'date_field' => 'string',
-            'datetime_field' => 'string',
+            'date_field' => ['string', 'null'],
+            'datetime_field' => ['string', 'null'],
             'single_select_field' => 'array',
-            'multi_select_field' => 'array',
+            'multi_select_field' => ['array', 'null'],
         ]);
 
         $schema = $schema->toArray();

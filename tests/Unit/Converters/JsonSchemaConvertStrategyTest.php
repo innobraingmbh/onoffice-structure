@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
+use Illuminate\JsonSchema\Types\ArrayType;
+use Illuminate\JsonSchema\Types\BooleanType;
+use Illuminate\JsonSchema\Types\IntegerType;
+use Illuminate\JsonSchema\Types\ObjectType;
+use Illuminate\JsonSchema\Types\StringType;
 use Innobrain\Structure\Collections\FieldCollection;
-use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;
+use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\FieldDependency;
 use Innobrain\Structure\Dtos\FieldFilter;
@@ -11,16 +16,10 @@ use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldType;
-use Prism\Prism\Schema\ArraySchema;
-use Prism\Prism\Schema\BooleanSchema;
-use Prism\Prism\Schema\EnumSchema;
-use Prism\Prism\Schema\NumberSchema;
-use Prism\Prism\Schema\ObjectSchema;
-use Prism\Prism\Schema\StringSchema;
 
-describe('PrismSchemaConvertStrategy', function () {
+describe('JsonSchemaConvertStrategy', function () {
     beforeEach(function () {
-        $this->strategy = new PrismSchemaConvertStrategy;
+        $this->strategy = new JsonSchemaConvertStrategy;
     });
 
     describe('convertPermittedValue', function () {
@@ -78,11 +77,12 @@ describe('PrismSchemaConvertStrategy', function () {
 
             $schema = $this->strategy->convertField($field);
 
-            expect($schema)->toBeInstanceOf(StringSchema::class)
-                ->and($schema->name)->toBe('name')
-                ->and($schema->description)->toContain('Full Name')
-                ->and($schema->description)->toContain('max length: 255')
-                ->and($schema->nullable)->toBeTrue();
+            expect($schema)->toBeArray()
+                ->and($schema['name'])->toBeInstanceOf(StringType::class)
+                ->and($schema['name']->toArray()['title'])->toBe('name')
+                ->and($schema['name']->toArray()['description'])->toContain('Full Name')
+                ->and($schema['name']->toArray()['description'])->toContain('max length: 255')
+                ->and($schema['name']->toArray()['maxLength'])->toBe(255);
         });
 
         it('converts integer field to NumberSchema', function () {
@@ -101,9 +101,10 @@ describe('PrismSchemaConvertStrategy', function () {
 
             $schema = $this->strategy->convertField($field);
 
-            expect($schema)->toBeInstanceOf(NumberSchema::class)
-                ->and($schema->name)->toBe('age')
-                ->and($schema->description)->toBe('Age');
+            expect($schema)->toBeArray()
+                ->and($schema['age'])->toBeInstanceOf(IntegerType::class)
+                ->and($schema['age']->toArray()['title'])->toBe('age')
+                ->and($schema['age']->toArray()['description'])->toBe('Age');
         });
 
         it('converts boolean field to BooleanSchema', function () {
@@ -122,9 +123,9 @@ describe('PrismSchemaConvertStrategy', function () {
 
             $schema = $this->strategy->convertField($field);
 
-            expect($schema)->toBeInstanceOf(BooleanSchema::class)
-                ->and($schema->name)->toBe('active')
-                ->and($schema->nullable ?? false)->toBeFalsy();
+            expect($schema)->toBeArray()
+                ->and($schema['active'])->toBeInstanceOf(BooleanType::class)
+                ->and($schema['active']->toArray()['title'])->toBe('active');
         });
 
         it('converts date field to StringSchema with date format', function () {
@@ -143,9 +144,10 @@ describe('PrismSchemaConvertStrategy', function () {
 
             $schema = $this->strategy->convertField($field);
 
-            expect($schema)->toBeInstanceOf(StringSchema::class)
-                ->and($schema->description)->toContain('Birth Date')
-                ->and($schema->description)->toContain('YYYY-MM-DD');
+            expect($schema)->toBeArray()
+                ->and($schema['birthdate'])->toBeInstanceOf(StringType::class)
+                ->and($schema['birthdate']->toArray()['description'])->toContain('Birth Date')
+                ->and($schema['birthdate']->toArray()['description'])->toContain('YYYY-MM-DD');
         });
 
         it('converts single select field to EnumSchema', function () {
@@ -167,9 +169,9 @@ describe('PrismSchemaConvertStrategy', function () {
 
             $schema = $this->strategy->convertField($field);
 
-            expect($schema)->toBeInstanceOf(EnumSchema::class)
-                ->and($schema->name)->toBe('status')
-                ->and($schema->options)->toBe(['active', 'inactive']);
+            expect($schema)->toBeArray()
+                ->and($schema['status'])->toBeInstanceOf(ArrayType::class)
+                ->and($schema['status']->toArray()['enum'])->toBe(['active', 'inactive']);
         });
 
         it('converts multi select field to ArraySchema with EnumSchema items', function () {
@@ -192,10 +194,9 @@ describe('PrismSchemaConvertStrategy', function () {
 
             $schema = $this->strategy->convertField($field);
 
-            expect($schema)->toBeInstanceOf(ArraySchema::class)
-                ->and($schema->name)->toBe('tags')
-                ->and($schema->items)->toBeInstanceOf(EnumSchema::class)
-                ->and($schema->items->options)->toBe(['php', 'js', 'python']);
+            expect($schema)->toBeArray()
+                ->and($schema['tags'])->toBeInstanceOf(ArrayType::class)
+                ->and($schema['tags']->toArray()['enum'])->toBe(['php', 'js', 'python']);
         });
 
         it('handles empty permitted values for select fields', function () {
@@ -214,7 +215,8 @@ describe('PrismSchemaConvertStrategy', function () {
 
             $schema = $this->strategy->convertField($field);
 
-            expect($schema)->toBeInstanceOf(StringSchema::class);
+            expect($schema)->toBeArray()
+                ->and($schema['category'])->toBeInstanceOf(StringType::class);
         });
     });
 
@@ -265,17 +267,17 @@ describe('PrismSchemaConvertStrategy', function () {
 
             $schema = $this->strategy->convertModule($module);
 
-            expect($schema)->toBeInstanceOf(ObjectSchema::class)
-                ->and($schema->name)->toBe('address')
-                ->and($schema->description)->toBe('Address Information')
-                ->and($schema->properties)->toHaveCount(3)
-                ->and($schema->requiredFields)->toBe(['verified']);
+            expect($schema)->toBeInstanceOf(ObjectType::class)
+                ->and($schema->toArray()['title'])->toBe('address')
+                ->and($schema->toArray()['description'])->toBe('Address Information')
+                ->and($schema->toArray()['properties'])->toHaveCount(3)
+                ->and($schema->toArray()['required'])->toBe(['verified']);
         });
     });
 
     describe('configuration options', function () {
         it('excludes descriptions when configured', function () {
-            $strategy = new PrismSchemaConvertStrategy(
+            $strategy = new JsonSchemaConvertStrategy(
                 includeNullable: true,
                 includeDescriptions: false
             );
@@ -295,16 +297,16 @@ describe('PrismSchemaConvertStrategy', function () {
 
             $schema = $strategy->convertField($field);
 
-            expect($schema->description)->toBe('');
+            expect($schema['email']->toArray())->not->toHaveKey('description');
         });
 
         it('handles nullable configuration', function () {
-            $strategyNullable = new PrismSchemaConvertStrategy(
+            $strategyNullable = new JsonSchemaConvertStrategy(
                 includeNullable: true,
                 includeDescriptions: true
             );
 
-            $strategyNotNullable = new PrismSchemaConvertStrategy(
+            $strategyNotNullable = new JsonSchemaConvertStrategy(
                 includeNullable: false,
                 includeDescriptions: true
             );
@@ -325,8 +327,8 @@ describe('PrismSchemaConvertStrategy', function () {
             $schemaNullable = $strategyNullable->convertField($field);
             $schemaNotNullable = $strategyNotNullable->convertField($field);
 
-            expect($schemaNullable->nullable)->toBeTrue()
-                ->and($schemaNotNullable->nullable ?? false)->toBeFalse();
+            expect($schemaNullable['optional']->toArray()['type'])->toBe(['string', 'null'])
+                ->and($schemaNotNullable['optional']->toArray()['type'])->toBe('string');
         });
     });
 });

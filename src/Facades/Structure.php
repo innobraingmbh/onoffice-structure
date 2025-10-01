@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace Innobrain\Structure\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
+use Innobrain\Structure\Collections\ModulesCollection;
+use Innobrain\Structure\Services\Structure as ServiceStructure;
 
 /**
- * @see \Innobrain\Structure\Structure
+ * @see ServiceStructure
+ *
+ * @method static ServiceStructure forClient(OnOfficeApiCredentials $onOfficeApiCredentials)
+ * @method static ModulesCollection getModules(string|array<int, string> $only = [])
  */
 class Structure extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \Innobrain\Structure\Structure::class;
+        return ServiceStructure::class;
     }
 }

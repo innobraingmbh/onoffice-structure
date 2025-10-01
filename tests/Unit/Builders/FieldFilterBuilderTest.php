@@ -7,8 +7,8 @@ namespace Innobrain\Structure\Tests\Unit\Builders;
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Builders\FieldFilterBuilder;
 use Innobrain\Structure\Collections\FieldCollection;
-use Innobrain\Structure\DTOs\Field;
-use Innobrain\Structure\DTOs\FieldFilter;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\FieldFilter;
 use Innobrain\Structure\Enums\FieldType;
 
 describe('FieldFilterBuilder', function () {
@@ -81,10 +81,11 @@ describe('FieldFilterBuilder', function () {
             $builder = new FieldFilterBuilder($this->fields);
             $result = $builder->where('type', 'estate')->get();
 
-            expect($result)->toBeInstanceOf(FieldCollection::class);
-            expect($result->count())->toBe(2); // field1 and field3 (field3 has no filters so matches all)
-            expect($result->has('field1'))->toBeTrue();
-            expect($result->has('field3'))->toBeTrue();
+            // field1 and field3 (field3 has no filters so matches all)
+            expect($result)->toBeInstanceOf(FieldCollection::class)
+                ->and($result->count())->toBe(2)
+                ->and($result->has('field1'))->toBeTrue()
+                ->and($result->has('field3'))->toBeTrue();
         });
 
         it('chains multiple where clauses', function () {
@@ -94,9 +95,9 @@ describe('FieldFilterBuilder', function () {
                 ->where('category', 'house')
                 ->get();
 
-            expect($result->count())->toBe(2);
-            expect($result->has('field1'))->toBeTrue();
-            expect($result->has('field3'))->toBeTrue();
+            expect($result->count())->toBe(2)
+                ->and($result->has('field1'))->toBeTrue()
+                ->and($result->has('field3'))->toBeTrue();
         });
 
         it('returns empty collection when no fields match', function () {
@@ -105,9 +106,10 @@ describe('FieldFilterBuilder', function () {
                 ->where('type', 'nonexistent')
                 ->get();
 
-            expect($result)->toBeInstanceOf(FieldCollection::class);
-            expect($result->count())->toBe(1); // Only field3 which has no filters
-            expect($result->has('field3'))->toBeTrue();
+            // Only field3 which has no filters
+            expect($result)->toBeInstanceOf(FieldCollection::class)
+                ->and($result->count())->toBe(1)
+                ->and($result->has('field3'))->toBeTrue();
         });
 
         it('overwrites previous filter value when same key is used', function () {
@@ -117,9 +119,9 @@ describe('FieldFilterBuilder', function () {
                 ->where('type', 'land') // Overwrites previous
                 ->get();
 
-            expect($result->count())->toBe(2);
-            expect($result->has('field2'))->toBeTrue();
-            expect($result->has('field3'))->toBeTrue();
+            expect($result->count())->toBe(2)
+                ->and($result->has('field2'))->toBeTrue()
+                ->and($result->has('field3'))->toBeTrue();
         });
     });
 
@@ -128,24 +130,24 @@ describe('FieldFilterBuilder', function () {
             $builder = new FieldFilterBuilder($this->fields);
             $result = $builder->get();
 
-            expect($result)->toBeInstanceOf(FieldCollection::class);
-            expect($result->count())->toBe(3);
+            expect($result)->toBeInstanceOf(FieldCollection::class)
+                ->and($result->count())->toBe(3);
         });
 
         it('returns filtered FieldCollection instance', function () {
             $builder = new FieldFilterBuilder($this->fields);
             $result = $builder->where('type', 'land')->get();
 
-            expect($result)->toBeInstanceOf(FieldCollection::class);
-            expect($result->count())->toBe(2);
+            expect($result)->toBeInstanceOf(FieldCollection::class)
+                ->and($result->count())->toBe(2);
         });
 
         it('returns new FieldCollection instance', function () {
             $builder = new FieldFilterBuilder($this->fields);
             $result = $builder->where('type', 'estate')->get();
 
-            expect($result)->not->toBe($this->fields);
-            expect($result)->toBeInstanceOf(FieldCollection::class);
+            expect($result)->not->toBe($this->fields)
+                ->and($result)->toBeInstanceOf(FieldCollection::class);
         });
     });
 
@@ -154,8 +156,8 @@ describe('FieldFilterBuilder', function () {
             $builder = new FieldFilterBuilder($this->fields);
             $result = $builder->where('type', 'estate')->first();
 
-            expect($result)->toBeInstanceOf(Field::class);
-            expect($result->key)->toBe('field1');
+            expect($result)->toBeInstanceOf(Field::class)
+                ->and($result->key)->toBe('field1');
         });
 
         it('returns null when no fields match', function () {

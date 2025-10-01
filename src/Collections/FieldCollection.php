@@ -6,12 +6,12 @@ namespace Innobrain\Structure\Collections;
 
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Builders\FieldFilterBuilder;
-use Innobrain\Structure\DTOs\Field;
+use Innobrain\Structure\Dtos\Field;
 
 /**
  * @extends Collection<string, Field>
  */
-class FieldCollection extends Collection
+final class FieldCollection extends Collection
 {
     public function whereMatchesFilters(): FieldFilterBuilder
     {
