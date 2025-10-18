@@ -2,6 +2,12 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v1.0.1 - 2025-10-18
+
+* allow prism up to v1
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v1.0.0...v1.0.1
+
 ## v1.0.0 - 2025-10-01
 
 ### What's Changed
