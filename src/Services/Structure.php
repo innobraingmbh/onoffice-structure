@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\OnOfficeAdapter\Exceptions\OnOfficeException;
 use Innobrain\Structure\Collections\ModulesCollection;
+use Innobrain\Structure\Enums\Language;
 use LogicException;
 use Throwable;
 
@@ -31,10 +32,10 @@ class Structure
      * @throws OnOfficeException
      * @throws Throwable
      */
-    public function getModules(string|array $only = []): ModulesCollection
+    public function getModules(string|array $only = [], Language $language = Language::German): ModulesCollection
     {
         throw_unless($this->onOfficeApiCredentials instanceof OnOfficeApiCredentials, LogicException::class, 'No OnOfficeApiCredentials provided. Use the forClient method to provide credentials.');
 
-        return $this->fieldConfiguration->retrieveForClient($this->onOfficeApiCredentials, Arr::wrap($only));
+        return $this->fieldConfiguration->retrieveForClient($this->onOfficeApiCredentials, Arr::wrap($only), $language);
     }
 }

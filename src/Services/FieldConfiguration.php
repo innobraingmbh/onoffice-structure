@@ -18,6 +18,7 @@ use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldType;
+use Innobrain\Structure\Enums\Language;
 
 use function is_array;
 use function is_string;
@@ -32,7 +33,7 @@ class FieldConfiguration
      *
      * @throws OnOfficeException
      */
-    public function retrieveForClient(OnOfficeApiCredentials $credentials, array $only = []): ModulesCollection
+    public function retrieveForClient(OnOfficeApiCredentials $credentials, array $only = [], Language $language = Language::German): ModulesCollection
     {
         $moduleValues = FieldConfigurationModule::values($only);
 
@@ -41,7 +42,7 @@ class FieldConfiguration
             ->withModules($moduleValues)
             ->parameters([
                 'labels' => true,
-                'language' => 'DEU',
+                'language' => $language->value,
                 'showfieldfilters' => true,
                 'showfielddependencies' => true,
                 'showFieldMeasureFormat' => true,
