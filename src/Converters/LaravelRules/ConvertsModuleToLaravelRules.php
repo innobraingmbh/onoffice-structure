@@ -28,7 +28,7 @@ trait ConvertsModuleToLaravelRules
             // Extra rules per item for multi-selects
             if ($field->type === FieldType::MultiSelect && $field->permittedValues->isNotEmpty()) {
                 $itemRules = [
-                    'in:'.implode(',', $field->permittedValues->keys()->toArray()),
+                    'in:'.implode(',', $field->permittedValues->keys()->all()),
                 ];
                 $result[$fieldKey.'.*'] = $this->pipeOrArray($itemRules);
             }

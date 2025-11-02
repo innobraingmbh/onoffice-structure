@@ -15,7 +15,7 @@ trait ConvertsFieldFilterToArray
     {
         return $this->normalize([
             'name' => $fieldFilter->name,
-            'config' => $fieldFilter->config->toArray(),
+            'config' => $fieldFilter->config->all(),
         ]);
     }
 }
