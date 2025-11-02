@@ -87,7 +87,7 @@ trait ConvertsFieldToPrismSchema
         $options = $field->permittedValues
             ->map(fn (PermittedValue $pv) => $pv->key)
             ->values()
-            ->toArray();
+            ->all();
 
         return new EnumSchema(
             name: $name,
@@ -115,7 +115,7 @@ trait ConvertsFieldToPrismSchema
             $options = $field->permittedValues
                 ->map(fn (PermittedValue $pv) => $pv->key)
                 ->values()
-                ->toArray();
+                ->all();
 
             $itemSchema = new EnumSchema(
                 name: $name.'_item',

@@ -100,7 +100,7 @@ trait ConvertsFieldToJsonSchema
         $options = $field->permittedValues
             ->map(fn (PermittedValue $pv) => $pv->key)
             ->values()
-            ->toArray();
+            ->all();
 
         $jsonSchema = JsonSchema::array()
             ->title($name)
@@ -138,7 +138,7 @@ trait ConvertsFieldToJsonSchema
         $options = $field->permittedValues
             ->map(fn (PermittedValue $pv) => $pv->key)
             ->values()
-            ->toArray();
+            ->all();
 
         $jsonSchema = JsonSchema::array()
             ->title($name)

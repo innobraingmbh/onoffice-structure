@@ -73,7 +73,7 @@ trait ConvertsFieldToLaravelRules
             return [];
         }
 
-        $values = $field->permittedValues->keys()->toArray();
+        $values = $field->permittedValues->keys()->all();
 
         return ['in:'.implode(',', $values)];
     }
@@ -90,6 +90,6 @@ trait ConvertsFieldToLaravelRules
         // @phpstan-ignore-next-line
         return $field->dependencies
             ->map(fn (FieldDependency $dependency) => 'required_if:'.$dependency->dependentFieldKey.','.$dependency->dependentFieldValue)
-            ->toArray();
+            ->all();
     }
 }

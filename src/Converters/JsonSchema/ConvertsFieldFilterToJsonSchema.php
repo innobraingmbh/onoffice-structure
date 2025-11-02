@@ -17,7 +17,7 @@ trait ConvertsFieldFilterToJsonSchema
         // Return metadata for potential future use
         return [
             'name' => $fieldFilter->name,
-            'config' => $fieldFilter->config->toArray(),
+            'config' => $fieldFilter->config->all(),
         ];
     }
 }
