@@ -10,5 +10,6 @@ enum Language: string
     case English = 'ENG';
     case French = 'FRA';
     case Spanish = 'ESP';
+    case Italian = 'ITA';
     case Croatian = 'HRV';
 }
