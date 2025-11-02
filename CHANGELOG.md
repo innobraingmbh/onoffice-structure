@@ -2,6 +2,12 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v1.1.2 - 2025-11-02
+
+* chore: support italian
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v1.1.1...v1.1.2
+
 ## v1.1.1 - 2025-11-02
 
 * chore: docblocks for facades
