@@ -2,6 +2,19 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v1.1.0 - 2025-11-02
+
+### What's Changed
+
+* chore(deps): bump stefanzweifel/git-auto-commit-action from 6 to 7 by @dependabot[bot] in https://github.com/innobraingmbh/onoffice-structure/pull/10
+* feat: allow passing the user language by @kauffinger in https://github.com/innobraingmbh/onoffice-structure/pull/11
+
+### New Contributors
+
+* @kauffinger made their first contribution in https://github.com/innobraingmbh/onoffice-structure/pull/11
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v1.0.1...v1.1.0
+
 ## v1.0.1 - 2025-10-18
 
 * allow prism up to v1
