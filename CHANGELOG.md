@@ -2,6 +2,14 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v1.2.0 - 2025-11-04
+
+### What's Changed
+
+* feat: enable manual override of required fields if necessary by @kauffinger in https://github.com/innobraingmbh/onoffice-structure/pull/12
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v1.1.2...v1.2.0
+
 ## v1.1.2 - 2025-11-02
 
 * chore: support italian
