@@ -31,7 +31,7 @@ trait ConvertsModuleToPrismSchema
             name: $module->key->value,
             description: $description,
             properties: $properties,
-            requiredFields: $requiredFields
+            requiredFields: $this->requiredFieldKeys !== [] ? $this->requiredFieldKeys : $requiredFields
         );
     }
 }
