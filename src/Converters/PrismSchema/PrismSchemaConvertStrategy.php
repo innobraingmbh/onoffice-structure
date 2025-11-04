@@ -28,9 +28,11 @@ final readonly class PrismSchemaConvertStrategy implements ConvertStrategy
     /**
      * @param  bool  $includeNullable  true ➜ mark fields as nullable when they have no default
      * @param  bool  $includeDescriptions  true ➜ include field labels as descriptions
+     * @param  string[]  $requiredFieldKeys  list of field keys to mark as required, overrides internal logic
      */
     public function __construct(
         private bool $includeNullable = true,
         private bool $includeDescriptions = true,
+        private array $requiredFieldKeys = [],
     ) {}
 }
