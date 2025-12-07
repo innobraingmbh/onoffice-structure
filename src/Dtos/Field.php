@@ -81,4 +81,27 @@ readonly class Field implements Convertible
 
         return true;
     }
+
+    /**
+     * Returns true if the field has permitted values
+     */
+    public function hasPermittedValues(): bool
+    {
+        return $this->permittedValues->isNotEmpty();
+    }
+
+    /**
+     * Returns true if the field contains the given permitted value key.
+     * Will also return false if the field has no permitted values.
+     * You need to check hasPermittedValues() before calling this method.
+     */
+    public function containsPermittedValue(string $permittedValueKey): bool
+    {
+        return $this->permittedValues->contains(static fn (PermittedValue $permittedValue) => $permittedValue->key === $permittedValueKey);
+    }
+
+    public function doesntContainPermittedValue(string $permittedValueKey): bool
+    {
+        return ! $this->containsPermittedValue($permittedValueKey);
+    }
 }
