@@ -24,8 +24,9 @@ final class FieldCollection extends Collection
      */
     public function sanitize(Collection $data): Collection
     {
-        return $data->only($this->keys())
+        return $data->intersectByKeys($this)
             ->reject(function (string $value, string $key) {
+                /** @var Field $field */
                 $field = $this->get($key);
 
                 return $field->hasPermittedValues() && $field->doesntContainPermittedValue($value);
