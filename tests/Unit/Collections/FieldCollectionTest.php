@@ -157,4 +157,28 @@ describe('FieldCollection', function () {
             ->and($cleanedData->has('field3'))->toBeFalse()
             ->and($cleanedData->has('field4'))->toBeFalse();
     });
+
+    test('sanitize keeps values matching permitted values', function () {
+        $field = new Field(
+            key: 'status',
+            label: 'Status',
+            type: FieldType::SingleSelect,
+            length: null,
+            permittedValues: new Collection([
+                new PermittedValue('active', 'Active'),
+                new PermittedValue('inactive', 'Inactive'),
+            ]),
+            default: null,
+            filters: new Collection,
+            dependencies: new Collection,
+            compoundFields: new Collection,
+            fieldMeasureFormat: null
+        );
+
+        $fields = new FieldCollection(['status' => $field]);
+
+        $cleanedData = $fields->sanitize(new Collection(['status' => 'active']));
+
+        expect($cleanedData->get('status'))->toBe('active');
+    });
 });
