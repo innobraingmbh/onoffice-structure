@@ -92,8 +92,6 @@ readonly class Field implements Convertible
 
     /**
      * Returns true if the field contains the given permitted value key.
-     * Will also return false if the field has no permitted values.
-     * You need to check hasPermittedValues() before calling this method.
      */
     public function containsPermittedValue(string $permittedValueKey): bool
     {
