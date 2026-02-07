@@ -138,7 +138,7 @@ describe('FieldCollection', function () {
     test('remove data not present in collection', function () {
         $data = new Collection([
             'field1' => 'estate',
-            'field2' => true,
+            'field2' => '1',
             'field3' => 'single-select',
             'field4' => 'extra',
         ]);

@@ -23,7 +23,7 @@ final class FieldCollection extends Collection
      */
     public function hasField(string $fieldKeyName): bool
     {
-        return $this->contains(static fn (Field $field) => $field->key === $fieldKeyName);
+        return $this->has($fieldKeyName);
     }
 
     /**
@@ -38,17 +38,17 @@ final class FieldCollection extends Collection
      * Remove data entries that do not correspond to any field in the collection
      * or have values not permitted by their respective fields.
      *
-     * @param  Collection<string, mixed>  $data
-     * @return Collection<string, mixed>
+     * @param  Collection<string, string>  $data
+     * @return Collection<string, string>
      */
     public function removeDataNotPresentInCollection(Collection $data): Collection
     {
-        return $data->map(function (mixed $value, string $key) {
+        return $data->map(function (string $value, string $key) {
             if ($this->doesntHaveField($key)) {
                 return null;
             }
-            $field = $this->first(static fn (Field $field) => $field->key === $key);
-            assert($field instanceof Field);
+
+            $field = $this->get($key);
 
             if ($field->hasPermittedValues() && $field->doesntContainPermittedValue($value)) {
                 return null;
