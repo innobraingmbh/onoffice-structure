@@ -23,29 +23,26 @@ describe('JsonSchemaConvertStrategy', function () {
     });
 
     describe('convertPermittedValue', function () {
-        it('returns the key of the permitted value', function () {
+        it('returns empty array by default', function () {
             $pv = new PermittedValue('active', 'Active');
 
             expect($this->strategy->convertPermittedValue($pv))
-                ->toBe('active');
+                ->toBe([]);
         });
     });
 
     describe('convertFieldDependency', function () {
-        it('returns dependency metadata', function () {
+        it('returns empty array by default', function () {
             $dependency = new FieldDependency('status', 'active');
 
             $result = $this->strategy->convertFieldDependency($dependency);
 
-            expect($result)->toBe([
-                'field' => 'status',
-                'value' => 'active',
-            ]);
+            expect($result)->toBe([]);
         });
     });
 
     describe('convertFieldFilter', function () {
-        it('returns filter metadata', function () {
+        it('returns empty array by default', function () {
             $filter = new FieldFilter(
                 'range',
                 collect(['min' => ['0'], 'max' => ['100']])
@@ -53,10 +50,7 @@ describe('JsonSchemaConvertStrategy', function () {
 
             $result = $this->strategy->convertFieldFilter($filter);
 
-            expect($result)->toBe([
-                'name' => 'range',
-                'config' => ['min' => ['0'], 'max' => ['100']],
-            ]);
+            expect($result)->toBe([]);
         });
     });
 

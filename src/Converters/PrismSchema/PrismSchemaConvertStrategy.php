@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\PrismSchema;
 
-use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
+use Innobrain\Structure\Converters\Concerns\BaseConvertStrategy;
 
 /**
  * Convert the package's DTOs into Prism PHP schemas.
@@ -17,13 +17,10 @@ use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
  *   • Module   ⇒ ObjectSchema with properties for each field
  *   • Field    ⇒ Schema (type depends on field type)
  */
-final readonly class PrismSchemaConvertStrategy implements ConvertStrategy
+final readonly class PrismSchemaConvertStrategy extends BaseConvertStrategy
 {
-    use ConvertsFieldDependencyToPrismSchema;
-    use ConvertsFieldFilterToPrismSchema;
     use ConvertsFieldToPrismSchema;
     use ConvertsModuleToPrismSchema;
-    use ConvertsPermittedValueToPrismSchema;
 
     /**
      * @param  bool  $includeNullable  true ➜ mark fields as nullable when they have no default

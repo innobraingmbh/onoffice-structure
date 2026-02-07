@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\JsonSchema;
 
-use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
+use Innobrain\Structure\Converters\Concerns\BaseConvertStrategy;
 
 /**
- * Convert the package's DTOs into Prism PHP schemas.
+ * Convert the package's DTOs into JSON Schema format.
  *
  * Typical usage:
  *   $schema = $module->convert(new JsonSchemaConvertStrategy());
@@ -17,13 +17,10 @@ use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
  *   • Module   ⇒ ObjectType with properties for each field
  *   • Field    ⇒ Type (type depends on field type)
  */
-final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
+final readonly class JsonSchemaConvertStrategy extends BaseConvertStrategy
 {
-    use ConvertsFieldDependencyToJsonSchema;
-    use ConvertsFieldFilterToJsonSchema;
     use ConvertsFieldToJsonSchema;
     use ConvertsModuleToJsonSchema;
-    use ConvertsPermittedValueToJsonSchema;
 
     /**
      * @param  bool  $includeNullable  true ➜ mark fields as nullable when they have no default

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\LaravelRules;
 
-use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
+use Innobrain\Structure\Converters\Concerns\BaseConvertStrategy;
 
 /**
  * Convert the package's DTOs into Laravel validation-rule arrays / strings.
@@ -20,13 +20,10 @@ use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
  * Multi-select fields automatically receive an additional "{fieldKey}.*" rule
  * with the permitted-values "in:" constraint so that each submitted item is validated.
  */
-final readonly class LaravelRulesConvertStrategy implements ConvertStrategy
+final readonly class LaravelRulesConvertStrategy extends BaseConvertStrategy
 {
-    use ConvertsFieldDependencyToLaravelRules;
-    use ConvertsFieldFilterToLaravelRules;
     use ConvertsFieldToLaravelRules;
     use ConvertsModuleToLaravelRules;
-    use ConvertsPermittedValueToLaravelRules;
 
     /**
      * @param  bool  $pipeSyntax  true ➜ 'string|max:80|nullable',  false ➜ ['string', 'max:80', 'nullable']

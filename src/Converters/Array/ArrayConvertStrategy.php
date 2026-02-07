@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Innobrain\Structure\Converters\Array;
 
 use Innobrain\Structure\Converters\Array\Concerns\FilterEmptyRecursive;
-use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
+use Innobrain\Structure\Converters\Concerns\BaseConvertStrategy;
 
 /**
  * Concrete converter that turns DTOs into nested arrays.
  */
-final readonly class ArrayConvertStrategy implements ConvertStrategy
+final readonly class ArrayConvertStrategy extends BaseConvertStrategy
 {
     use ConvertsFieldDependencyToArray;
     use ConvertsFieldFilterToArray;
