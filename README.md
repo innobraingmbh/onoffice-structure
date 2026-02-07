@@ -5,290 +5,190 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/innobraingmbh/onoffice-structure/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/innobraingmbh/onoffice-structure/actions?query=workflow%3A"Fix+PHP+Code+Style+Issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/innobraingmbh/onoffice-structure.svg?style=flat-square)](https://packagist.org/packages/innobraingmbh/onoffice-structure)
 
-This package provides a structured way to extract and work with the onOffice enterprise field configuration (Modul- und Feldkonfiguration) within a Laravel application. It fetches the configuration via the [innobrain/laravel-onoffice-adapter](https://github.com/innobraingmbh/laravel-onoffice-adapter) and transforms it into a collection of Data Transfer Objects (DTOs). These DTOs can then be converted into various formats, such as arrays or Laravel validation rules, using a flexible strategy pattern.
+Extract and work with the onOffice enterprise field configuration (Modul- und Feldkonfiguration) in Laravel. The package fetches configurations via [innobrain/laravel-onoffice-adapter](https://github.com/innobraingmbh/laravel-onoffice-adapter), transforms them into readonly DTOs, and converts them into various output formats using a strategy pattern.
 
 ## Features
 
-*   Fetch onOffice field configurations for various modules (Address, Estate, etc.).
-*   Structured DTOs for Modules, Fields, Permitted Values, Dependencies, and Filters.
-*   Convert DTOs to arrays.
-*   Convert DTOs to Laravel validation rules.
-*   Extensible converter strategy pattern.
-*   Facade for easy access.
-*   Configuration file for future extensions.
-*   Includes a basic Artisan command.
+- Fetch field configurations for all onOffice modules (Address, Estate, AgentsLog, Calendar, Email, File, News, Intranet, Project, Task, User)
+- Readonly DTOs for Modules, Fields, Permitted Values, Dependencies, and Filters
+- Convert to arrays, Laravel validation rules, [Prism PHP](https://prismphp.com/) schemas, or JSON Schema
+- Filter fields by configuration-based conditions with a fluent builder
+- Sanitize input data against field definitions and permitted values
+- Multi-language support (German, English, French, Spanish, Italian, Croatian)
+- Extensible converter strategy pattern for custom output formats
 
 ## Installation
-
-You can install the package via Composer:
 
 ```bash
 composer require innobraingmbh/onoffice-structure
 ```
 
-## Configuration
-
-You can publish the configuration file using:
+You can optionally publish the configuration file:
 
 ```bash
 php artisan vendor:publish --provider="Innobrain\Structure\StructureServiceProvider" --tag="onoffice-structure-config"
 ```
 
-This will publish the `onoffice-structure.php` file to your `config` directory. Currently, this file is a placeholder for future configuration options.
-
 ## Usage
-
-The primary way to interact with the package is through the `Structure` facade or by injecting the `Innobrain\Structure\Services\Structure` class.
 
 ### Fetching Structure Data
 
-To fetch the field configuration, you need to provide `OnOfficeApiCredentials` from the `innobrain/laravel-onoffice-adapter` package.
+Use the `Structure` facade or inject `Innobrain\Structure\Services\Structure`:
 
 ```php
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
+use Innobrain\Structure\Enums\FieldConfigurationModule;
+use Innobrain\Structure\Enums\Language;
 use Innobrain\Structure\Facades\Structure;
-use Innobrain\Structure\Collections\ModulesCollection;
 
-// Instantiate your API credentials
 $credentials = new OnOfficeApiCredentials('your-token', 'your-secret');
 
-// Fetch the structure
-$modulesCollection = Structure::forClient($credentials)->getModules();
+// Fetch all modules (defaults to German labels)
+$modules = Structure::forClient($credentials)->getModules();
 
-// $modulesCollection is an instance of Innobrain\Structure\Collections\ModulesCollection
-// which extends Illuminate\Support\Collection. It contains Module DTOs.
+// Fetch specific modules in a specific language
+$modules = Structure::forClient($credentials)->getModules(
+    only: [FieldConfigurationModule::Address->value, FieldConfigurationModule::Estate->value],
+    language: Language::English,
+);
 
-foreach ($modulesCollection as $moduleKey => $module) {
-    echo "Module: " . $module->label . " (" . $module->key->value . ")\n";
+// Iterate over modules and fields
+foreach ($modules as $moduleKey => $module) {
+    echo "Module: {$module->label} ({$module->key->value})\n";
     foreach ($module->fields as $fieldKey => $field) {
-        echo "  Field: " . $field->label . " (" . $field->key . ") - Type: " . $field->type->value . "\n";
+        echo "  Field: {$field->label} ({$field->key}) - Type: {$field->type->value}\n";
     }
 }
 ```
 
-You can also access specific modules:
+### Filtering Fields
+
+Fields can have filter configurations that determine their visibility based on other field values. Use the fluent `FieldFilterBuilder` to narrow down fields:
 
 ```php
-use Innobrain\Structure\Enums\FieldConfigurationModule;
+$addressModule = $modules->get(FieldConfigurationModule::Address->value);
 
-$addressModule = $modulesCollection->get(FieldConfigurationModule::Address->value);
-if ($addressModule) {
-    // Work with the address module
-}
+$filteredFields = $addressModule->fields
+    ->whereMatchesFilters()
+    ->where('Art', '2')       // only fields visible when Art = 2
+    ->when($someCondition, fn ($builder) => $builder->where('ArtDaten', '1'))
+    ->get();
 ```
 
-### Direct Field Configuration Access
+### Sanitizing Input Data
 
-If you only need to retrieve the configuration without the `Structure` wrapper, you can use the `FieldConfiguration` facade or class:
+Remove keys that don't match known fields or have invalid permitted values:
 
 ```php
-use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
-use Innobrain\Structure\Facades\FieldConfiguration;
-
-$credentials = new OnOfficeApiCredentials('your-token', 'your-secret');
-$modules = FieldConfiguration::retrieveForClient($credentials);
+$sanitized = $addressModule->fields->sanitize(collect([
+    'Email' => 'test@example.com',
+    'unknownField' => 'value',      // removed: not in field collection
+    'Beziehung' => '999',           // removed: not a permitted value
+]));
 ```
 
 ### Converting Data
 
-The DTOs and `ModulesCollection` implement the `Convertible` interface, allowing them to be transformed using a `ConvertStrategy`.
+All DTOs and collections implement `Convertible` and can be transformed using a `ConvertStrategy`.
 
-#### 1. Array Conversion (`ArrayConvertStrategy`)
-
-This strategy converts the DTOs into nested arrays.
+#### Array Conversion
 
 ```php
 use Innobrain\Structure\Converters\Array\ArrayConvertStrategy;
 
-// Convert the entire collection of modules
-$strategy = new ArrayConvertStrategy(dropEmpty: false); // or true to remove null/empty values
-$arrayOfModules = $modulesCollection->convert($strategy);
+$strategy = new ArrayConvertStrategy(dropEmpty: true); // remove null/empty values
 
-// Convert a single module
-$addressModuleArray = $addressModule->convert($strategy);
-
-// Convert a single field
-$emailField = $addressModule->fields->get('Email');
-$emailFieldArray = $emailField->convert($new ArrayConvertStrategy());
+$allModulesArray = $modules->convert($strategy);
+$moduleArray = $addressModule->convert($strategy);
+$fieldArray = $addressModule->fields->get('Email')->convert($strategy);
 ```
 
-The `ArrayConvertStrategy` constructor accepts a `bool $dropEmpty` (default `false`). If `true`, it will recursively remove keys with `null`, empty string, or empty array values from the output.
-
-#### 2. Laravel Validation Rules Conversion (`LaravelRulesConvertStrategy`)
-
-This strategy converts module or field DTOs into Laravel validation rules.
+#### Laravel Validation Rules
 
 ```php
 use Innobrain\Structure\Converters\LaravelRules\LaravelRulesConvertStrategy;
 
-// For a specific module (e.g., Address)
-$addressModule = $modulesCollection->get(FieldConfigurationModule::Address->value);
+// Pipe-separated strings with nullable (default)
+$strategy = new LaravelRulesConvertStrategy(pipeSyntax: true, includeNullable: true);
+$rules = $addressModule->convert($strategy);
+// ['KdNr' => 'integer|nullable', 'Email' => 'string|max:100|nullable', ...]
 
-// Get rules as pipe-separated strings (default), including 'nullable' for fields without defaults
-$strategyPipe = new LaravelRulesConvertStrategy(pipeSyntax: true, includeNullable: true);
-$addressValidationRules = $addressModule->convert($strategyPipe);
-/*
-Example output for $addressValidationRules:
-[
-    'KdNr' => 'integer|nullable',
-    'Email' => 'string|max:100|nullable',
-    'Beziehung' => 'array|distinct|nullable',
-    'Beziehung.*' => 'in:0,1,2,3', // if Beziehung is a multiselect
-    // ... other fields
-]
-*/
+// Array syntax without nullable
+$strategy = new LaravelRulesConvertStrategy(pipeSyntax: false, includeNullable: false);
+$rules = $addressModule->convert($strategy);
+// ['KdNr' => ['integer'], 'Email' => ['string', 'max:100'], ...]
 
-// Get rules as arrays, excluding 'nullable' by default
-$strategyArray = new LaravelRulesConvertStrategy(pipeSyntax: false, includeNullable: false);
-$addressValidationRulesArray = $addressModule->convert($strategyArray);
-/*
-Example output for $addressValidationRulesArray:
-[
-    'KdNr' => ['integer'],
-    'Email' => ['string', 'max:100'],
-    'Beziehung' => ['array', 'distinct'],
-    'Beziehung.*' => ['in:0,1,2,3'],
-    // ... other fields
-]
-*/
-
-// Convert a single field
-$emailField = $addressModule->fields->get('Email');
-$emailFieldRules = $emailField->convert($strategyPipe); // e.g., 'string|max:100|nullable'
+// Multi-select fields automatically get a wildcard rule:
+// 'Beziehung' => 'array|distinct|nullable', 'Beziehung.*' => 'in:0,1,2,3'
 ```
 
-Constructor options for `LaravelRulesConvertStrategy`:
-*   `bool $pipeSyntax` (default `true`): If `true`, rules are returned as a pipe-separated string (e.g., `'string|max:80|nullable'`). If `false`, rules are an array (e.g., `['string', 'max:80', 'nullable']`).
-*   `bool $includeNullable` (default `true`): If `true`, the `'nullable'` rule is automatically added to fields that do not have a default value defined in the onOffice configuration.
-
-#### 3. Prism Schema Conversion (`PrismSchemaConvertStrategy`)
-
-This strategy converts module or field DTOs into [Prism PHP](https://prismphp.com/) schemas, which can be used for structured data generation with AI providers.
+#### Prism Schema (for AI tooling)
 
 ```php
 use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;
-use Prism\Prism;
-use Prism\Providers\OpenRouter\OpenRouter;
 
-// Convert an entire module to a Prism ObjectSchema
-$addressModule = $modulesCollection->get(FieldConfigurationModule::Address->value);
 $strategy = new PrismSchemaConvertStrategy(
-    includeNullable: true,     // Mark fields without defaults as nullable
-    includeDescriptions: true   // Include field labels as descriptions
+    includeNullable: true,      // mark fields without defaults as nullable
+    includeDescriptions: true,  // use field labels as descriptions
 );
-$addressSchema = $addressModule->convert($strategy);
-// Returns an ObjectSchema with properties for each field
 
-// Convert a single field to its appropriate Prism schema
-$emailField = $addressModule->fields->get('Email');
-$emailSchema = $emailField->convert($strategy);
-// Returns a StringSchema with max length constraint in description
-
-// Use the schema with Prism for AI-powered data generation
-
-$prism = Prism::using(OpenRouter::instance())
-    ->withStructuredOutput($addressSchema);
-
-$response = $prism->generate('Create a realistic address entry');
+$schema = $addressModule->convert($strategy);
+// Returns an ObjectSchema usable with Prism's structured output
 ```
 
-The `PrismSchemaConvertStrategy` maps field types as follows:
-*   `VarChar/Text/Blob` → `StringSchema` (with length constraint in description)
-*   `Integer` → `NumberSchema`
-*   `Float` → `NumberSchema`
-*   `Boolean` → `BooleanSchema`
-*   `Date/DateTime` → `StringSchema` (with format hint in description)
-*   `SingleSelect` → `EnumSchema` (with permitted values as options)
-*   `MultiSelect` → `ArraySchema` (containing `EnumSchema` items)
+Field type mapping: `VarChar/Text/Blob` -> `StringSchema`, `Integer/Float` -> `NumberSchema`, `Boolean` -> `BooleanSchema`, `Date/DateTime` -> `StringSchema` (with format hint), `SingleSelect` -> `EnumSchema`, `MultiSelect` -> `ArraySchema<EnumSchema>`.
 
-Constructor options for `PrismSchemaConvertStrategy`:
-*   `bool $includeNullable` (default `true`): If `true`, fields without default values are marked as nullable.
-*   `bool $includeDescriptions` (default `true`): If `true`, field labels are included as schema descriptions.
-
-#### 4. JsonSchema Conversion (`JsonSchemaConvertStrategy`)
-
-This strategy converts module or field DTOs into JsonSchema Laravel format.
+#### JSON Schema
 
 ```php
 use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
 
-// Convert an entire module to a JsonSchema ObjectType
-$addressModule = $modulesCollection->get(FieldConfigurationModule::Address->value);
 $strategy = new JsonSchemaConvertStrategy(
-    includeNullable: true,     // Mark fields without defaults as nullable
-    includeDescriptions: true   // Include field labels as descriptions
+    includeNullable: true,
+    includeDescriptions: true,
 );
-$addressSchema = $addressModule->convert($strategy);
-// Returns an ObjectType with properties for each field
 
-// Convert a single field to its appropriate JsonSchema
-$emailField = $addressModule->fields->get('Email');
-$emailSchema = $emailField->convert($strategy);
-// Returns a StringType with max length constraint, also mentioned in the description
+$schema = $addressModule->convert($strategy);
+// Returns a JsonSchema ObjectType
 ```
 
-## Data Transfer Objects (DTOs)
+### Writing a Custom Converter
 
-The package uses the following DTOs to represent the structure:
+Implement `ConvertStrategy` (or extend `BaseConvertStrategy`) and add `convertField`, `convertModule`, etc. methods matching the DTO class names:
 
-*   `Innobrain\Structure\DTOs\Module`: Represents a module (e.g., Address, Estate).
-    *   `key`: `FieldConfigurationModule` (enum)
-    *   `label`: `string`
-    *   `fields`: `Illuminate\Support\Collection` of `Field` DTOs.
-*   `Innobrain\Structure\DTOs\Field`: Represents a field within a module.
-    *   `key`: `string`
-    *   `label`: `string`
-    *   `type`: `FieldType` (enum)
-    *   `length`: `?int`
-    *   `permittedValues`: `Illuminate\Support\Collection` of `PermittedValue` DTOs.
-    *   `default`: `?string`
-    *   `filters`: `Illuminate\Support\Collection` of `FieldFilter` DTOs.
-    *   `dependencies`: `Illuminate\Support\Collection` of `FieldDependency` DTOs.
-    *   `compoundFields`: `Illuminate\Support\Collection` of strings.
-    *   `fieldMeasureFormat`: `?string`
-*   `Innobrain\Structure\DTOs\PermittedValue`: Represents a permitted value for select fields.
-    *   `key`: `string`
-    *   `label`: `string`
-*   `Innobrain\Structure\DTOs\FieldDependency`: Represents a dependency between fields.
-    *   `dependentFieldKey`: `string`
-    *   `dependentFieldValue`: `string`
-*   `Innobrain\Structure\DTOs\FieldFilter`: Represents a filter configuration for a field.
-    *   `name`: `string`
-    *   `config`: `Illuminate\Support\Collection`
+```php
+use Innobrain\Structure\Converters\Concerns\BaseConvertStrategy;
+use Innobrain\Structure\Dtos\Field;
+use Innobrain\Structure\Dtos\Module;
 
-All DTOs implement `Innobrain\Structure\Contracts\Convertible`.
+final readonly class MyConvertStrategy extends BaseConvertStrategy
+{
+    public function convertModule(Module $module): mixed { /* ... */ }
+    public function convertField(Field $field): mixed { /* ... */ }
+}
 
-## Enums
+$result = $module->convert(new MyConvertStrategy());
+```
 
-*   `Innobrain\Structure\Enums\FieldConfigurationModule`: Defines the available onOffice modules (e.g., `Address`, `Estate`).
-*   `Innobrain\Structure\Enums\FieldType`: Defines the types of fields (e.g., `VarChar`, `Integer`, `MultiSelect`).
+## DTOs
 
-## Collections
+All DTOs are readonly and implement `Convertible`.
 
-*   `Innobrain\Structure\Collections\ModulesCollection`: A custom collection that extends `Illuminate\Support\Collection` and holds `Module` DTOs. It also implements `Convertible`.
+| DTO | Key Properties |
+|-----|---------------|
+| `Module` | `key` (FieldConfigurationModule), `label`, `fields` (FieldCollection) |
+| `Field` | `key`, `label`, `type` (FieldType), `length`, `permittedValues`, `default`, `filters`, `dependencies`, `compoundFields`, `fieldMeasureFormat` |
+| `PermittedValue` | `key`, `label` |
+| `FieldDependency` | `dependentFieldKey`, `dependentFieldValue` |
+| `FieldFilter` | `name`, `config` |
 
 ## Testing
 
-To run the test suite:
-
 ```bash
-composer test
-```
-
-To run tests with coverage:
-
-```bash
-composer test-coverage
-```
-
-To run static analysis (PHPStan):
-```bash
-composer analyse
-```
-
-To format code (Rector & Pint):
-```bash
-composer format
+composer test              # Run tests
+composer test-coverage     # Run tests with coverage
+composer analyse           # PHPStan static analysis
+composer format            # Rector + Pint formatting
 ```
 
 ## Changelog
@@ -297,20 +197,19 @@ Please see [CHANGELOG.md](CHANGELOG.md) for more information on what has changed
 
 ## Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](https://github.com/innobraingmbh/onoffice-structure/.github/CONTRIBUTING.md) (if available) or open an issue/pull request.
-For bug reports, please use the [Bug Report Template](.github/ISSUE_TEMPLATE/bug.yml).
+Contributions are welcome! Please open an issue or pull request. For bug reports, use the [Bug Report Template](.github/ISSUE_TEMPLATE/bug.yml).
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within this package, please send an e-mail to Konstantin Auffinger via the email address in `composer.json`. All security vulnerabilities will be promptly addressed.
+If you discover a security vulnerability, please send an e-mail to Konstantin Auffinger via the email address in `composer.json`. All security vulnerabilities will be promptly addressed.
 
 ## Credits
 
--   [Konstantin Auffinger](https://github.com/kauffinger)
--   All Contributors
+- [Konstantin Auffinger](https://github.com/kauffinger)
+- [All Contributors](../../contributors)
 
-This package was generated using [Spatie's Laravel Package Tools](https://github.com/spatie/laravel-package-tools).
+Built with [Spatie's Laravel Package Tools](https://github.com/spatie/laravel-package-tools).
 
 ## License
 
-This is proprietary to InnoBrain GmbH & Konstantin Auffinger. There is no license. It is only source-available.
+The MIT License (MIT). Please see [composer.json](composer.json) for more information.
