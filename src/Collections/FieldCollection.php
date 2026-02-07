@@ -17,4 +17,19 @@ final class FieldCollection extends Collection
     {
         return new FieldFilterBuilder($this);
     }
+
+    /**
+     * @param  Collection<string, string>  $data
+     * @return Collection<string, string>
+     */
+    public function sanitize(Collection $data): Collection
+    {
+        return $data->intersectByKeys($this)
+            ->reject(function (string $value, string $key) {
+                /** @var Field $field */
+                $field = $this->get($key);
+
+                return $field->hasPermittedValues() && $field->doesntContainPermittedValue($value);
+            });
+    }
 }

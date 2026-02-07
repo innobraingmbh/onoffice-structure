@@ -9,6 +9,7 @@ use Innobrain\Structure\Builders\FieldFilterBuilder;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\FieldFilter;
+use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldType;
 
 describe('FieldCollection', function () {
@@ -120,5 +121,64 @@ describe('FieldCollection', function () {
                 ->and($this->fields->get('field2'))->toBe($this->field2)
                 ->and($this->fields->get('nonexistent'))->toBeNull();
         });
+    });
+
+    test('sanitize', function () {
+        $data = new Collection([
+            'field1' => 'estate',
+            'field2' => '1',
+            'field3' => 'single-select',
+            'field4' => 'extra',
+        ]);
+
+        $this->field3 = new Field(
+            key: 'field3',
+            label: 'Field 3',
+            type: FieldType::SingleSelect,
+            length: null,
+            permittedValues: new Collection([new PermittedValue('multi-select', 'Multi Select')]),
+            default: null,
+            filters: new Collection,
+            dependencies: new Collection,
+            compoundFields: new Collection,
+            fieldMeasureFormat: null
+        );
+
+        $this->fields = new FieldCollection([
+            'field1' => $this->field1,
+            'field2' => $this->field2,
+            'field3' => $this->field3,
+        ]);
+
+        $cleanedData = $this->fields->sanitize($data);
+
+        expect($cleanedData->has('field1'))->toBeTrue()
+            ->and($cleanedData->has('field2'))->toBeTrue()
+            ->and($cleanedData->has('field3'))->toBeFalse()
+            ->and($cleanedData->has('field4'))->toBeFalse();
+    });
+
+    test('sanitize keeps values matching permitted values', function () {
+        $field = new Field(
+            key: 'status',
+            label: 'Status',
+            type: FieldType::SingleSelect,
+            length: null,
+            permittedValues: new Collection([
+                new PermittedValue('active', 'Active'),
+                new PermittedValue('inactive', 'Inactive'),
+            ]),
+            default: null,
+            filters: new Collection,
+            dependencies: new Collection,
+            compoundFields: new Collection,
+            fieldMeasureFormat: null
+        );
+
+        $fields = new FieldCollection(['status' => $field]);
+
+        $cleanedData = $fields->sanitize(new Collection(['status' => 'active']));
+
+        expect($cleanedData->get('status'))->toBe('active');
     });
 });
