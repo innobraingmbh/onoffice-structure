@@ -16,14 +16,12 @@ class Structure
 {
     public function __construct(
         private readonly FieldConfiguration $fieldConfiguration,
-        private ?OnOfficeApiCredentials $onOfficeApiCredentials = null,
+        private readonly ?OnOfficeApiCredentials $onOfficeApiCredentials = null,
     ) {}
 
     public function forClient(OnOfficeApiCredentials $onOfficeApiCredentials): self
     {
-        $this->onOfficeApiCredentials = $onOfficeApiCredentials;
-
-        return $this;
+        return new self($this->fieldConfiguration, $onOfficeApiCredentials);
     }
 
     /**
