@@ -2,6 +2,16 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v1.3.0 - 2026-02-07
+
+### What's Changed
+
+* chore(deps): bump actions/checkout from 5 to 6 by @dependabot[bot] in https://github.com/innobraingmbh/onoffice-structure/pull/13
+* chore(deps): bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/innobraingmbh/onoffice-structure/pull/15
+* Add helper functions for field collections by @Katalam in https://github.com/innobraingmbh/onoffice-structure/pull/14
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v1.2.0...v1.3.0
+
 ## v1.2.0 - 2025-11-04
 
 ### What's Changed
