@@ -19,42 +19,16 @@ final class FieldCollection extends Collection
     }
 
     /**
-     * Check if a field with the given key name exists in the collection.
-     */
-    public function hasField(string $fieldKeyName): bool
-    {
-        return $this->has($fieldKeyName);
-    }
-
-    /**
-     * Check if a field with the given key name does not exist in the collection.
-     */
-    public function doesntHaveField(string $fieldKeyName): bool
-    {
-        return ! $this->hasField($fieldKeyName);
-    }
-
-    /**
-     * Remove data entries that do not correspond to any field in the collection
-     * or have values not permitted by their respective fields.
-     *
      * @param  Collection<string, string>  $data
      * @return Collection<string, string>
      */
-    public function removeDataNotPresentInCollection(Collection $data): Collection
+    public function sanitize(Collection $data): Collection
     {
-        return $data->map(function (string $value, string $key) {
-            if ($this->doesntHaveField($key)) {
-                return null;
-            }
+        return $data->only($this->keys())
+            ->reject(function (string $value, string $key) {
+                $field = $this->get($key);
 
-            $field = $this->get($key);
-
-            if ($field->hasPermittedValues() && $field->doesntContainPermittedValue($value)) {
-                return null;
-            }
-
-            return $value;
-        })->filter();
+                return $field->hasPermittedValues() && $field->doesntContainPermittedValue($value);
+            });
     }
 }

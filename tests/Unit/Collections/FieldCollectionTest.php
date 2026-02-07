@@ -123,19 +123,7 @@ describe('FieldCollection', function () {
         });
     });
 
-    test('has field', function () {
-        expect($this->fields->has('field1'))->toBeTrue()
-            ->and($this->fields->has('field2'))->toBeTrue()
-            ->and($this->fields->has('field3'))->toBeFalse();
-    });
-
-    test('doesnt have field', function () {
-        expect($this->fields->doesntHaveField('field1'))->toBeFalse()
-            ->and($this->fields->doesntHaveField('field2'))->toBeFalse()
-            ->and($this->fields->doesntHaveField('field3'))->toBeTrue();
-    });
-
-    test('remove data not present in collection', function () {
+    test('sanitize', function () {
         $data = new Collection([
             'field1' => 'estate',
             'field2' => '1',
@@ -162,7 +150,7 @@ describe('FieldCollection', function () {
             'field3' => $this->field3,
         ]);
 
-        $cleanedData = $this->fields->removeDataNotPresentInCollection($data);
+        $cleanedData = $this->fields->sanitize($data);
 
         expect($cleanedData->has('field1'))->toBeTrue()
             ->and($cleanedData->has('field2'))->toBeTrue()
