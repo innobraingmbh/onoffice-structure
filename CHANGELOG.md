@@ -2,6 +2,19 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v1.4.0 - 2026-04-09
+
+### What's Changed
+
+* chore: improve docs by @kauffinger in https://github.com/innobraingmbh/onoffice-structure/pull/16
+* Support Laravel v13 by @danielgnh in https://github.com/innobraingmbh/onoffice-structure/pull/19
+
+### New Contributors
+
+* @danielgnh made their first contribution in https://github.com/innobraingmbh/onoffice-structure/pull/19
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v1.3.0...v1.4.0
+
 ## v1.3.0 - 2026-02-07
 
 ### What's Changed
