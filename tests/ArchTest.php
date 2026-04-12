@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Innobrain\Structure\Converters\Array\ArrayHydrator;
 use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
 
 arch('it will not use debugging functions')
@@ -11,7 +12,8 @@ arch('it will not use debugging functions')
 arch('all non traits are implementing the convert strategy interface')
     ->expect('Innobrain\Structure\Converters')
     ->classes()
-    ->toImplement(ConvertStrategy::class);
+    ->toImplement(ConvertStrategy::class)
+    ->ignoring(ArrayHydrator::class);
 
 arch('all traits only used in same directory')
     ->expect('Innobrain\Structure\Converters')

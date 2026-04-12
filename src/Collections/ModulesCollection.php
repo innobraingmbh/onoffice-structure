@@ -7,6 +7,7 @@ namespace Innobrain\Structure\Collections;
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
+use Innobrain\Structure\Converters\Array\ArrayHydrator;
 use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
 use Innobrain\Structure\Dtos\Module;
 
@@ -16,6 +17,12 @@ use Innobrain\Structure\Dtos\Module;
 final class ModulesCollection extends Collection implements Convertible
 {
     use HasConverter;
+
+    /** @param array<string, mixed> $data */
+    public static function fromArray(array $data): self
+    {
+        return ArrayHydrator::hydrate($data);
+    }
 
     /**
      * @return array<string, mixed>
