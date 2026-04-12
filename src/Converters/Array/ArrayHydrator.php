@@ -20,10 +20,12 @@ final readonly class ArrayHydrator
     /** @param array<string, mixed> $data */
     public static function hydrate(array $data): ModulesCollection
     {
+        /** @var array<string, Module> $modules */
         $modules = [];
 
         foreach ($data as $moduleData) {
-            $modules[] = self::hydrateModule($moduleData);
+            $module = self::hydrateModule($moduleData);
+            $modules[$module->key->value] = $module;
         }
 
         return new ModulesCollection($modules);
@@ -48,6 +50,7 @@ final readonly class ArrayHydrator
     /** @param array<string, mixed> $fieldData */
     private static function hydrateField(array $fieldData): Field
     {
+        /** @var Collection<string, PermittedValue> $permittedValues */
         $permittedValues = new Collection;
         foreach (data_get($fieldData, 'permittedValues', []) as $pvKey => $pvData) {
             $permittedValues[$pvKey] = new PermittedValue(
@@ -56,14 +59,16 @@ final readonly class ArrayHydrator
             );
         }
 
+        /** @var Collection<string, FieldFilter> $filters */
         $filters = new Collection;
         foreach (data_get($fieldData, 'filters', []) as $filterKey => $filterData) {
             $filters[$filterKey] = new FieldFilter(
                 name: data_get($filterData, 'name', ''),
-                config: collect(data_get($filterData, 'config', [])),
+                config: new Collection(data_get($filterData, 'config', [])),
             );
         }
 
+        /** @var Collection<int, FieldDependency> $dependencies */
         $dependencies = new Collection;
         foreach (data_get($fieldData, 'dependencies', []) as $depData) {
             $dependencies[] = new FieldDependency(
@@ -71,6 +76,9 @@ final readonly class ArrayHydrator
                 dependentFieldValue: data_get($depData, 'dependentFieldValue', ''),
             );
         }
+
+        /** @var Collection<int, string> $compoundFields */
+        $compoundFields = new Collection(data_get($fieldData, 'compoundFields', []));
 
         return new Field(
             key: data_get($fieldData, 'key', ''),
@@ -81,7 +89,7 @@ final readonly class ArrayHydrator
             default: data_get($fieldData, 'default'),
             filters: $filters,
             dependencies: $dependencies,
-            compoundFields: collect(data_get($fieldData, 'compoundFields', [])),
+            compoundFields: $compoundFields,
             fieldMeasureFormat: data_get($fieldData, 'fieldMeasureFormat'),
         );
     }
