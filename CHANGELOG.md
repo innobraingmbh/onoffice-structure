@@ -2,6 +2,14 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v2.0.0 - 2026-06-15
+
+### What's Changed
+
+* feat: add realDataTypes support and five new FieldType cases by @kauffinger in https://github.com/innobraingmbh/onoffice-structure/pull/23
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v1.4.0...v2.0.0
+
 ## v1.4.0 - 2026-04-09
 
 ### What's Changed
