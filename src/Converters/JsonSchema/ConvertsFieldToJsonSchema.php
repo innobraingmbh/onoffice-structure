@@ -32,7 +32,14 @@ trait ConvertsFieldToJsonSchema
         $nullable = $this->includeNullable && $field->default === null;
 
         return match ($field->type) {
-            FieldType::VarChar, FieldType::Text, FieldType::Blob => $this->createStringSchema($field, $name, $description, $nullable),
+            FieldType::VarChar,
+            FieldType::Text,
+            FieldType::Blob,
+            FieldType::User,
+            FieldType::File,
+            FieldType::RedHint,
+            FieldType::BlackHint,
+            FieldType::DividingLine => $this->createStringSchema($field, $name, $description, $nullable),
             FieldType::Integer => $this->createStandardSchema('integer', $name, $description, $nullable),
             FieldType::Float => $this->createStandardSchema('number', $name, $description, $nullable),
             FieldType::Boolean => $this->createStandardSchema('boolean', $name, $description, $nullable),

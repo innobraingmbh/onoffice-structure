@@ -46,6 +46,7 @@ class FieldConfiguration
                 'showfieldfilters' => true,
                 'showfielddependencies' => true,
                 'showFieldMeasureFormat' => true,
+                'realDataTypes' => true,
             ])
             ->get();
 
