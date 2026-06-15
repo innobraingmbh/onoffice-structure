@@ -1,0 +1,102 @@
+{
+    "status": {
+        "code": 200,
+        "errorcode": 0,
+        "message": "OK"
+    },
+    "response": {
+        "results": [
+            {
+                "actionid": "urn:onoffice-de-ns:smart:2.5:smartml:action:get",
+                "resourceid": "",
+                "resourcetype": "fields",
+                "cacheable": true,
+                "identifier": "",
+                "data": {
+                    "meta": {
+                        "cntabsolute": null
+                    },
+                    "records": [
+                        {
+                            "id": "address",
+                            "type": "",
+                            "elements": {
+                                "label": "Address",
+                                "KdNr": {
+                                    "type": "integer",
+                                    "length": null,
+                                    "permittedvalues": null,
+                                    "default": null,
+                                    "filters": [],
+                                    "dependencies": [],
+                                    "compoundFields": [],
+                                    "label": "KdNr",
+                                    "fieldMeasureFormat": null
+                                },
+                                "Benutzer": {
+                                    "type": "user",
+                                    "length": 40,
+                                    "permittedvalues": null,
+                                    "default": null,
+                                    "filters": [],
+                                    "dependencies": [],
+                                    "compoundFields": [],
+                                    "label": "Betreuer",
+                                    "fieldMeasureFormat": null
+                                },
+                                "Profilbild": {
+                                    "type": "datei",
+                                    "length": null,
+                                    "permittedvalues": null,
+                                    "default": null,
+                                    "filters": [],
+                                    "dependencies": [],
+                                    "compoundFields": [],
+                                    "label": "Profilbild",
+                                    "fieldMeasureFormat": null
+                                },
+                                "Hinweis1": {
+                                    "type": "redhint",
+                                    "length": null,
+                                    "permittedvalues": null,
+                                    "default": null,
+                                    "filters": [],
+                                    "dependencies": [],
+                                    "compoundFields": [],
+                                    "label": "Roter Hinweis",
+                                    "fieldMeasureFormat": null
+                                },
+                                "Hinweis2": {
+                                    "type": "blackhint",
+                                    "length": null,
+                                    "permittedvalues": null,
+                                    "default": null,
+                                    "filters": [],
+                                    "dependencies": [],
+                                    "compoundFields": [],
+                                    "label": "Schwarzer Hinweis",
+                                    "fieldMeasureFormat": null
+                                },
+                                "Trennlinie": {
+                                    "type": "dividingline",
+                                    "length": null,
+                                    "permittedvalues": null,
+                                    "default": null,
+                                    "filters": [],
+                                    "dependencies": [],
+                                    "compoundFields": [],
+                                    "label": "Trennlinie",
+                                    "fieldMeasureFormat": null
+                                }
+                            }
+                        }
+                    ]
+                },
+                "status": {
+                    "errorcode": 0,
+                    "message": "OK"
+                }
+            }
+        ]
+    }
+}
