@@ -2,6 +2,18 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v2.1.0 - 2026-06-26
+
+### What's Changed
+
+* added support for more languages by @andre-onoffice in https://github.com/innobraingmbh/onoffice-structure/pull/24
+
+### New Contributors
+
+* @andre-onoffice made their first contribution in https://github.com/innobraingmbh/onoffice-structure/pull/24
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v2.0.0...v2.1.0
+
 ## v2.0.0 - 2026-06-15
 
 ### What's Changed
