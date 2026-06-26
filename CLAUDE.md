@@ -50,7 +50,7 @@ Both have facades in `src/Facades/`.
 
 ### Enums
 
-All enums are **string-backed** (enforced by arch tests): `FieldConfigurationModule` (11 modules), `FieldType` (10 types), `Language` (6 languages).
+All enums are **string-backed** (enforced by arch tests): `FieldConfigurationModule` (11 modules), `FieldType` (10 types), `Language` (34 languages).
 
 ## Code Standards
 
