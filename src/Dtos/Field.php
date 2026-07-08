@@ -83,6 +83,16 @@ readonly class Field implements Convertible
     }
 
     /**
+     * Returns true if the field has a default value
+     *
+     * @phpstan-assert-if-true !null $this->default
+     */
+    public function hasDefault(): bool
+    {
+        return $this->default !== null;
+    }
+
+    /**
      * Returns true if the field has permitted values
      */
     public function hasPermittedValues(): bool

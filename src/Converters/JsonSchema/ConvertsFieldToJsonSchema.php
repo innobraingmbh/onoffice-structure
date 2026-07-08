@@ -6,10 +6,12 @@ namespace Innobrain\Structure\Converters\JsonSchema;
 
 use Illuminate\JsonSchema\JsonSchema;
 use Illuminate\JsonSchema\Types\ArrayType;
+use Illuminate\JsonSchema\Types\BooleanType;
+use Illuminate\JsonSchema\Types\IntegerType;
+use Illuminate\JsonSchema\Types\NumberType;
 use Illuminate\JsonSchema\Types\StringType;
 use Illuminate\JsonSchema\Types\Type;
 use Innobrain\Structure\Dtos\Field;
-use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldType;
 
 trait ConvertsFieldToJsonSchema
@@ -19,18 +21,17 @@ trait ConvertsFieldToJsonSchema
      */
     public function convertField(Field $field): array
     {
-        return $this->createBaseSchema($field);
+        $schema = $this->createSchema($field);
+
+        $schema->title($field->key)
+            ->required(! $field->hasDefault())
+            ->nullable($this->isNullable($field));
+
+        return [$field->key => $schema];
     }
 
-    /**
-     * @return array<string, Type>
-     */
-    private function createBaseSchema(Field $field): array
+    private function createSchema(Field $field): Type
     {
-        $name = $field->key;
-        $description = $this->includeDescriptions ? $field->label : null;
-        $nullable = $this->includeNullable && $field->default === null;
-
         return match ($field->type) {
             FieldType::VarChar,
             FieldType::Text,
@@ -39,121 +40,133 @@ trait ConvertsFieldToJsonSchema
             FieldType::File,
             FieldType::RedHint,
             FieldType::BlackHint,
-            FieldType::DividingLine => $this->createStringSchema($field, $name, $description, $nullable),
-            FieldType::Integer => $this->createStandardSchema('integer', $name, $description, $nullable),
-            FieldType::Float => $this->createStandardSchema('number', $name, $description, $nullable),
-            FieldType::Boolean => $this->createStandardSchema('boolean', $name, $description, $nullable),
-            FieldType::Date => $this->createStandardSchema('string', $name, $description ? $description.' (Date format: YYYY-MM-DD)' : 'Date format: YYYY-MM-DD', $nullable),
-            FieldType::DateTime => $this->createStandardSchema('string', $name, $description ? $description.' (DateTime format: ISO 8601)' : 'DateTime format: ISO 8601', $nullable),
-            FieldType::SingleSelect => $this->createEnumSchema($field, $name, $description, $nullable),
-            FieldType::MultiSelect => $this->createMultiSelectSchema($field, $name, $description, $nullable),
+            FieldType::DividingLine => $this->createStringSchema($field),
+            FieldType::Integer => $this->createIntegerSchema($field),
+            FieldType::Float => $this->createNumberSchema($field),
+            FieldType::Boolean => $this->createBooleanSchema($field),
+            FieldType::Date => $this->createDateSchema($field, 'date'),
+            FieldType::DateTime => $this->createDateSchema($field, 'date-time'),
+            FieldType::SingleSelect => $this->createSingleSelectSchema($field),
+            FieldType::MultiSelect => $this->createMultiSelectSchema($field),
         };
     }
 
-    /**
-     * @return array<string, Type>
-     */
-    private function createStandardSchema(string $type, string $name, ?string $description, bool $nullable): array
+    private function createStringSchema(Field $field): StringType
     {
-        $jsonSchema = JsonSchema::{$type}()
-            ->title($name)
-            ->description($description ?? '')
-            ->required(! $nullable)
-            ->nullable($nullable);
+        $schema = JsonSchema::string();
 
-        return [$name => $jsonSchema];
+        if ($field->length !== null) {
+            $schema->max($field->length);
+        }
+
+        if ($field->hasDefault()) {
+            $schema->default($field->default);
+        }
+
+        $this->applyDescription($schema, $field);
+
+        return $schema;
     }
 
-    /**
-     * @return array<string, StringType>
-     */
-    private function createStringSchema(Field $field, string $name, ?string $description, bool $nullable): array
+    private function createIntegerSchema(Field $field): IntegerType
     {
-        $jsonSchema = JsonSchema::string()
-            ->title($name)
-            ->required(! $nullable)
-            ->nullable($nullable);
+        $schema = JsonSchema::integer();
 
-        // Add length constraint info to description if available
-        $finalDescription = $description ?? '';
-        if ($field->length && $this->includeDescriptions) {
-            $lengthInfo = " (max length: $field->length)";
-            $jsonSchema->description($finalDescription !== '' && $finalDescription !== '0' ? $finalDescription.$lengthInfo : $lengthInfo);
+        if ($field->hasDefault()) {
+            $schema->default((int) $field->default);
         }
 
-        if ($field->length) {
-            $jsonSchema->max($field->length);
-        }
+        $this->applyDescription($schema, $field);
 
-        return [$name => $jsonSchema];
+        return $schema;
     }
 
-    /**
-     * @return array<string, ArrayType|StringType>
-     */
-    private function createEnumSchema(Field $field, string $name, ?string $description, bool $nullable): array
+    private function createNumberSchema(Field $field): NumberType
     {
-        if ($field->permittedValues->isEmpty()) {
-            // If no permitted values, fall back to StringSchema
-            $jsonSchema = JsonSchema::string()
-                ->title($name)
-                ->description($description ?? '')
-                ->required(! $nullable)
-                ->nullable($nullable);
+        $schema = JsonSchema::number();
 
-            return [$name => $jsonSchema];
+        if ($field->hasDefault()) {
+            $schema->default((float) $field->default);
         }
 
-        $options = $field->permittedValues
-            ->map(fn (PermittedValue $pv) => $pv->key)
-            ->values()
-            ->all();
+        $this->applyDescription($schema, $field);
 
-        $jsonSchema = JsonSchema::array()
-            ->title($name)
-            ->enum($options)
-            ->description($description ?? '')
-            ->required(! $nullable)
-            ->nullable($nullable);
-
-        return [$name => $jsonSchema];
+        return $schema;
     }
 
-    /**
-     * @return array<string, ArrayType>
-     */
-    private function createMultiSelectSchema(Field $field, string $name, ?string $description, bool $nullable): array
+    private function createBooleanSchema(Field $field): BooleanType
     {
-        if ($field->permittedValues->isEmpty()) {
-            // If no permitted values, create array of strings
-            $jsonSchema = JsonSchema::array()
-                ->title($name)
-                ->items(
-                    JsonSchema::string()
-                        ->title($name.'_item')
-                        ->description('Item value')
-                        ->required()
-                )
-                ->description($description ?? '')
-                ->required(! $nullable)
-                ->nullable($nullable);
+        $schema = JsonSchema::boolean();
 
-            return [$name => $jsonSchema];
+        if ($field->hasDefault()) {
+            $schema->default(filter_var($field->default, FILTER_VALIDATE_BOOLEAN));
         }
 
-        // Create enum schema for array items
-        $options = $field->permittedValues
-            ->map(fn (PermittedValue $pv) => $pv->key)
-            ->values()
-            ->all();
+        $this->applyDescription($schema, $field);
 
-        $jsonSchema = JsonSchema::array()
-            ->title($name)
-            ->enum($options)
-            ->description($description ?? '')
-            ->required(! $nullable)
-            ->nullable($nullable);
+        return $schema;
+    }
 
-        return [$name => $jsonSchema];
+    private function createDateSchema(Field $field, string $format): StringType
+    {
+        $schema = JsonSchema::string()->format($format);
+
+        if ($field->hasDefault()) {
+            $schema->default($field->default);
+        }
+
+        $this->applyDescription($schema, $field);
+
+        return $schema;
+    }
+
+    private function createSingleSelectSchema(Field $field): StringType
+    {
+        $schema = JsonSchema::string();
+
+        if ($field->hasPermittedValues()) {
+            $options = $field->permittedValues->keys()->all();
+
+            if ($this->isNullable($field)) {
+                $options[] = null;
+            }
+
+            $schema->enum($options);
+        }
+
+        if ($field->hasDefault()) {
+            $schema->default($field->default);
+        }
+
+        $this->applyDescription($schema, $field);
+
+        return $schema;
+    }
+
+    private function createMultiSelectSchema(Field $field): ArrayType
+    {
+        $items = JsonSchema::string();
+
+        if ($field->hasPermittedValues()) {
+            $items->enum($field->permittedValues->keys()->all());
+        }
+
+        $schema = JsonSchema::array()->items($items)->unique();
+
+        $this->applyDescription($schema, $field);
+
+        return $schema;
+    }
+
+    private function applyDescription(Type $schema, Field $field): void
+    {
+        if ($this->includeDescriptions && $field->label !== '') {
+            $schema->description($field->label);
+        }
+    }
+
+    private function isNullable(Field $field): bool
+    {
+        return $this->includeNullable && ! $field->hasDefault();
     }
 }

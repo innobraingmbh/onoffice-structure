@@ -144,16 +144,15 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
         // String field
         expect($properties['objekttitel'])->toBeArray()
             ->and($properties['objekttitel']['title'])->toBe('objekttitel')
-            ->and($properties['objekttitel']['description'])->toContain('Property Title')
-            ->and($properties['objekttitel']['description'])->toContain('max length: 200')
+            ->and($properties['objekttitel']['description'])->toBe('Property Title')
             ->and($properties['objekttitel']['type'])->toBe(['string', 'null'])
             ->and($properties['objekttitel']['maxLength'])->toBe(200)
             // Enum field (single select)
             ->and($properties['objektart'])->toBeArray()
             ->and($properties['objektart']['title'])->toBe('objektart')
             ->and($properties['objektart']['description'])->toContain('Property Type')
-            ->and($properties['objektart']['type'])->toBe(['array', 'null'])
-            ->and($properties['objektart']['enum'])->toBe(['haus', 'wohnung', 'grundstueck'])
+            ->and($properties['objektart']['type'])->toBe(['string', 'null'])
+            ->and($properties['objektart']['enum'])->toBe(['haus', 'wohnung', 'grundstueck', null])
             // Number field (float)
             ->and($properties['kaufpreis'])->toBeArray()
             ->and($properties['kaufpreis']['title'])->toBe('kaufpreis')
@@ -169,7 +168,9 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
             ->and($properties['ausstattung']['title'])->toBe('ausstattung')
             ->and($properties['ausstattung']['description'])->toContain('Features')
             ->and($properties['ausstattung']['type'])->toBe(['array', 'null'])
-            ->and($properties['ausstattung']['enum'])->toBe(['balkon', 'garten', 'garage', 'keller', 'aufzug'])
+            ->and($properties['ausstattung']['uniqueItems'])->toBeTrue()
+            ->and($properties['ausstattung']['items']['type'])->toBe('string')
+            ->and($properties['ausstattung']['items']['enum'])->toBe(['balkon', 'garten', 'garage', 'keller', 'aufzug'])
             // Boolean field
             ->and($properties['verfuegbar'])->toBeArray()
             ->and($properties['verfuegbar']['title'])->toBe('verfuegbar')
@@ -179,18 +180,20 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
             ->and($properties['verfuegbar_ab'])->toBeArray()
             ->and($properties['verfuegbar_ab']['title'])->toBe('verfuegbar_ab')
             ->and($properties['verfuegbar_ab']['description'])->toContain('Available From')
-            ->and($properties['verfuegbar_ab']['description'])->toContain('YYYY-MM-DD')
+            ->and($properties['verfuegbar_ab']['format'])->toBe('date')
             ->and($properties['verfuegbar_ab']['type'])->toBe(['string', 'null'])
             // Text field
             ->and($properties['beschreibung'])->toBeArray()
             ->and($properties['beschreibung']['title'])->toBe('beschreibung')
             ->and($properties['beschreibung']['type'])->toBe(['string', 'null'])
-            // Check required fields
+            // Fields without a default are required; fields with one carry it as "default"
             ->and($schema['required'])->toBeArray()
-            ->toContain('zimmer')
-            ->toContain('verfuegbar')
-            ->not->toContain('objekttitel')
-            ->not->toContain('verfuegbar_ab');
+            ->toContain('objekttitel')
+            ->toContain('verfuegbar_ab')
+            ->not->toContain('zimmer')
+            ->not->toContain('verfuegbar')
+            ->and($properties['zimmer']['default'])->toBe(0)
+            ->and($properties['verfuegbar']['default'])->toBeTrue();
     });
 
     it('handles ModulesCollection conversion', function () {
@@ -391,18 +394,28 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
             'boolean_field' => 'boolean',
             'date_field' => ['string', 'null'],
             'datetime_field' => ['string', 'null'],
-            'single_select_field' => 'array',
+            'single_select_field' => 'string',
             'multi_select_field' => ['array', 'null'],
         ]);
 
         $schema = $schema->toArray();
 
-        // Check required fields (those with defaults)
-        expect($schema['required'])->toContain('varchar_field')
-            ->toContain('integer_field')
-            ->toContain('float_field')
-            ->toContain('boolean_field')
-            ->toContain('single_select_field');
+        // Fields without defaults are required
+        expect($schema['required'])->toContain('text_field')
+            ->toContain('blob_field')
+            ->toContain('date_field')
+            ->toContain('datetime_field')
+            ->toContain('multi_select_field')
+            ->not->toContain('varchar_field')
+            ->not->toContain('single_select_field');
+
+        // Fields with defaults carry them, cast to the schema type
+        expect($schema['properties']['varchar_field']['default'])->toBe('default_value')
+            ->and($schema['properties']['integer_field']['default'])->toBe(42)
+            ->and($schema['properties']['float_field']['default'])->toBe(3.14)
+            ->and($schema['properties']['boolean_field']['default'])->toBeFalse()
+            ->and($schema['properties']['single_select_field']['default'])->toBe('option1')
+            ->and($schema['properties']['single_select_field']['enum'])->toBe(['option1', 'option2']);
     });
 
     it('respects configuration options', function () {
@@ -433,7 +446,7 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
 
         $schemaNoDesc = $module->convert($strategyNoDesc)->toArray();
 
-        expect($schemaNoDesc['description'])->toBe('')
+        expect($schemaNoDesc)->not->toHaveKey('description')
             ->and($schemaNoDesc['properties']['field1'])->not->toHaveKey('description');
 
         // Test with nullable disabled
