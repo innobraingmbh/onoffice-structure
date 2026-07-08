@@ -13,19 +13,18 @@ trait ConvertsModuleToJsonSchema
 {
     public function convertModule(Module $module): ObjectType
     {
-        $properties = [];
+        $properties = $module->fields
+            ->toBase()
+            ->mapWithKeys(fn (Field $field) => $this->convertField($field))
+            ->all();
 
-        foreach ($module->fields as $field) {
-            /** @var Field $field */
-            $schema = $this->convertField($field);
+        $schema = JsonSchema::object($properties)
+            ->title($module->key->value);
 
-            $properties = array_merge($properties, $schema);
+        if ($this->includeDescriptions && $module->label !== '') {
+            $schema->description($module->label);
         }
 
-        $description = $this->includeDescriptions ? $module->label : '';
-
-        return JsonSchema::object($properties)
-            ->title($module->key->value)
-            ->description($description);
+        return $schema;
     }
 }

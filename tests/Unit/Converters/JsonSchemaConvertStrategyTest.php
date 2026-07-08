@@ -74,9 +74,27 @@ describe('JsonSchemaConvertStrategy', function () {
             expect($schema)->toBeArray()
                 ->and($schema['name'])->toBeInstanceOf(StringType::class)
                 ->and($schema['name']->toArray()['title'])->toBe('name')
-                ->and($schema['name']->toArray()['description'])->toContain('Full Name')
-                ->and($schema['name']->toArray()['description'])->toContain('max length: 255')
+                ->and($schema['name']->toArray()['description'])->toBe('Full Name')
                 ->and($schema['name']->toArray()['maxLength'])->toBe(255);
+        });
+
+        it('keeps the label as description for string fields without a length', function () {
+            $field = new Field(
+                key: 'notes',
+                label: 'Notes',
+                type: FieldType::Text,
+                length: null,
+                permittedValues: collect(),
+                default: null,
+                filters: collect(),
+                dependencies: collect(),
+                compoundFields: collect(),
+                fieldMeasureFormat: null
+            );
+
+            $schema = $this->strategy->convertField($field);
+
+            expect($schema['notes']->toArray()['description'])->toBe('Notes');
         });
 
         it('converts integer field to NumberSchema', function () {
@@ -141,7 +159,7 @@ describe('JsonSchemaConvertStrategy', function () {
             expect($schema)->toBeArray()
                 ->and($schema['birthdate'])->toBeInstanceOf(StringType::class)
                 ->and($schema['birthdate']->toArray()['description'])->toContain('Birth Date')
-                ->and($schema['birthdate']->toArray()['description'])->toContain('YYYY-MM-DD');
+                ->and($schema['birthdate']->toArray()['format'])->toBe('date');
         });
 
         it('converts single select field to EnumSchema', function () {
@@ -164,8 +182,9 @@ describe('JsonSchemaConvertStrategy', function () {
             $schema = $this->strategy->convertField($field);
 
             expect($schema)->toBeArray()
-                ->and($schema['status'])->toBeInstanceOf(ArrayType::class)
-                ->and($schema['status']->toArray()['enum'])->toBe(['active', 'inactive']);
+                ->and($schema['status'])->toBeInstanceOf(StringType::class)
+                ->and($schema['status']->toArray()['type'])->toBe(['string', 'null'])
+                ->and($schema['status']->toArray()['enum'])->toBe(['active', 'inactive', null]);
         });
 
         it('converts multi select field to ArraySchema with EnumSchema items', function () {
@@ -190,7 +209,10 @@ describe('JsonSchemaConvertStrategy', function () {
 
             expect($schema)->toBeArray()
                 ->and($schema['tags'])->toBeInstanceOf(ArrayType::class)
-                ->and($schema['tags']->toArray()['enum'])->toBe(['php', 'js', 'python']);
+                ->and($schema['tags']->toArray())->not->toHaveKey('enum')
+                ->and($schema['tags']->toArray())->not->toHaveKey('uniqueItems')
+                ->and($schema['tags']->toArray()['items']['type'])->toBe('string')
+                ->and($schema['tags']->toArray()['items']['enum'])->toBe(['php', 'js', 'python']);
         });
 
         it('handles empty permitted values for select fields', function () {
@@ -265,7 +287,8 @@ describe('JsonSchemaConvertStrategy', function () {
                 ->and($schema->toArray()['title'])->toBe('address')
                 ->and($schema->toArray()['description'])->toBe('Address Information')
                 ->and($schema->toArray()['properties'])->toHaveCount(3)
-                ->and($schema->toArray()['required'])->toBe(['verified']);
+                ->and($schema->toArray()['required'])->toBe(['street', 'city'])
+                ->and($schema->toArray()['properties']['verified']['default'])->toBeFalse();
         });
     });
 
