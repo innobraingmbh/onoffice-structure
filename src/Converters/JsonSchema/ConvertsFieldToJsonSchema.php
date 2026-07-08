@@ -143,6 +143,11 @@ trait ConvertsFieldToJsonSchema
         return $schema;
     }
 
+    /**
+     * The items are not marked unique: structured-output grammars (OpenAI
+     * strict mode, vLLM/xgrammar) reject "uniqueItems", and consumers can
+     * dedupe trivially.
+     */
     private function createMultiSelectSchema(Field $field): ArrayType
     {
         $items = JsonSchema::string();
@@ -151,7 +156,7 @@ trait ConvertsFieldToJsonSchema
             $items->enum($field->permittedValues->keys()->all());
         }
 
-        $schema = JsonSchema::array()->items($items)->unique();
+        $schema = JsonSchema::array()->items($items);
 
         $this->applyDescription($schema, $field);
 

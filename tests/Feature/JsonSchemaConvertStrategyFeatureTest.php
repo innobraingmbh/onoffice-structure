@@ -168,7 +168,7 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
             ->and($properties['ausstattung']['title'])->toBe('ausstattung')
             ->and($properties['ausstattung']['description'])->toContain('Features')
             ->and($properties['ausstattung']['type'])->toBe(['array', 'null'])
-            ->and($properties['ausstattung']['uniqueItems'])->toBeTrue()
+            ->and($properties['ausstattung'])->not->toHaveKey('uniqueItems')
             ->and($properties['ausstattung']['items']['type'])->toBe('string')
             ->and($properties['ausstattung']['items']['enum'])->toBe(['balkon', 'garten', 'garage', 'keller', 'aufzug'])
             // Boolean field

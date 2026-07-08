@@ -210,7 +210,7 @@ describe('JsonSchemaConvertStrategy', function () {
             expect($schema)->toBeArray()
                 ->and($schema['tags'])->toBeInstanceOf(ArrayType::class)
                 ->and($schema['tags']->toArray())->not->toHaveKey('enum')
-                ->and($schema['tags']->toArray()['uniqueItems'])->toBeTrue()
+                ->and($schema['tags']->toArray())->not->toHaveKey('uniqueItems')
                 ->and($schema['tags']->toArray()['items']['type'])->toBe('string')
                 ->and($schema['tags']->toArray()['items']['enum'])->toBe(['php', 'js', 'python']);
         });
