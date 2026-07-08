@@ -2,6 +2,14 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v3.0.0 - 2026-07-08
+
+### What's Changed
+
+* refactor: laravel json schema by @kauffinger in https://github.com/innobraingmbh/onoffice-structure/pull/25
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v2.1.0...v3.0.0
+
 ## v2.1.0 - 2026-06-26
 
 ### What's Changed
