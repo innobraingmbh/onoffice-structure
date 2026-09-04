@@ -2,6 +2,10 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v3.1.0 - 2026-09-04
+
+- chore: allow `innobrain/laravel-onoffice-adapter` ^2.0 alongside ^1.10
+
 ## v3.0.0 - 2026-07-08
 
 ### What's Changed
