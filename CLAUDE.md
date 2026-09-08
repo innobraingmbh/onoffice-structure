@@ -45,11 +45,15 @@ Both have facades in `src/Facades/`.
 
 ### Collections
 
-- `ModulesCollection` and `FieldCollection` extend `Illuminate\Support\Collection`. `ModulesCollection` implements `Convertible` for batch conversions; `FieldCollection` adds `writable()`, `whereMatchesFilters()` and `sanitize()`.
+- `ModulesCollection` and `FieldCollection` extend `Illuminate\Support\Collection`. `ModulesCollection` implements `Convertible` for batch conversions and adds `module()`; `FieldCollection` adds `find()` (case-insensitive), `writable()`, `whereMatchesFilters()`, `sanitize()` and `violations()`.
+
+### Testing Helpers
+
+`src/Testing/` ships `FieldConfigurationFake` (swapped in via `Structure::fake()` / `FieldConfiguration::fake()`) and the `FieldFactory` / `ModuleFactory` builders. `Structure::serializableClasses()` lists every class a cache store must allow to unserialize a `ModulesCollection`; keep it in sync when adding DTOs or enums to the graph.
 
 ### Enums
 
-All enums are **string-backed** (enforced by arch tests): `FieldConfigurationModule` (11 modules), `FieldType` (10 types), `Language` (34 languages).
+All enums are **string-backed** (enforced by arch tests): `FieldConfigurationModule` (11 modules), `FieldType` (15 types, with `isLayoutOnly()` / `isSelect()`), `FieldMeasureFormat`, `Language` (34 languages), `ViolationReason`.
 
 ## Live API Probes
 

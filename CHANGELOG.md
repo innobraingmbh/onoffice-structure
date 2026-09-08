@@ -28,6 +28,12 @@ All notable changes to `onoffice-structure` will be documented in this file.
 - `getModules()` and `retrieveForClient()` accept `FieldConfigurationModule` cases as well as keys.
 - `Field` only requires `key`, `label` and `type`; the remaining constructor parameters have defaults.
 - Workbench probe commands for exploring the live field configuration.
+- `FieldType::isLayoutOnly()` and `FieldType::isSelect()`.
+- `Field::permittedValueLabels()`, `Field::labelFor()`, `Field::resolvePermittedValueKey()` and `Field::permits()`.
+- `FieldCollection::find()`, `Module::field()` and `ModulesCollection::module()` for case-insensitive lookups.
+- `FieldCollection::sanitize()` drops single items of multi-select arrays instead of rejecting the whole entry, and `FieldCollection::violations()` reports what was dropped and why.
+- `Structure::serializableClasses()` for the `cache.serializable_classes` config.
+- `Structure::fake()` / `FieldConfiguration::fake()` and the `FieldFactory` / `ModuleFactory` test helpers.
 
 ## v3.1.0 - 2026-09-04
 

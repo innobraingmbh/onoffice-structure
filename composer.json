@@ -75,5 +75,8 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "suggest": {
+        "phpunit/phpunit": "Required to use the FieldConfigurationFake assertions in your tests."
+    }
 }

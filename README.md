@@ -91,16 +91,52 @@ $objekttyp = $estateModule->fields->get('objekttyp')->withPermittedValuesFor('ha
 // $objekttyp->permittedValues now only contains house types such as "bungalow"
 ```
 
+### Looking Up Fields and Permitted Values
+
+The API accepts field keys in any casing, so lookups fall back to a case-insensitive match:
+
+```php
+$field = $estateModule->field('ort');            // finds "Ort"
+$field = $modules->module('estate')?->field('ort');
+```
+
+`Field` resolves permitted values by key or label, which is handy for user or AI input:
+
+```php
+$objektart = $estateModule->field('objektart');
+
+$objektart->permittedValueLabels();              // ['haus' => 'Haus', 'wohnung' => 'Wohnung', ...]
+$objektart->labelFor('haus');                    // 'Haus'
+$objektart->resolvePermittedValueKey('Wohnung'); // 'wohnung'
+$objektart->permits('villa');                    // false
+```
+
 ### Sanitizing Input Data
 
-Remove keys that don't match known fields or have invalid permitted values:
+`sanitize()` removes keys that don't match known fields and values that are not permitted. Items of a multi-select array are removed individually:
 
 ```php
 $sanitized = $addressModule->fields->sanitize(collect([
     'Email' => 'test@example.com',
     'unknownField' => 'value',      // removed: not in field collection
-    'Beziehung' => '999',           // removed: not a permitted value
+    'Beziehung' => ['1', '999'],    // '999' removed: not a permitted value
 ]));
+```
+
+`violations()` reports what `sanitize()` would drop, as `FieldViolation` DTOs with a `ViolationReason`:
+
+```php
+foreach ($addressModule->fields->violations($input) as $violation) {
+    Log::info("{$violation->fieldKey}: {$violation->reason->value}", ['value' => $violation->value]);
+}
+```
+
+### Caching
+
+The DTOs serialize cleanly, so a `ModulesCollection` can be cached as-is. If your cache store restricts unserializable classes, allow the package's classes in `config/cache.php`:
+
+```php
+'serializable_classes' => \Innobrain\Structure\Services\Structure::serializableClasses(),
 ```
 
 ### Converting Data
@@ -172,6 +208,32 @@ final readonly class MyConvertStrategy implements ConvertStrategy
 $result = $module->convert(new MyConvertStrategy());
 ```
 
+## Testing Your Application
+
+`Structure::fake()` (or `FieldConfiguration::fake()`) replaces the API call with canned modules for the rest of the test. The factories build DTOs without spelling out every constructor argument:
+
+```php
+use Innobrain\Structure\Enums\FieldConfigurationModule;
+use Innobrain\Structure\Facades\Structure;
+use Innobrain\Structure\Testing\FieldFactory;
+use Innobrain\Structure\Testing\ModuleFactory;
+
+$fake = Structure::fake([
+    ModuleFactory::new(FieldConfigurationModule::Estate)->fields(
+        FieldFactory::new('Ort'),
+        FieldFactory::singleSelect('objektart', ['haus' => 'Haus', 'wohnung' => 'Wohnung'])->default('haus'),
+        FieldFactory::singleSelect('objekttyp', ['einfamilienhaus' => 'Einfamilienhaus'])
+            ->dependencies(['einfamilienhaus' => 'haus']),
+    )->make(),
+]);
+
+// ... run the code under test ...
+
+$fake->assertRetrieved(FieldConfigurationModule::Estate);
+```
+
+The fake narrows to the requested modules and still throws for unknown module keys. The same modules are returned for every language.
+
 ## DTOs
 
 All DTOs are readonly. `Field` only requires `key`, `label` and `type`; the other properties default to `null` or an empty collection.
@@ -183,6 +245,7 @@ All DTOs are readonly. `Field` only requires `key`, `label` and `type`; the othe
 | `PermittedValue` | `key`, `label` |
 | `FieldDependency` | `permittedValueKey`, `parentFieldValue` (the permitted value is only available when the parent field holds that value, e.g. `objekttyp` => `objektart`) |
 | `FieldFilter` | `name`, `config` |
+| `FieldViolation` | `fieldKey`, `value`, `reason` (ViolationReason) |
 
 ## Testing
 

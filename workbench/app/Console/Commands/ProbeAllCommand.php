@@ -11,7 +11,6 @@ use Innobrain\Structure\Converters\Array\ArrayConvertStrategy;
 use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
 use Innobrain\Structure\Converters\LaravelRules\LaravelRulesConvertStrategy;
 use Innobrain\Structure\Dtos\Field;
-use Innobrain\Structure\Enums\FieldType;
 use Innobrain\Structure\Enums\Language;
 use Innobrain\Structure\Facades\Structure;
 use Throwable;
@@ -100,13 +99,12 @@ class ProbeAllCommand extends Command
      */
     private function checkField(string $module, Field $field, array &$problems): void
     {
-        $selectTypes = [FieldType::SingleSelect, FieldType::MultiSelect];
 
-        if (in_array($field->type, $selectTypes, true) && ! $field->hasPermittedValues()) {
+        if ($field->type->isSelect() && ! $field->hasPermittedValues()) {
             $problems[] = [$module, $field->key, 'select field without permitted values'];
         }
 
-        if (! in_array($field->type, $selectTypes, true) && $field->hasPermittedValues()) {
+        if (! $field->type->isSelect() && $field->hasPermittedValues()) {
             $problems[] = [$module, $field->key, "{$field->type->value} field with ".$field->permittedValues->count().' permitted values'];
         }
 

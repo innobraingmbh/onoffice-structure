@@ -102,7 +102,7 @@ readonly class Field implements Convertible
             return false;
         }
 
-        return ! in_array($this->type, [FieldType::RedHint, FieldType::BlackHint, FieldType::DividingLine], true);
+        return ! $this->type->isLayoutOnly();
     }
 
     /**
@@ -132,6 +132,43 @@ readonly class Field implements Convertible
             ->all();
     }
 
+    /**
+     * Numeric keys become integers here because they are used as array keys.
+     *
+     * @return array<string, string>
+     */
+    public function permittedValueLabels(): array
+    {
+        return $this->permittedValues
+            ->mapWithKeys(fn (PermittedValue $permittedValue): array => [$permittedValue->key => $permittedValue->label])
+            ->all();
+    }
+
+    public function labelFor(string $permittedValueKey): ?string
+    {
+        return $this->permittedValues
+            ->first(fn (PermittedValue $permittedValue): bool => $permittedValue->key === $permittedValueKey)
+            ?->label;
+    }
+
+    /**
+     * Find the key of a permitted value from user input, which may be the key
+     * itself or its label in any casing.
+     */
+    public function resolvePermittedValueKey(string $keyOrLabel): ?string
+    {
+        if ($this->containsPermittedValue($keyOrLabel)) {
+            return $keyOrLabel;
+        }
+
+        $needle = mb_strtolower(trim($keyOrLabel));
+
+        $byKey = $this->permittedValues->first(fn (PermittedValue $permittedValue): bool => mb_strtolower($permittedValue->key) === $needle);
+        $byLabel = $this->permittedValues->first(fn (PermittedValue $permittedValue): bool => mb_strtolower($permittedValue->label) === $needle);
+
+        return ($byKey ?? $byLabel)?->key;
+    }
+
     public function containsPermittedValue(string $permittedValueKey): bool
     {
         return $this->permittedValues->contains(static fn (PermittedValue $permittedValue) => $permittedValue->key === $permittedValueKey);
@@ -140,5 +177,22 @@ readonly class Field implements Convertible
     public function doesntContainPermittedValue(string $permittedValueKey): bool
     {
         return ! $this->containsPermittedValue($permittedValueKey);
+    }
+
+    /**
+     * Whether a submitted value is allowed for this field. A field without
+     * permitted values accepts anything; a multi-select accepts an array of keys.
+     */
+    public function permits(mixed $value): bool
+    {
+        if (! $this->hasPermittedValues()) {
+            return true;
+        }
+
+        if (is_array($value)) {
+            return array_all($value, fn (mixed $item): bool => $this->permits($item));
+        }
+
+        return is_scalar($value) && $this->containsPermittedValue((string) $value);
     }
 }

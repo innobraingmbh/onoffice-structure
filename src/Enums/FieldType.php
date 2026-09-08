@@ -24,4 +24,23 @@ enum FieldType: string
     case RedHint = 'redhint';
     case BlackHint = 'blackhint';
     case DividingLine = 'dividingline';
+
+    /**
+     * Hints and dividing lines only structure the form and carry no data.
+     */
+    public function isLayoutOnly(): bool
+    {
+        return match ($this) {
+            self::RedHint, self::BlackHint, self::DividingLine => true,
+            default => false,
+        };
+    }
+
+    public function isSelect(): bool
+    {
+        return match ($this) {
+            self::SingleSelect, self::MultiSelect => true,
+            default => false,
+        };
+    }
 }

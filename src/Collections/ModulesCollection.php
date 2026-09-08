@@ -8,12 +8,18 @@ use Illuminate\Support\Collection;
 use Innobrain\Structure\Contracts\Convertible;
 use Innobrain\Structure\Contracts\ConvertStrategy;
 use Innobrain\Structure\Dtos\Module;
+use Innobrain\Structure\Enums\FieldConfigurationModule;
 
 /**
  * @extends Collection<string, Module>
  */
 final class ModulesCollection extends Collection implements Convertible
 {
+    public function module(FieldConfigurationModule|string $module): ?Module
+    {
+        return $this->get($module instanceof FieldConfigurationModule ? $module->value : $module);
+    }
+
     /**
      * @return array<string, mixed>
      */

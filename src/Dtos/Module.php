@@ -17,6 +17,11 @@ readonly class Module implements Convertible
         public FieldCollection $fields,
     ) {}
 
+    public function field(string $key): ?Field
+    {
+        return $this->fields->find($key);
+    }
+
     public function convert(ConvertStrategy $strategy): mixed
     {
         return $strategy->convertModule($this);
