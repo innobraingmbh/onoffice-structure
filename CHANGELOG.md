@@ -2,7 +2,7 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
-## Unreleased
+## v4.0.0 - 2026-09-08
 
 ### Breaking
 
@@ -34,6 +34,8 @@ All notable changes to `onoffice-structure` will be documented in this file.
 - `FieldCollection::sanitize()` drops single items of multi-select arrays instead of rejecting the whole entry, and `FieldCollection::violations()` reports what was dropped and why.
 - `Structure::serializableClasses()` for the `cache.serializable_classes` config.
 - `Structure::fake()` / `FieldConfiguration::fake()` and the `FieldFactory` / `ModuleFactory` test helpers.
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v3.1.0...v4.0.0
 
 ## v3.1.0 - 2026-09-04
 
