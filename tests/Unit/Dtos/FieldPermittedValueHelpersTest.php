@@ -29,17 +29,17 @@ describe('permitted value labels', function (): void {
     });
 
     it('resolves a key from a key or label in any casing', function (): void {
-        expect($this->objektart->resolvePermittedValueKey('haus'))->toBe('haus')
-            ->and($this->objektart->resolvePermittedValueKey('HAUS'))->toBe('haus')
-            ->and($this->objektart->resolvePermittedValueKey('Wohnung'))->toBe('wohnung')
-            ->and($this->objektart->resolvePermittedValueKey(' fünf '))->toBe('5')
-            ->and($this->objektart->resolvePermittedValueKey('villa'))->toBeNull();
+        expect($this->objektart->permittedValueKeyFor('haus'))->toBe('haus')
+            ->and($this->objektart->permittedValueKeyFor('HAUS'))->toBe('haus')
+            ->and($this->objektart->permittedValueKeyFor('Wohnung'))->toBe('wohnung')
+            ->and($this->objektart->permittedValueKeyFor(' fünf '))->toBe('5')
+            ->and($this->objektart->permittedValueKeyFor('villa'))->toBeNull();
     });
 
     it('prefers a key match over a label match', function (): void {
         $field = FieldFactory::singleSelect('status', ['a' => 'B', 'b' => 'A'])->make();
 
-        expect($field->resolvePermittedValueKey('B'))->toBe('b');
+        expect($field->permittedValueKeyFor('B'))->toBe('b');
     });
 });
 
@@ -55,8 +55,11 @@ describe('permits', function (): void {
     it('checks scalar values against the permitted keys', function (): void {
         expect($this->objektart->permits('haus'))->toBeTrue()
             ->and($this->objektart->permits(5))->toBeTrue()
-            ->and($this->objektart->permits('villa'))->toBeFalse()
-            ->and($this->objektart->permits(null))->toBeFalse();
+            ->and($this->objektart->permits('villa'))->toBeFalse();
+    });
+
+    it('accepts null like the nullable validation rules do', function (): void {
+        expect($this->objektart->permits(null))->toBeTrue();
     });
 
     it('checks every item of an array', function (): void {

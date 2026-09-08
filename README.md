@@ -107,7 +107,7 @@ $objektart = $estateModule->field('objektart');
 
 $objektart->permittedValueLabels();              // ['haus' => 'Haus', 'wohnung' => 'Wohnung', ...]
 $objektart->labelFor('haus');                    // 'Haus'
-$objektart->resolvePermittedValueKey('Wohnung'); // 'wohnung'
+$objektart->permittedValueKeyFor('Wohnung');     // 'wohnung'
 $objektart->permits('villa');                    // false
 ```
 

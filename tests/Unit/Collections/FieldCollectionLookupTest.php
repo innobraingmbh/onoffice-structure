@@ -60,6 +60,18 @@ describe('sanitize', function (): void {
 
         expect($sanitized->get('ausstattung'))->toBe(['balkon', 'garten']);
     });
+
+    it('keeps an emptied multi-select array', function (): void {
+        $sanitized = $this->module->fields->sanitize(new Collection(['ausstattung' => ['pool']]));
+
+        expect($sanitized->all())->toBe(['ausstattung' => []]);
+    });
+
+    it('matches field keys case-insensitively and returns the canonical key', function (): void {
+        $sanitized = $this->module->fields->sanitize(new Collection(['ort' => 'Aachen', 'OBJEKTART' => 'haus']));
+
+        expect($sanitized->all())->toBe(['Ort' => 'Aachen', 'objektart' => 'haus']);
+    });
 });
 
 describe('violations', function (): void {
@@ -78,6 +90,12 @@ describe('violations', function (): void {
                 ['ausstattung', 'pool', ViolationReason::ValueNotPermitted],
                 ['unknown', 'x', ViolationReason::UnknownField],
             ]);
+    });
+
+    it('reports the canonical field key for case-insensitive matches', function (): void {
+        $violations = $this->module->fields->violations(new Collection(['OBJEKTART' => 'villa']));
+
+        expect($violations->first()->fieldKey)->toBe('objektart');
     });
 
     it('is empty for valid data', function (): void {

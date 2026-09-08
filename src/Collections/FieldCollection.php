@@ -46,29 +46,35 @@ final class FieldCollection extends Collection
     }
 
     /**
-     * Drop unknown fields and values that are not permitted. Items of a
-     * multi-select array are dropped individually.
+     * Drop unknown fields and values that are not permitted. Fields are matched
+     * like find() and returned under their canonical key. Items of a
+     * multi-select array are dropped individually, so an array whose items were
+     * all dropped is kept as an empty array.
      *
      * @param  Collection<string, mixed>  $data
      * @return Collection<string, mixed>
      */
     public function sanitize(Collection $data): Collection
     {
-        return $data->intersectByKeys($this)
-            ->map(function (mixed $value, string $key): mixed {
-                /** @var Field $field */
-                $field = $this->get($key);
+        $sanitized = new Collection;
 
-                return is_array($value)
-                    ? array_values(array_filter($value, $field->permits(...)))
-                    : $value;
-            })
-            ->reject(function (mixed $value, string $key): bool {
-                /** @var Field $field */
-                $field = $this->get($key);
+        foreach ($data as $key => $value) {
+            $field = $this->find($key);
 
-                return ! $field->permits($value);
-            });
+            if (! $field instanceof Field) {
+                continue;
+            }
+
+            if (is_array($value)) {
+                $value = array_values(array_filter($value, $field->permits(...)));
+            }
+
+            if ($field->permits($value)) {
+                $sanitized->put($field->key, $value);
+            }
+        }
+
+        return $sanitized;
     }
 
     /**
@@ -82,7 +88,7 @@ final class FieldCollection extends Collection
         $violations = new Collection;
 
         foreach ($data as $key => $value) {
-            $field = $this->get($key);
+            $field = $this->find($key);
 
             if (! $field instanceof Field) {
                 $violations->push(new FieldViolation($key, $value, ViolationReason::UnknownField));
@@ -92,7 +98,7 @@ final class FieldCollection extends Collection
 
             foreach (is_array($value) ? $value : [$value] as $item) {
                 if (! $field->permits($item)) {
-                    $violations->push(new FieldViolation($key, $item, ViolationReason::ValueNotPermitted));
+                    $violations->push(new FieldViolation($field->key, $item, ViolationReason::ValueNotPermitted));
                 }
             }
         }

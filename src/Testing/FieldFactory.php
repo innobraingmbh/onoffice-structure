@@ -94,6 +94,8 @@ final class FieldFactory
     }
 
     /**
+     * The filter name defaults to the field key, which is how the API names them.
+     *
      * @param  array<string, array<string>>  $config  filter key => allowed values, e.g. ['immobilienart' => ['haus']]
      */
     public function filter(array $config, ?string $name = null): self

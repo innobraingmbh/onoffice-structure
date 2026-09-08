@@ -135,7 +135,7 @@ readonly class Field implements Convertible
     /**
      * Numeric keys become integers here because they are used as array keys.
      *
-     * @return array<string, string>
+     * @return array<int|string, string>
      */
     public function permittedValueLabels(): array
     {
@@ -155,7 +155,7 @@ readonly class Field implements Convertible
      * Find the key of a permitted value from user input, which may be the key
      * itself or its label in any casing.
      */
-    public function resolvePermittedValueKey(string $keyOrLabel): ?string
+    public function permittedValueKeyFor(string $keyOrLabel): ?string
     {
         if ($this->containsPermittedValue($keyOrLabel)) {
             return $keyOrLabel;
@@ -181,11 +181,12 @@ readonly class Field implements Convertible
 
     /**
      * Whether a submitted value is allowed for this field. A field without
-     * permitted values accepts anything; a multi-select accepts an array of keys.
+     * permitted values accepts anything, null is always allowed since the
+     * validation rules are nullable, and a multi-select accepts an array of keys.
      */
     public function permits(mixed $value): bool
     {
-        if (! $this->hasPermittedValues()) {
+        if ($value === null || ! $this->hasPermittedValues()) {
             return true;
         }
 
