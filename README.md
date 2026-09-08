@@ -46,9 +46,10 @@ $credentials = new OnOfficeApiCredentials('your-token', 'your-secret');
 // Fetch all modules (defaults to German labels)
 $modules = Structure::forClient($credentials)->getModules();
 
-// Fetch specific modules in a specific language
+// Fetch specific modules in a specific language. Enum cases and plain keys
+// both work; an unknown key throws an InvalidArgumentException.
 $modules = Structure::forClient($credentials)->getModules(
-    only: [FieldConfigurationModule::Address->value, FieldConfigurationModule::Estate->value],
+    only: [FieldConfigurationModule::Address, 'estate'],
     language: Language::English,
 );
 
@@ -75,6 +76,21 @@ $filteredFields = $addressModule->fields
     ->get();
 ```
 
+### Writable Fields and Dependent Permitted Values
+
+Hints, dividing lines and compound fields cannot be written to the API. `FieldCollection::writable()` drops them:
+
+```php
+$writable = $estateModule->fields->writable();
+```
+
+Some permitted values depend on the value of a parent field. In the estate module the `objekttyp` values depend on `objektart`. `Field::withPermittedValuesFor()` narrows a field to the permitted values allowed for a parent value:
+
+```php
+$objekttyp = $estateModule->fields->get('objekttyp')->withPermittedValuesFor('haus');
+// $objekttyp->permittedValues now only contains house types such as "bungalow"
+```
+
 ### Sanitizing Input Data
 
 Remove keys that don't match known fields or have invalid permitted values:
@@ -89,7 +105,7 @@ $sanitized = $addressModule->fields->sanitize(collect([
 
 ### Converting Data
 
-All DTOs and collections implement `Convertible` and can be transformed using a `ConvertStrategy`.
+`Module`, `Field` and `ModulesCollection` implement `Convertible` and can be transformed using a `ConvertStrategy`.
 
 #### Array Conversion
 
@@ -122,7 +138,7 @@ $rules = $addressModule->convert($strategy);
 // 'Beziehung' => 'array|distinct|nullable', 'Beziehung.*' => 'in:0,1,2,3'
 ```
 
-Module conversions for Laravel rules and JSON Schema only include writable fields (`Field::isWritable()`). Hints and dividing lines carry no data, and compound fields such as `Plz-Ort` are set through their individual fields, so they are left out. Converting such a field directly still works.
+Module conversions for Laravel rules and JSON Schema only include writable fields (`FieldCollection::writable()`). Hints and dividing lines carry no data, and compound fields such as `Plz-Ort` are set through their individual fields, so they are left out. Converting such a field directly still works.
 
 #### JSON Schema
 
@@ -140,14 +156,14 @@ $schema = $addressModule->convert($strategy);
 
 ### Writing a Custom Converter
 
-Implement `ConvertStrategy` (or extend `BaseConvertStrategy`) and add `convertField`, `convertModule`, etc. methods matching the DTO class names:
+Implement `ConvertStrategy` with `convertField` and `convertModule`:
 
 ```php
-use Innobrain\Structure\Converters\Concerns\BaseConvertStrategy;
+use Innobrain\Structure\Contracts\ConvertStrategy;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\Module;
 
-final readonly class MyConvertStrategy extends BaseConvertStrategy
+final readonly class MyConvertStrategy implements ConvertStrategy
 {
     public function convertModule(Module $module): mixed { /* ... */ }
     public function convertField(Field $field): mixed { /* ... */ }
@@ -158,14 +174,14 @@ $result = $module->convert(new MyConvertStrategy());
 
 ## DTOs
 
-All DTOs are readonly and implement `Convertible`.
+All DTOs are readonly. `Field` only requires `key`, `label` and `type`; the other properties default to `null` or an empty collection.
 
 | DTO | Key Properties |
 |-----|---------------|
 | `Module` | `key` (FieldConfigurationModule), `label`, `fields` (FieldCollection) |
 | `Field` | `key`, `label`, `type` (FieldType), `length`, `permittedValues`, `default`, `filters`, `dependencies`, `compoundFields`, `fieldMeasureFormat` (FieldMeasureFormat) |
 | `PermittedValue` | `key`, `label` |
-| `FieldDependency` | `dependentFieldKey`, `dependentFieldValue` (maps a permitted value of this field to the required value of its parent field, e.g. `objekttyp` => `objektart`) |
+| `FieldDependency` | `permittedValueKey`, `parentFieldValue` (the permitted value is only available when the parent field holds that value, e.g. `objekttyp` => `objektart`) |
 | `FieldFilter` | `name`, `config` |
 
 ## Testing

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Innobrain\Structure\Converters\Concerns\ConvertStrategy;
+use Innobrain\Structure\Contracts\ConvertStrategy;
 
 arch('it will not use debugging functions')
     ->expect(['dd', 'dump', 'ray'])

@@ -22,17 +22,50 @@ trait ConvertsFieldToArray
             'type' => $field->type->value,
             'length' => $field->length,
             'permittedValues' => $field->permittedValues
-                ->map(fn (PermittedValue $pv) => $pv->convert($this))
-                ->toArray(),
+                ->map(fn (PermittedValue $permittedValue): array => $this->convertPermittedValue($permittedValue))
+                ->all(),
             'default' => $field->default,
             'filters' => $field->filters
-                ->map(fn (FieldFilter $f) => $f->convert($this))
-                ->toArray(),
+                ->map(fn (FieldFilter $filter): array => $this->convertFieldFilter($filter))
+                ->all(),
             'dependencies' => $field->dependencies
-                ->map(fn (FieldDependency $d) => $d->convert($this))
-                ->toArray(),
+                ->map(fn (FieldDependency $dependency): array => $this->convertFieldDependency($dependency))
+                ->all(),
             'compoundFields' => $field->compoundFields->all(),
             'fieldMeasureFormat' => $field->fieldMeasureFormat?->value,
         ]);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function convertPermittedValue(PermittedValue $permittedValue): array
+    {
+        return [
+            'key' => $permittedValue->key,
+            'label' => $permittedValue->label,
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function convertFieldFilter(FieldFilter $filter): array
+    {
+        return $this->normalize([
+            'name' => $filter->name,
+            'config' => $filter->config->all(),
+        ]);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function convertFieldDependency(FieldDependency $dependency): array
+    {
+        return [
+            'permittedValueKey' => $dependency->permittedValueKey,
+            'parentFieldValue' => $dependency->parentFieldValue,
+        ];
     }
 }

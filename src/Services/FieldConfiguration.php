@@ -20,6 +20,7 @@ use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldMeasureFormat;
 use Innobrain\Structure\Enums\FieldType;
 use Innobrain\Structure\Enums\Language;
+use InvalidArgumentException;
 
 use function is_array;
 use function is_string;
@@ -30,9 +31,10 @@ class FieldConfiguration
     /**
      * Retrieve the field configuration for a given client.
      *
-     * @param  array<int, string>  $only
+     * @param  array<int, FieldConfigurationModule|string>  $only  Empty means all modules
      *
      * @throws OnOfficeException
+     * @throws InvalidArgumentException when a module key is unknown
      */
     public function retrieveForClient(OnOfficeApiCredentials $credentials, array $only = [], Language $language = Language::German): ModulesCollection
     {
@@ -195,8 +197,8 @@ class FieldConfiguration
             foreach ($dependenciesData as $key => $value) {
                 if (is_string($key) && is_string($value)) {
                     $dependencies->add(new FieldDependency(
-                        dependentFieldKey: $key,
-                        dependentFieldValue: $value,
+                        permittedValueKey: $key,
+                        parentFieldValue: $value,
                     ));
                 }
             }

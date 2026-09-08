@@ -23,13 +23,10 @@ describe('writable fields in module converters', function () {
             key: $key,
             label: ucfirst($key),
             type: $type,
-            length: null,
             permittedValues: new Collection,
-            default: null,
             filters: new Collection,
             dependencies: new Collection,
             compoundFields: new Collection($compoundFields),
-            fieldMeasureFormat: null,
         );
     }
 
@@ -57,6 +54,10 @@ describe('writable fields in module converters', function () {
             ->and($fields->get('Hinweis')->isWritable())->toBeFalse()
             ->and($fields->get('Warnung')->isWritable())->toBeFalse()
             ->and($fields->get('Trennlinie')->isWritable())->toBeFalse();
+    });
+
+    it('filters a collection down to writable fields', function () {
+        expect(writableTestModule()->fields->writable()->keys()->all())->toBe(['Anrede', 'Titel']);
     });
 
     it('only emits Laravel rules for writable fields', function () {

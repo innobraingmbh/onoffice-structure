@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace Innobrain\Structure\Dtos;
 
 use Illuminate\Support\Collection;
-use Innobrain\Structure\Concerns\HasConverter;
-use Innobrain\Structure\Contracts\Convertible;
 
-readonly class FieldFilter implements Convertible
+readonly class FieldFilter
 {
-    use HasConverter;
-
     /**
      * @param  Collection<string, string[]>  $config
      */

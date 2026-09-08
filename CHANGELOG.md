@@ -10,6 +10,9 @@ All notable changes to `onoffice-structure` will be documented in this file.
 - Module conversions for Laravel rules and JSON Schema skip non-writable fields (hints, dividing lines, compound fields). Use `Field::isWritable()` to check.
 - Removed the Prism schema converter and the `prism-php/prism` dependency. Use the JSON Schema converter for structured output.
 - Laravel rules no longer emit `required_if` from field dependencies. Dependencies map permitted values to their parent field's value, not fields to values.
+- `FieldDependency::$dependentFieldKey` and `$dependentFieldValue` are renamed to `$permittedValueKey` and `$parentFieldValue`. The array converter emits the new names.
+- `ConvertStrategy` moved to `Innobrain\Structure\Contracts` and only declares `convertField()` and `convertModule()`. `BaseConvertStrategy`, the `HasConverter` trait and the `convertPermittedValue()`, `convertFieldDependency()` and `convertFieldFilter()` methods are gone. `PermittedValue`, `FieldDependency` and `FieldFilter` no longer implement `Convertible`.
+- Requesting an unknown module key from `getModules()` or `retrieveForClient()` throws an `InvalidArgumentException` instead of silently returning nothing.
 
 ### Fixed
 
@@ -19,7 +22,10 @@ All notable changes to `onoffice-structure` will be documented in this file.
 ### Added
 
 - `FieldMeasureFormat` enum.
-- `Field::isWritable()`.
+- `Field::isWritable()` and `FieldCollection::writable()`.
+- `Field::withPermittedValuesFor()` narrows a field's permitted values by a parent field value using its dependencies, e.g. `objekttyp` for an `objektart`.
+- `getModules()` and `retrieveForClient()` accept `FieldConfigurationModule` cases as well as keys.
+- `Field` only requires `key`, `label` and `type`; the remaining constructor parameters have defaults.
 - Workbench probe commands for exploring the live field configuration.
 
 ## v3.1.0 - 2026-09-04

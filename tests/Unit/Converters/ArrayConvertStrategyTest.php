@@ -18,83 +18,37 @@ use Innobrain\Structure\Enums\FieldMeasureFormat;
 use Innobrain\Structure\Enums\FieldType;
 
 describe('ArrayConvertStrategy', function () {
-    describe('PermittedValue Conversion', function () {
-        it('converts PermittedValue to array', function () {
-            $pv = new PermittedValue(key: 'pv_key', label: 'PV Label');
-            $strategy = new ArrayConvertStrategy(dropEmpty: false);
-            $result = $pv->convert($strategy);
+    describe('Sub-DTO Conversion', function () {
+        it('converts permitted values, filters and dependencies inside a field', function () {
+            $field = new Field(
+                key: 'field_key',
+                label: 'Field Label',
+                type: FieldType::SingleSelect,
+                permittedValues: new Collection(['pv_key' => new PermittedValue(key: 'pv_key', label: 'PV Label')]),
+                filters: new Collection(['filter_name' => new FieldFilter(name: 'filter_name', config: new Collection(['cfg_key' => ['cfg_value']]))]),
+                dependencies: new Collection([new FieldDependency(permittedValueKey: 'pv_key', parentFieldValue: 'parent_value')]),
+            );
 
-            expect($result)->toBe([
-                'key' => 'pv_key',
-                'label' => 'PV Label',
-            ]);
+            $result = $field->convert(new ArrayConvertStrategy(dropEmpty: false));
+
+            expect($result['permittedValues'])->toBe(['pv_key' => ['key' => 'pv_key', 'label' => 'PV Label']])
+                ->and($result['filters'])->toBe(['filter_name' => ['name' => 'filter_name', 'config' => ['cfg_key' => ['cfg_value']]]])
+                ->and($result['dependencies'])->toBe([['permittedValueKey' => 'pv_key', 'parentFieldValue' => 'parent_value']]);
         });
 
-        it('converts PermittedValue to array and dropEmpty has no effect', function () {
-            $pv = new PermittedValue(key: 'pv_key', label: 'PV Label');
-            $strategy = new ArrayConvertStrategy(dropEmpty: true);
-            $result = $pv->convert($strategy);
+        it('drops an empty filter config when dropEmpty is true', function () {
+            $field = new Field(
+                key: 'field_key',
+                label: 'Field Label',
+                type: FieldType::VarChar,
+                filters: new Collection(['filter_name' => new FieldFilter(name: 'filter_name', config: new Collection)]),
+            );
 
-            expect($result)->toBe([
-                'key' => 'pv_key',
-                'label' => 'PV Label',
-            ]);
-        });
-    });
+            $keepEmpty = $field->convert(new ArrayConvertStrategy(dropEmpty: false));
+            $dropEmpty = $field->convert(new ArrayConvertStrategy(dropEmpty: true));
 
-    describe('FieldDependency Conversion', function () {
-        it('converts FieldDependency to array', function () {
-            $fd = new FieldDependency(dependentFieldKey: 'dep_key', dependentFieldValue: 'dep_value');
-            $strategy = new ArrayConvertStrategy(dropEmpty: false);
-            $result = $fd->convert($strategy);
-
-            expect($result)->toBe([
-                'dependentFieldKey' => 'dep_key',
-                'dependentFieldValue' => 'dep_value',
-            ]);
-        });
-
-        it('converts FieldDependency to array and dropEmpty has no effect', function () {
-            $fd = new FieldDependency(dependentFieldKey: 'dep_key', dependentFieldValue: 'dep_value');
-            $strategy = new ArrayConvertStrategy(dropEmpty: true);
-            $result = $fd->convert($strategy);
-
-            expect($result)->toBe([
-                'dependentFieldKey' => 'dep_key',
-                'dependentFieldValue' => 'dep_value',
-            ]);
-        });
-    });
-
-    describe('FieldFilter Conversion', function () {
-        it('converts FieldFilter to array with config', function () {
-            $ff = new FieldFilter(name: 'filter_name', config: new Collection(['cfg_key' => ['cfg_value']]));
-            $strategy = new ArrayConvertStrategy(dropEmpty: false);
-            $result = $ff->convert($strategy);
-
-            expect($result)->toBe([
-                'name' => 'filter_name',
-                'config' => ['cfg_key' => ['cfg_value']],
-            ]);
-        });
-
-        it('converts FieldFilter to array and drops empty config when dropEmpty is true', function () {
-            $ff = new FieldFilter(name: 'filter_name', config: new Collection);
-            $strategy = new ArrayConvertStrategy(dropEmpty: true);
-            $result = $ff->convert($strategy);
-
-            expect($result)->toBe(['name' => 'filter_name']);
-        });
-
-        it('converts FieldFilter to array and keeps empty config when dropEmpty is false', function () {
-            $ff = new FieldFilter(name: 'filter_name', config: new Collection);
-            $strategy = new ArrayConvertStrategy(dropEmpty: false);
-            $result = $ff->convert($strategy);
-
-            expect($result)->toBe([
-                'name' => 'filter_name',
-                'config' => [],
-            ]);
+            expect($keepEmpty['filters'])->toBe(['filter_name' => ['name' => 'filter_name', 'config' => []]])
+                ->and($dropEmpty['filters'])->toBe(['filter_name' => ['name' => 'filter_name']]);
         });
     });
 
@@ -125,7 +79,7 @@ describe('ArrayConvertStrategy', function () {
                 'permittedValues' => ['pv1' => ['key' => 'pv1', 'label' => 'Permitted Value 1']],
                 'default' => 'default_value',
                 'filters' => ['ff1' => ['name' => 'ff1', 'config' => ['cfg' => ['val']]]],
-                'dependencies' => [['dependentFieldKey' => 'dep_key', 'dependentFieldValue' => 'dep_val']],
+                'dependencies' => [['permittedValueKey' => 'dep_key', 'parentFieldValue' => 'dep_val']],
                 'compoundFields' => ['cf1', 'cf2'],
                 'fieldMeasureFormat' => 'DATA_TYPE_MONETARY',
             ]);
@@ -193,13 +147,10 @@ describe('ArrayConvertStrategy', function () {
                 key: 'field1',
                 label: 'Field 1',
                 type: FieldType::Text,
-                length: null,
                 permittedValues: new Collection,
-                default: null,
                 filters: new Collection,
                 dependencies: new Collection,
-                compoundFields: new Collection,
-                fieldMeasureFormat: null
+                compoundFields: new Collection
             );
             $module = new Module(
                 key: FieldConfigurationModule::Address,
@@ -266,9 +217,9 @@ describe('ArrayConvertStrategy', function () {
     describe('ModulesCollection Conversion', function () {
         it('converts ModulesCollection to an array of module arrays', function () {
             $module1Field = new Field(
-                key: 'field1', label: 'Field 1', type: FieldType::Text, length: null,
-                permittedValues: new Collection, default: null, filters: new Collection,
-                dependencies: new Collection, compoundFields: new Collection, fieldMeasureFormat: null
+                key: 'field1', label: 'Field 1', type: FieldType::Text,
+                permittedValues: new Collection, filters: new Collection,
+                dependencies: new Collection, compoundFields: new Collection
             );
             $module1 = new Module(
                 key: FieldConfigurationModule::Address,
@@ -279,7 +230,7 @@ describe('ArrayConvertStrategy', function () {
             $module2Field = new Field(
                 key: 'field2', label: 'Field 2', type: FieldType::Integer, length: 10,
                 permittedValues: new Collection, default: '0', filters: new Collection,
-                dependencies: new Collection, compoundFields: new Collection, fieldMeasureFormat: null
+                dependencies: new Collection, compoundFields: new Collection
             );
             $module2 = new Module(
                 key: FieldConfigurationModule::Estate,
@@ -318,9 +269,9 @@ describe('ArrayConvertStrategy', function () {
 
         it('converts ModulesCollection to array and drops empty values when dropEmpty is true', function () {
             $module1Field = new Field(
-                key: 'field1', label: 'Field 1', type: FieldType::Text, length: null,
-                permittedValues: new Collection, default: null, filters: new Collection, // all empty/null
-                dependencies: new Collection, compoundFields: new Collection, fieldMeasureFormat: null
+                key: 'field1', label: 'Field 1', type: FieldType::Text,
+                permittedValues: new Collection, filters: new Collection, // all empty/null
+                dependencies: new Collection, compoundFields: new Collection
             );
             $module1 = new Module(
                 key: FieldConfigurationModule::Address,

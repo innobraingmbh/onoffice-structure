@@ -112,8 +112,8 @@ it('should correctly convert retrieved field configuration to array using ArrayC
     $estateModuleKeepEmpty = collect($convertedArrayKeepEmpty)->firstWhere('key', FieldConfigurationModule::Estate->value);
     $objekttypFieldKeepEmpty = $estateModuleKeepEmpty['fields']['objekttyp'];
     expect($objekttypFieldKeepEmpty['dependencies'])->toContain([
-        'dependentFieldKey' => 'stellplatz',
-        'dependentFieldValue' => 'parken',
+        'permittedValueKey' => 'stellplatz',
+        'parentFieldValue' => 'parken',
     ]);
 
     // Test with dropEmpty: true

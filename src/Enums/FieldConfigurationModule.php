@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Enums;
 
+use InvalidArgumentException;
+
 enum FieldConfigurationModule: string
 {
     case Address = 'address';
@@ -19,13 +21,27 @@ enum FieldConfigurationModule: string
     case User = 'user';
 
     /**
-     * @param  array<int, string>  $only
+     * Resolve the module keys to request from the API. An empty list means all modules.
+     *
+     * @param  array<int, self|string>  $only
      * @return array<int, string>
+     *
+     * @throws InvalidArgumentException when a module key is unknown
      */
     public static function values(array $only = []): array
     {
-        $all = array_map(static fn (self $element) => $element->value, self::cases());
+        if ($only === []) {
+            return array_map(static fn (self $module): string => $module->value, self::cases());
+        }
 
-        return $only === [] ? $all : array_values(array_intersect($all, $only));
+        return array_values(array_unique(array_map(
+            static fn (self|string $module): string => $module instanceof self ? $module->value : self::fromKey($module)->value,
+            $only,
+        )));
+    }
+
+    private static function fromKey(string $key): self
+    {
+        return self::tryFrom($key) ?? throw new InvalidArgumentException("Unknown field configuration module [$key].");
     }
 }

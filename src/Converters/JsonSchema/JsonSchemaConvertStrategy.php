@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\JsonSchema;
 
-use Innobrain\Structure\Converters\Concerns\BaseConvertStrategy;
+use Innobrain\Structure\Contracts\ConvertStrategy;
 
 /**
  * Convert the package's DTOs into JSON Schema format.
@@ -17,7 +17,7 @@ use Innobrain\Structure\Converters\Concerns\BaseConvertStrategy;
  *   • Module   ⇒ ObjectType with properties for each field
  *   • Field    ⇒ Type (type depends on field type)
  */
-final readonly class JsonSchemaConvertStrategy extends BaseConvertStrategy
+final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
 {
     use ConvertsFieldToJsonSchema;
     use ConvertsModuleToJsonSchema;

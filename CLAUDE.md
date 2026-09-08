@@ -20,7 +20,7 @@ vendor/bin/pest --filter="test name"  # Run a single test
 
 ### Strategy Pattern + DTOs
 
-The core pattern is **readonly DTOs** that implement `Convertible` and use the `HasConverter` trait. Conversion is delegated to strategy objects via reflection (`convert` + class basename → method name).
+The core pattern is **readonly DTOs**. `Module` and `Field` implement `Convertible` and delegate to a `ConvertStrategy` (`src/Contracts/`), which has exactly two methods:
 
 ```
 Field->convert($strategy)  →  $strategy->convertField($field)
@@ -34,18 +34,18 @@ Module->convert($strategy) →  $strategy->convertModule($module)
 - `LaravelRulesConvertStrategy` — Laravel validation rules (pipe or array syntax)
 - `JsonSchemaConvertStrategy` — JSON Schema format
 
-Each strategy implements `ConvertStrategy` and extends `BaseConvertStrategy`. Converter-specific traits live in the same converter namespace directory (architecture-tested).
+Each strategy implements `ConvertStrategy`. Converter-specific traits live in the same converter namespace directory (architecture-tested). Module conversions only include `FieldCollection::writable()` fields.
 
 ### Services
 
-- **`Structure`** — main entry point with fluent API: `Structure::forClient($credentials)->getModules($only, $language)`
+- **`Structure`** — main entry point with fluent API: `Structure::forClient($credentials)->getModules($only, $language)`. `$only` accepts `FieldConfigurationModule` cases or keys; unknown keys throw.
 - **`FieldConfiguration`** — parses raw onOffice API responses into DTO hierarchies
 
 Both have facades in `src/Facades/`.
 
 ### Collections
 
-- `ModulesCollection` and `FieldCollection` extend `Illuminate\Support\Collection` and implement `Convertible` for batch conversions.
+- `ModulesCollection` and `FieldCollection` extend `Illuminate\Support\Collection`. `ModulesCollection` implements `Convertible` for batch conversions; `FieldCollection` adds `writable()`, `whereMatchesFilters()` and `sanitize()`.
 
 ### Enums
 
@@ -60,6 +60,8 @@ Run a probe via Testbench:
 ```bash
 vendor/bin/testbench probe:structure
 vendor/bin/testbench probe:structure --only=estate --only=address --language=ENG --fields
+vendor/bin/testbench probe:convert address --format=json --field=Anrede
+vendor/bin/testbench probe:objekttyp haus
 ```
 
 Add a new probe by dropping a command into `workbench/app/Console/Commands/` and registering it in `WorkbenchServiceProvider::boot()`. Use the package's facades (`Structure::forClient(...)->getModules(...)`) directly inside `handle()`.

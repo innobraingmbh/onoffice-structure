@@ -19,6 +19,14 @@ final class FieldCollection extends Collection
     }
 
     /**
+     * Only the fields that can be written to the API, see Field::isWritable().
+     */
+    public function writable(): self
+    {
+        return $this->filter(fn (Field $field): bool => $field->isWritable());
+    }
+
+    /**
      * @param  Collection<string, string>  $data
      * @return Collection<string, string>
      */

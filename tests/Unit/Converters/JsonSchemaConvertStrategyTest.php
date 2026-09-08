@@ -10,8 +10,6 @@ use Illuminate\JsonSchema\Types\StringType;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
 use Innobrain\Structure\Dtos\Field;
-use Innobrain\Structure\Dtos\FieldDependency;
-use Innobrain\Structure\Dtos\FieldFilter;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
@@ -22,38 +20,6 @@ describe('JsonSchemaConvertStrategy', function () {
         $this->strategy = new JsonSchemaConvertStrategy;
     });
 
-    describe('convertPermittedValue', function () {
-        it('returns empty array by default', function () {
-            $pv = new PermittedValue('active', 'Active');
-
-            expect($this->strategy->convertPermittedValue($pv))
-                ->toBe([]);
-        });
-    });
-
-    describe('convertFieldDependency', function () {
-        it('returns empty array by default', function () {
-            $dependency = new FieldDependency('status', 'active');
-
-            $result = $this->strategy->convertFieldDependency($dependency);
-
-            expect($result)->toBe([]);
-        });
-    });
-
-    describe('convertFieldFilter', function () {
-        it('returns empty array by default', function () {
-            $filter = new FieldFilter(
-                'range',
-                collect(['min' => ['0'], 'max' => ['100']])
-            );
-
-            $result = $this->strategy->convertFieldFilter($filter);
-
-            expect($result)->toBe([]);
-        });
-    });
-
     describe('convertField', function () {
         it('converts varchar field to StringSchema', function () {
             $field = new Field(
@@ -62,11 +28,9 @@ describe('JsonSchemaConvertStrategy', function () {
                 type: FieldType::VarChar,
                 length: 255,
                 permittedValues: collect(),
-                default: null,
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $schema = $this->strategy->convertField($field);
@@ -83,13 +47,10 @@ describe('JsonSchemaConvertStrategy', function () {
                 key: 'notes',
                 label: 'Notes',
                 type: FieldType::Text,
-                length: null,
                 permittedValues: collect(),
-                default: null,
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $schema = $this->strategy->convertField($field);
@@ -102,13 +63,10 @@ describe('JsonSchemaConvertStrategy', function () {
                 key: 'age',
                 label: 'Age',
                 type: FieldType::Integer,
-                length: null,
                 permittedValues: collect(),
-                default: null,
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $schema = $this->strategy->convertField($field);
@@ -124,13 +82,11 @@ describe('JsonSchemaConvertStrategy', function () {
                 key: 'active',
                 label: 'Is Active',
                 type: FieldType::Boolean,
-                length: null,
                 permittedValues: collect(),
                 default: 'false',
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $schema = $this->strategy->convertField($field);
@@ -145,13 +101,10 @@ describe('JsonSchemaConvertStrategy', function () {
                 key: 'birthdate',
                 label: 'Birth Date',
                 type: FieldType::Date,
-                length: null,
                 permittedValues: collect(),
-                default: null,
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $schema = $this->strategy->convertField($field);
@@ -167,16 +120,13 @@ describe('JsonSchemaConvertStrategy', function () {
                 key: 'status',
                 label: 'Status',
                 type: FieldType::SingleSelect,
-                length: null,
                 permittedValues: collect([
                     'active' => new PermittedValue('active', 'Active'),
                     'inactive' => new PermittedValue('inactive', 'Inactive'),
                 ]),
-                default: null,
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $schema = $this->strategy->convertField($field);
@@ -192,17 +142,14 @@ describe('JsonSchemaConvertStrategy', function () {
                 key: 'tags',
                 label: 'Tags',
                 type: FieldType::MultiSelect,
-                length: null,
                 permittedValues: collect([
                     'php' => new PermittedValue('php', 'PHP'),
                     'js' => new PermittedValue('js', 'JavaScript'),
                     'python' => new PermittedValue('python', 'Python'),
                 ]),
-                default: null,
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $schema = $this->strategy->convertField($field);
@@ -220,13 +167,10 @@ describe('JsonSchemaConvertStrategy', function () {
                 key: 'category',
                 label: 'Category',
                 type: FieldType::SingleSelect,
-                length: null,
                 permittedValues: collect(),
-                default: null,
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $schema = $this->strategy->convertField($field);
@@ -246,26 +190,21 @@ describe('JsonSchemaConvertStrategy', function () {
                 key: 'haustiere',
                 label: 'Pets',
                 type: FieldType::SingleSelect,
-                length: null,
                 permittedValues: $permittedValues,
                 default: '1',
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $multiSelect = new Field(
                 key: 'options',
                 label: 'Options',
                 type: FieldType::MultiSelect,
-                length: null,
                 permittedValues: $permittedValues,
-                default: null,
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $single = $this->strategy->convertField($singleSelect)['haustiere']->toArray();
@@ -289,11 +228,9 @@ describe('JsonSchemaConvertStrategy', function () {
                         type: FieldType::VarChar,
                         length: 200,
                         permittedValues: collect(),
-                        default: null,
                         filters: collect(),
                         dependencies: collect(),
-                        compoundFields: collect(),
-                        fieldMeasureFormat: null
+                        compoundFields: collect()
                     ),
                     'city' => new Field(
                         key: 'city',
@@ -301,23 +238,19 @@ describe('JsonSchemaConvertStrategy', function () {
                         type: FieldType::VarChar,
                         length: 100,
                         permittedValues: collect(),
-                        default: null,
                         filters: collect(),
                         dependencies: collect(),
-                        compoundFields: collect(),
-                        fieldMeasureFormat: null
+                        compoundFields: collect()
                     ),
                     'verified' => new Field(
                         key: 'verified',
                         label: 'Verified',
                         type: FieldType::Boolean,
-                        length: null,
                         permittedValues: collect(),
                         default: 'false',
                         filters: collect(),
                         dependencies: collect(),
-                        compoundFields: collect(),
-                        fieldMeasureFormat: null
+                        compoundFields: collect()
                     ),
                 ])
             );
@@ -346,11 +279,9 @@ describe('JsonSchemaConvertStrategy', function () {
                 type: FieldType::VarChar,
                 length: 255,
                 permittedValues: collect(),
-                default: null,
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $schema = $strategy->convertField($field);
@@ -373,13 +304,10 @@ describe('JsonSchemaConvertStrategy', function () {
                 key: 'optional',
                 label: 'Optional Field',
                 type: FieldType::VarChar,
-                length: null,
                 permittedValues: collect(),
-                default: null,
                 filters: collect(),
                 dependencies: collect(),
-                compoundFields: collect(),
-                fieldMeasureFormat: null
+                compoundFields: collect()
             );
 
             $schemaNullable = $strategyNullable->convertField($field);

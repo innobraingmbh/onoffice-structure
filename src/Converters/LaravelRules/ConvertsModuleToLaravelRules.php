@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\LaravelRules;
 
-use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Enums\FieldType;
 
@@ -21,12 +20,7 @@ trait ConvertsModuleToLaravelRules
     {
         $result = [];
 
-        foreach ($module->fields as $fieldKey => $field) {
-            /** @var Field $field */
-            if (! $field->isWritable()) {
-                continue;
-            }
-
+        foreach ($module->fields->writable() as $fieldKey => $field) {
             $result[$fieldKey] = $this->convertField($field);
 
             // Extra rules per item for multi-selects

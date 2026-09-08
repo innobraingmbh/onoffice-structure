@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Innobrain\Structure\Dtos;
 
 use Illuminate\Support\Collection;
-use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
+use Innobrain\Structure\Contracts\ConvertStrategy;
 use Innobrain\Structure\Enums\FieldMeasureFormat;
 use Innobrain\Structure\Enums\FieldType;
 
 readonly class Field implements Convertible
 {
-    use HasConverter;
-
     /**
      * @param  Collection<string, PermittedValue>  $permittedValues
      * @param  Collection<string, FieldFilter>  $filters
@@ -24,14 +22,19 @@ readonly class Field implements Convertible
         public string $key,
         public string $label,
         public FieldType $type,
-        public ?int $length,
-        public Collection $permittedValues,
-        public ?string $default,
-        public Collection $filters,
-        public Collection $dependencies,
-        public Collection $compoundFields,
-        public ?FieldMeasureFormat $fieldMeasureFormat
+        public ?int $length = null,
+        public Collection $permittedValues = new Collection,
+        public ?string $default = null,
+        public Collection $filters = new Collection,
+        public Collection $dependencies = new Collection,
+        public Collection $compoundFields = new Collection,
+        public ?FieldMeasureFormat $fieldMeasureFormat = null,
     ) {}
+
+    public function convert(ConvertStrategy $strategy): mixed
+    {
+        return $strategy->convertField($this);
+    }
 
     /**
      * @param  Collection<string, PermittedValue>  $permittedValues
@@ -53,27 +56,34 @@ readonly class Field implements Convertible
     }
 
     /**
+     * Narrow the permitted values to those whose dependency requires the given
+     * parent field value, e.g. the "objekttyp" values available for an
+     * "objektart". A field without dependencies is returned unchanged.
+     */
+    public function withPermittedValuesFor(string $parentFieldValue): self
+    {
+        if ($this->dependencies->isEmpty()) {
+            return $this;
+        }
+
+        $allowedKeys = $this->dependencies
+            ->filter(fn (FieldDependency $dependency): bool => $dependency->parentFieldValue === $parentFieldValue)
+            ->map(fn (FieldDependency $dependency): string => $dependency->permittedValueKey);
+
+        return $this->withPermittedValues(
+            $this->permittedValues->filter(fn (PermittedValue $permittedValue): bool => $allowedKeys->contains($permittedValue->key))
+        );
+    }
+
+    /**
      * Check if this field matches the provided filter values
      *
      * @param  array<string, string>  $filterValues  Array of filter keys and their values
      */
     public function matchesFilters(array $filterValues): bool
     {
-        if ($this->filters->isEmpty()) {
-            return true;
-        }
-
-        // Check each filter on this field
         foreach ($this->filters as $filter) {
-            /** @phpstan-ignore-next-line */
-            if (! $filter instanceof FieldFilter) {
-                continue;
-            }
-
-            // Check each filter configuration
             foreach ($filter->config as $filterKey => $allowedValues) {
-                // If we have a value for this filter key
-                // Check if the current value is in the allowed values
                 if (isset($filterValues[$filterKey]) && ! in_array($filterValues[$filterKey], $allowedValues, true)) {
                     return false;
                 }

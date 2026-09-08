@@ -8,6 +8,7 @@ use Dotenv\Dotenv;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Workbench\App\Console\Commands\ProbeConvertCommand;
+use Workbench\App\Console\Commands\ProbeObjekttypCommand;
 use Workbench\App\Console\Commands\ProbeRawFieldsCommand;
 use Workbench\App\Console\Commands\ProbeStructureCommand;
 
@@ -32,6 +33,7 @@ class WorkbenchServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 ProbeConvertCommand::class,
+                ProbeObjekttypCommand::class,
                 ProbeRawFieldsCommand::class,
                 ProbeStructureCommand::class,
             ]);
