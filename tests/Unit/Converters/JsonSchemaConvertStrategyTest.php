@@ -234,6 +234,47 @@ describe('JsonSchemaConvertStrategy', function () {
             expect($schema)->toBeArray()
                 ->and($schema['category'])->toBeInstanceOf(StringType::class);
         });
+
+        it('keeps numeric permitted value keys as strings in enums', function () {
+            $permittedValues = collect([
+                '0' => new PermittedValue('0', 'No'),
+                '1' => new PermittedValue('1', 'Yes'),
+                '2' => new PermittedValue('2', 'Negotiable'),
+            ]);
+
+            $singleSelect = new Field(
+                key: 'haustiere',
+                label: 'Pets',
+                type: FieldType::SingleSelect,
+                length: null,
+                permittedValues: $permittedValues,
+                default: '1',
+                filters: collect(),
+                dependencies: collect(),
+                compoundFields: collect(),
+                fieldMeasureFormat: null
+            );
+
+            $multiSelect = new Field(
+                key: 'options',
+                label: 'Options',
+                type: FieldType::MultiSelect,
+                length: null,
+                permittedValues: $permittedValues,
+                default: null,
+                filters: collect(),
+                dependencies: collect(),
+                compoundFields: collect(),
+                fieldMeasureFormat: null
+            );
+
+            $single = $this->strategy->convertField($singleSelect)['haustiere']->toArray();
+            $multi = $this->strategy->convertField($multiSelect)['options']->toArray();
+
+            expect($single['enum'])->toBe(['0', '1', '2'])
+                ->and($single['default'])->toBe('1')
+                ->and($multi['items']['enum'])->toBe(['0', '1', '2']);
+        });
     });
 
     describe('convertModule', function () {

@@ -107,7 +107,7 @@ describe('LaravelRulesConvertStrategy', function () {
     });
 
     describe('convertField – dependency rules', function () {
-        it('appends required_if when dependencies exist', function () {
+        it('ignores dependencies because they describe permitted value relations, not fields', function () {
             $dependency = new FieldDependency('building', 'tower');
 
             $field = new Field(
@@ -127,7 +127,7 @@ describe('LaravelRulesConvertStrategy', function () {
 
             $result = $field->convert($strategy);
 
-            expect($result)->toBe('integer|required_if:building,tower');
+            expect($result)->toBe('integer');
         });
     });
 });

@@ -56,10 +56,10 @@ it('generates correct Laravel validation rules from the field configuration (Fie
     // ------------------------------------------------------------------
     // 4. Assertions – Estate module (from FieldsResponse2.json)
     // ------------------------------------------------------------------
-    // Field with dependencies should include at least one required_if rule.
-    // 'objekttyp' has dependencies in FieldsResponse2.json like "required_if:stellplatz,parken"
+    // 'objekttyp' has dependencies in FieldsResponse2.json, but they map permitted
+    // values to their parent objektart value and must not become required_if rules.
     expect($estateRules['objekttyp'])
-        ->toContain('required_if:stellplatz,parken');
+        ->not->toContain('required_if');
 });
 
 it('generates correct Laravel validation rules from FieldsResponse_json field configuration', function () {

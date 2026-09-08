@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Innobrain\Structure\Converters\LaravelRules;
 
 use Innobrain\Structure\Dtos\Field;
-use Innobrain\Structure\Dtos\FieldDependency;
 use Innobrain\Structure\Enums\FieldType;
 
 trait ConvertsFieldToLaravelRules
@@ -16,7 +15,6 @@ trait ConvertsFieldToLaravelRules
             $this->baseRules($field),
             $this->lengthRule($field),
             $this->inRule($field),
-            $this->dependencyRules($field),
         );
 
         if ($this->includeNullable && $field->default === null) {
@@ -81,20 +79,5 @@ trait ConvertsFieldToLaravelRules
         $values = $field->permittedValues->keys()->all();
 
         return ['in:'.implode(',', $values)];
-    }
-
-    /**
-     * @return string[]
-     */
-    private function dependencyRules(Field $field): array
-    {
-        if ($field->dependencies->isEmpty()) {
-            return [];
-        }
-
-        // @phpstan-ignore-next-line
-        return $field->dependencies
-            ->map(fn (FieldDependency $dependency) => 'required_if:'.$dependency->dependentFieldKey.','.$dependency->dependentFieldValue)
-            ->all();
     }
 }
