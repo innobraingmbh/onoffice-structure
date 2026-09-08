@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-`innobraingmbh/onoffice-structure` is a Laravel package that extracts onOffice enterprise field configurations via `innobrain/laravel-onoffice-adapter` into structured DTOs, which can then be converted into various formats (arrays, Laravel validation rules, Prism schemas, JSON Schema).
+`innobraingmbh/onoffice-structure` is a Laravel package that extracts onOffice enterprise field configurations via `innobrain/laravel-onoffice-adapter` into structured DTOs, which can then be converted into various formats (arrays, Laravel validation rules, JSON Schema).
 
 ## Commands
 
@@ -32,7 +32,6 @@ Module->convert($strategy) →  $strategy->convertModule($module)
 **Converter strategies** (`src/Converters/`):
 - `ArrayConvertStrategy` — nested arrays, optional empty filtering
 - `LaravelRulesConvertStrategy` — Laravel validation rules (pipe or array syntax)
-- `PrismSchemaConvertStrategy` — Prism PHP schemas for AI tooling
 - `JsonSchemaConvertStrategy` — JSON Schema format
 
 Each strategy implements `ConvertStrategy` and extends `BaseConvertStrategy`. Converter-specific traits live in the same converter namespace directory (architecture-tested).

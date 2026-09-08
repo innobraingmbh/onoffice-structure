@@ -9,7 +9,6 @@ use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\Structure\Converters\Array\ArrayConvertStrategy;
 use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
 use Innobrain\Structure\Converters\LaravelRules\LaravelRulesConvertStrategy;
-use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Enums\Language;
 use Innobrain\Structure\Facades\Structure;
@@ -20,7 +19,7 @@ class ProbeConvertCommand extends Command
 {
     protected $signature = 'probe:convert
         {module : Module key to fetch (e.g. estate).}
-        {--format=rules : One of rules, json, prism, array.}
+        {--format=rules : One of rules, json, array.}
         {--field=* : Restrict output to these field keys.}
         {--language=DEU : Language code for labels.}';
 
@@ -56,7 +55,6 @@ class ProbeConvertCommand extends Command
         $strategy = match ((string) $this->option('format')) {
             'rules' => new LaravelRulesConvertStrategy,
             'json' => new JsonSchemaConvertStrategy,
-            'prism' => new PrismSchemaConvertStrategy,
             'array' => new ArrayConvertStrategy,
             default => null,
         };
@@ -70,10 +68,6 @@ class ProbeConvertCommand extends Command
         $result = $module->convert($strategy);
 
         if ($strategy instanceof JsonSchemaConvertStrategy) {
-            $result = $result->toArray();
-        }
-
-        if ($strategy instanceof PrismSchemaConvertStrategy) {
             $result = $result->toArray();
         }
 

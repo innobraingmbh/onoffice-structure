@@ -11,7 +11,7 @@ Extract and work with the onOffice enterprise field configuration (Modul- und Fe
 
 - Fetch field configurations for all onOffice modules (Address, Estate, AgentsLog, Calendar, Email, File, News, Intranet, Project, Task, User)
 - Readonly DTOs for Modules, Fields, Permitted Values, Dependencies, and Filters
-- Convert to arrays, Laravel validation rules, [Prism PHP](https://prismphp.com/) schemas, or JSON Schema
+- Convert to arrays, Laravel validation rules, or JSON Schema
 - Filter fields by configuration-based conditions with a fluent builder
 - Sanitize input data against field definitions and permitted values
 - Multi-language support (German, English, French, Spanish, Italian, Croatian)
@@ -122,24 +122,7 @@ $rules = $addressModule->convert($strategy);
 // 'Beziehung' => 'array|distinct|nullable', 'Beziehung.*' => 'in:0,1,2,3'
 ```
 
-Module conversions for Laravel rules, Prism and JSON Schema only include writable fields (`Field::isWritable()`). Hints and dividing lines carry no data, and compound fields such as `Plz-Ort` are set through their individual fields, so they are left out. Converting such a field directly still works.
-
-#### Prism Schema (for AI tooling)
-
-```php
-use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;
-
-$strategy = new PrismSchemaConvertStrategy(
-    includeNullable: true,      // mark fields without defaults as nullable
-    includeDescriptions: true,  // use field labels as descriptions
-);
-
-$schema = $addressModule->convert($strategy);
-// Returns an ObjectSchema usable with Prism's structured output
-// Fields without a default are required; fields with a default are optional.
-```
-
-Field type mapping: `VarChar/Text/Blob` -> `StringSchema`, `Integer/Float` -> `NumberSchema`, `Boolean` -> `BooleanSchema`, `Date/DateTime` -> `StringSchema` (with format hint), `SingleSelect` -> `EnumSchema`, `MultiSelect` -> `ArraySchema<EnumSchema>`.
+Module conversions for Laravel rules and JSON Schema only include writable fields (`Field::isWritable()`). Hints and dividing lines carry no data, and compound fields such as `Plz-Ort` are set through their individual fields, so they are left out. Converting such a field directly still works.
 
 #### JSON Schema
 

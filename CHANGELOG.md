@@ -7,8 +7,8 @@ All notable changes to `onoffice-structure` will be documented in this file.
 ### Breaking
 
 - `Field::$fieldMeasureFormat` is now a `FieldMeasureFormat` enum instead of a string. Unknown formats parse to `null`.
-- Module conversions for Laravel rules, Prism and JSON Schema skip non-writable fields (hints, dividing lines, compound fields). Use `Field::isWritable()` to check.
-- Prism schemas now mark fields without a default as required, matching JSON Schema. Previously fields with a default were required.
+- Module conversions for Laravel rules and JSON Schema skip non-writable fields (hints, dividing lines, compound fields). Use `Field::isWritable()` to check.
+- Removed the Prism schema converter and the `prism-php/prism` dependency. Use the JSON Schema converter for structured output.
 - Laravel rules no longer emit `required_if` from field dependencies. Dependencies map permitted values to their parent field's value, not fields to values.
 
 ### Fixed

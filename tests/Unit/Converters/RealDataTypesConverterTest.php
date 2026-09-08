@@ -5,10 +5,8 @@ declare(strict_types=1);
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
 use Innobrain\Structure\Converters\LaravelRules\LaravelRulesConvertStrategy;
-use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Enums\FieldType;
-use Prism\Prism\Schema\StringSchema;
 
 /**
  * Unit tests ensuring every converter handles each real data type case without
@@ -140,30 +138,4 @@ describe('real data types in converters', function () {
         );
     });
 
-    describe('PrismSchemaConvertStrategy', function () use ($realDataTypes) {
-        it('produces a StringSchema for each real data type', function (string $name, FieldType $type) {
-            $field = makeField($type, strtolower($name));
-            $strategy = new PrismSchemaConvertStrategy(includeNullable: true, includeDescriptions: true);
-
-            $result = $strategy->convertField($field);
-
-            expect($result)->toBeInstanceOf(StringSchema::class)
-                ->and($result->name)->toBe(strtolower($name));
-        })->with(
-            collect($realDataTypes)
-                ->map(fn (FieldType $type, string $name) => [$name, $type])
-                ->values()
-                ->all()
-        );
-
-        it('marks User field as nullable when it has no default', function () {
-            $field = makeField(FieldType::User, 'Benutzer');
-            $strategy = new PrismSchemaConvertStrategy(includeNullable: true);
-
-            $result = $strategy->convertField($field);
-
-            expect($result)->toBeInstanceOf(StringSchema::class)
-                ->and($result->nullable)->toBeTrue();
-        });
-    });
 });

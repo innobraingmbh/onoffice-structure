@@ -6,12 +6,10 @@ use Illuminate\Support\Collection;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Converters\JsonSchema\JsonSchemaConvertStrategy;
 use Innobrain\Structure\Converters\LaravelRules\LaravelRulesConvertStrategy;
-use Innobrain\Structure\Converters\PrismSchema\PrismSchemaConvertStrategy;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldType;
-use Prism\Prism\Contracts\Schema;
 
 /**
  * Module conversions only include fields that can be written to the API:
@@ -72,13 +70,6 @@ describe('writable fields in module converters', function () {
 
         expect(array_keys($schema['properties']))->toBe(['Anrede', 'Titel'])
             ->and($schema['required'])->toBe(['Anrede', 'Titel']);
-    });
-
-    it('only emits Prism properties for writable fields', function () {
-        $schema = writableTestModule()->convert(new PrismSchemaConvertStrategy);
-
-        expect(array_map(fn (Schema $property): string => $property->name(), $schema->properties))->toBe(['Anrede', 'Titel'])
-            ->and($schema->requiredFields)->toBe(['Anrede', 'Titel']);
     });
 
     it('still converts a single non-writable field when asked directly', function () {

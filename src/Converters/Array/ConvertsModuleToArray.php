@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Converters\Array;
 
+use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\Module;
 
 trait ConvertsModuleToArray
@@ -17,7 +18,7 @@ trait ConvertsModuleToArray
             'key' => $module->key->value,
             'label' => $module->label,
             'fields' => $module->fields
-                ->map(fn ($f) => $f->convert($this))
+                ->map(fn (Field $field): mixed => $field->convert($this))
                 ->toArray(),
         ]);
     }
