@@ -23,12 +23,8 @@ trait ConvertsModuleToLaravelRules
         foreach ($module->fields->writable() as $fieldKey => $field) {
             $result[$fieldKey] = $this->convertField($field);
 
-            // Extra rules per item for multi-selects
-            if ($field->type === FieldType::MultiSelect && $field->permittedValues->isNotEmpty()) {
-                $itemRules = [
-                    'in:'.implode(',', $field->permittedValues->keys()->all()),
-                ];
-                $result[$fieldKey.'.*'] = $this->pipeOrArray($itemRules);
+            if ($field->type === FieldType::MultiSelect && $field->hasPermittedValues()) {
+                $result[$fieldKey.'.*'] = $this->pipeOrArray([$this->permittedValuesRule($field)]);
             }
         }
 

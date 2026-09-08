@@ -76,9 +76,7 @@ readonly class Field implements Convertible
     }
 
     /**
-     * Check if this field matches the provided filter values
-     *
-     * @param  array<string, string>  $filterValues  Array of filter keys and their values
+     * @param  array<string, string>  $filterValues
      */
     public function matchesFilters(array $filterValues): bool
     {
@@ -108,8 +106,6 @@ readonly class Field implements Convertible
     }
 
     /**
-     * Returns true if the field has a default value
-     *
      * @phpstan-assert-if-true !null $this->default
      */
     public function hasDefault(): bool
@@ -117,17 +113,25 @@ readonly class Field implements Convertible
         return $this->default !== null;
     }
 
-    /**
-     * Returns true if the field has permitted values
-     */
     public function hasPermittedValues(): bool
     {
         return $this->permittedValues->isNotEmpty();
     }
 
     /**
-     * Returns true if the field contains the given permitted value key.
+     * PHP turns numeric array keys into integers, so the keys are read from
+     * the permitted values themselves to keep them strings.
+     *
+     * @return array<int, string>
      */
+    public function permittedValueKeys(): array
+    {
+        return $this->permittedValues
+            ->map(fn (PermittedValue $permittedValue): string => $permittedValue->key)
+            ->values()
+            ->all();
+    }
+
     public function containsPermittedValue(string $permittedValueKey): bool
     {
         return $this->permittedValues->contains(static fn (PermittedValue $permittedValue) => $permittedValue->key === $permittedValueKey);

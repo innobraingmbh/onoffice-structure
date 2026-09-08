@@ -76,8 +76,11 @@ trait ConvertsFieldToLaravelRules
             return [];
         }
 
-        $values = $field->permittedValues->keys()->all();
+        return [$this->permittedValuesRule($field)];
+    }
 
-        return ['in:'.implode(',', $values)];
+    private function permittedValuesRule(Field $field): string
+    {
+        return 'in:'.implode(',', $field->permittedValueKeys());
     }
 }

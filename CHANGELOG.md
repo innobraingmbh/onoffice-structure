@@ -23,6 +23,7 @@ All notable changes to `onoffice-structure` will be documented in this file.
 
 - `FieldMeasureFormat` enum.
 - `Field::isWritable()` and `FieldCollection::writable()`.
+- `Field::permittedValueKeys()` returns the permitted value keys as strings, even when they are numeric.
 - `Field::withPermittedValuesFor()` narrows a field's permitted values by a parent field value using its dependencies, e.g. `objekttyp` for an `objektart`.
 - `getModules()` and `retrieveForClient()` accept `FieldConfigurationModule` cases as well as keys.
 - `Field` only requires `key`, `label` and `type`; the remaining constructor parameters have defaults.

@@ -7,18 +7,9 @@ namespace Innobrain\Structure\Converters\LaravelRules;
 use Innobrain\Structure\Contracts\ConvertStrategy;
 
 /**
- * Convert the package's DTOs into Laravel validation-rule arrays / strings.
- *
- * Typical usage:
- *   $rules = $modules->convert(new LaravelRulesConvertStrategy());          // all modules
- *   $address = $modules['address']->convert(new LaravelRulesConvertStrategy(pipeSyntax:false));
- *
- * The strategy returns:
- *   • Module   ⇒ array<string, string|array>   (field key → rule list)
- *   • Field    ⇒ string (pipe syntax)  or array<string>  depending on $pipeSyntax
- *
- * Multi-select fields automatically receive an additional "{fieldKey}.*" rule
- * with the permitted-values "in:" constraint so that each submitted item is validated.
+ * Converts fields into Laravel validation rules and modules into rule arrays
+ * keyed by field key. Multi-select fields receive an additional "{fieldKey}.*"
+ * rule so that each submitted item is checked against the permitted values.
  */
 final readonly class LaravelRulesConvertStrategy implements ConvertStrategy
 {

@@ -21,7 +21,7 @@ enum FieldConfigurationModule: string
     case User = 'user';
 
     /**
-     * Resolve the module keys to request from the API. An empty list means all modules.
+     * The module keys to request from the API. Empty means all modules.
      *
      * @param  array<int, self|string>  $only
      * @return array<int, string>
@@ -30,18 +30,12 @@ enum FieldConfigurationModule: string
      */
     public static function values(array $only = []): array
     {
-        if ($only === []) {
-            return array_map(static fn (self $module): string => $module->value, self::cases());
-        }
-
-        return array_values(array_unique(array_map(
-            static fn (self|string $module): string => $module instanceof self ? $module->value : self::fromKey($module)->value,
-            $only,
-        )));
-    }
-
-    private static function fromKey(string $key): self
-    {
-        return self::tryFrom($key) ?? throw new InvalidArgumentException("Unknown field configuration module [$key].");
+        return collect($only ?: self::cases())
+            ->map(fn (self|string $module): string => $module instanceof self
+                ? $module->value
+                : (self::tryFrom($module) ?? throw new InvalidArgumentException("Unknown field configuration module [$module]."))->value)
+            ->unique()
+            ->values()
+            ->all();
     }
 }

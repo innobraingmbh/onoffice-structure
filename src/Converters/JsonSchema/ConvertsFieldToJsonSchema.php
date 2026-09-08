@@ -12,7 +12,6 @@ use Illuminate\JsonSchema\Types\NumberType;
 use Illuminate\JsonSchema\Types\StringType;
 use Illuminate\JsonSchema\Types\Type;
 use Innobrain\Structure\Dtos\Field;
-use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldType;
 
 trait ConvertsFieldToJsonSchema
@@ -126,7 +125,7 @@ trait ConvertsFieldToJsonSchema
         $schema = JsonSchema::string();
 
         if ($field->hasPermittedValues()) {
-            $options = $this->permittedValueKeys($field);
+            $options = $field->permittedValueKeys();
 
             if ($this->isNullable($field)) {
                 $options[] = null;
@@ -154,7 +153,7 @@ trait ConvertsFieldToJsonSchema
         $items = JsonSchema::string();
 
         if ($field->hasPermittedValues()) {
-            $items->enum($this->permittedValueKeys($field));
+            $items->enum($field->permittedValueKeys());
         }
 
         $schema = JsonSchema::array()->items($items);
@@ -174,19 +173,5 @@ trait ConvertsFieldToJsonSchema
     private function isNullable(Field $field): bool
     {
         return $this->includeNullable && ! $field->hasDefault();
-    }
-
-    /**
-     * Numeric permitted value keys are normalized to integers by PHP arrays,
-     * so read the key from the DTO to keep the enum values strings.
-     *
-     * @return array<int, string>
-     */
-    private function permittedValueKeys(Field $field): array
-    {
-        return $field->permittedValues
-            ->map(fn (PermittedValue $permittedValue): string => $permittedValue->key)
-            ->values()
-            ->all();
     }
 }

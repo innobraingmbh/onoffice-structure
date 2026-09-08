@@ -7,15 +7,8 @@ namespace Innobrain\Structure\Converters\JsonSchema;
 use Innobrain\Structure\Contracts\ConvertStrategy;
 
 /**
- * Convert the package's DTOs into JSON Schema format.
- *
- * Typical usage:
- *   $schema = $module->convert(new JsonSchemaConvertStrategy());
- *   $fieldSchema = $field->convert(new JsonSchemaConvertStrategy());
- *
- * The strategy returns:
- *   • Module   ⇒ ObjectType with properties for each field
- *   • Field    ⇒ Type (type depends on field type)
+ * Converts fields into JSON Schema types and modules into an object type
+ * with one property per writable field.
  */
 final readonly class JsonSchemaConvertStrategy implements ConvertStrategy
 {

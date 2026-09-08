@@ -56,30 +56,36 @@ class FieldConfiguration
         $modules = new ModulesCollection;
 
         foreach ($rawModulesData as $moduleKey => $moduleData) {
-            if (! isset($moduleData['elements'])) {
-                continue;
-            }
-            if (! is_array($moduleData['elements'])) {
-                continue;
-            }
-            $moduleKey = $moduleData['id'] ?? $moduleKey;
-            $moduleEnum = FieldConfigurationModule::tryFrom((string) $moduleKey);
+            $module = $this->parseModule((string) ($moduleData['id'] ?? $moduleKey), $moduleData);
 
-            if (! $moduleEnum) {
-                continue; // skip unknown modules
+            if ($module instanceof Module) {
+                $modules->put($module->key->value, $module);
             }
-
-            $moduleLabel = Arr::get($moduleData, 'label', ucfirst((string) $moduleKey));
-            $parsedFields = $this->parseFields(Arr::get($moduleData, 'elements', []));
-
-            $modules->put($moduleEnum->value, new Module(
-                key: $moduleEnum,
-                label: $moduleLabel,
-                fields: $parsedFields,
-            ));
         }
 
         return $modules;
+    }
+
+    /**
+     * The API only returns module labels in German, so the module key is
+     * used as an English label instead.
+     *
+     * @param  array<string, mixed>  $moduleData
+     */
+    private function parseModule(string $moduleKey, array $moduleData): ?Module
+    {
+        $module = FieldConfigurationModule::tryFrom($moduleKey);
+        $fieldsData = Arr::get($moduleData, 'elements');
+
+        if (! $module instanceof FieldConfigurationModule || ! is_array($fieldsData)) {
+            return null;
+        }
+
+        return new Module(
+            key: $module,
+            label: ucfirst($moduleKey),
+            fields: $this->parseFields($fieldsData),
+        );
     }
 
     /**
