@@ -10,6 +10,7 @@ use Illuminate\Support\ServiceProvider;
 use Workbench\App\Console\Commands\ProbeAllCommand;
 use Workbench\App\Console\Commands\ProbeConvertCommand;
 use Workbench\App\Console\Commands\ProbeFiltersCommand;
+use Workbench\App\Console\Commands\ProbeLookupCommand;
 use Workbench\App\Console\Commands\ProbeObjekttypCommand;
 use Workbench\App\Console\Commands\ProbeRawFieldsCommand;
 use Workbench\App\Console\Commands\ProbeStructureCommand;
@@ -37,6 +38,7 @@ class WorkbenchServiceProvider extends ServiceProvider
                 ProbeAllCommand::class,
                 ProbeConvertCommand::class,
                 ProbeFiltersCommand::class,
+                ProbeLookupCommand::class,
                 ProbeObjekttypCommand::class,
                 ProbeRawFieldsCommand::class,
                 ProbeStructureCommand::class,
