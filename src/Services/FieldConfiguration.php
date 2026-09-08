@@ -111,16 +111,16 @@ class FieldConfiguration
             /** @var array<int, string> $compoundFields */
             $compoundFields = Arr::get($fieldData, 'compoundFields', []);
 
-            $length = Arr::get($fieldData, 'length');
+            $length = (int) Arr::get($fieldData, 'length');
             $default = Arr::get($fieldData, 'default');
 
             $fields->put($fieldKey, new Field(
                 key: $fieldKey,
                 label: (string) Arr::get($fieldData, 'label', Str::ucfirst($fieldKey)),
                 type: $fieldType,
-                length: $this->isBlank($length) ? null : (int) $length,
+                length: $length > 0 ? $length : null,
                 permittedValues: $this->parsePermittedValues(Arr::get($fieldData, 'permittedvalues', [])),
-                default: $this->isBlank($default) ? null : (string) $default,
+                default: blank($default) ? null : (string) $default,
                 filters: $this->parseFieldFilters(Arr::get($fieldData, 'filters', [])),
                 dependencies: $this->parseFieldDependencies(Arr::get($fieldData, 'dependencies', [])),
                 compoundFields: collect($compoundFields),
@@ -129,14 +129,6 @@ class FieldConfiguration
         }
 
         return $fields;
-    }
-
-    /**
-     * A default of "0" is a real value, so only null and empty strings count as blank.
-     */
-    private function isBlank(mixed $value): bool
-    {
-        return $value === null || $value === '';
     }
 
     /**

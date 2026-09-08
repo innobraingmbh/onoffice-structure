@@ -17,6 +17,9 @@ use function Illuminate\Support\enum_value;
  */
 final class ModulesCollection extends Collection implements Convertible
 {
+    /**
+     * Get the module with the given key.
+     */
     public function module(FieldConfigurationModule|string $module): ?Module
     {
         return $this->get(enum_value($module));

@@ -6,6 +6,7 @@ namespace Workbench\App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
+use Innobrain\Structure\Converters\Array\ArrayConvertStrategy;
 use Innobrain\Structure\Dtos\FieldViolation;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Facades\Structure;
@@ -62,7 +63,8 @@ class ProbeLookupCommand extends Command
             ->all());
 
         $restored = unserialize(serialize($modules), ['allowed_classes' => Structure::serializableClasses()]);
-        $this->components->info('serialize round trip: '.($restored === $modules ? 'equal' : 'DIFFERENT'));
+        $strategy = new ArrayConvertStrategy;
+        $this->components->info('serialize round trip: '.($restored->convert($strategy) === $modules->convert($strategy) ? 'equal' : 'DIFFERENT'));
 
         return self::SUCCESS;
     }

@@ -10,9 +10,9 @@ describe('FieldConfigurationModule::values', function () {
             ->toContain('estate', 'address');
     });
 
-    it('accepts module keys and enum cases in the requested order', function () {
+    it('accepts module keys and enum cases and returns them in declaration order', function () {
         expect(FieldConfigurationModule::values(['estate', FieldConfigurationModule::Address, 'estate']))
-            ->toBe(['estate', 'address']);
+            ->toBe(['address', 'estate']);
     });
 
     it('rejects unknown module keys', function () {

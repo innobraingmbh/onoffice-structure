@@ -6,7 +6,9 @@ namespace Workbench\App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
+use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
+use Innobrain\Structure\Enums\FieldType;
 use Innobrain\Structure\Facades\Structure;
 
 class ProbeFiltersCommand extends Command
@@ -62,6 +64,23 @@ class ProbeFiltersCommand extends Command
             'Beziehung' => '999999',
         ]));
         $this->components->info('address sanitize keeps: '.$addressSanitized->keys()->implode(', '));
+
+        $this->table(['type', 'with permitted values', 'without permitted values'], $estate->fields->writable()
+            ->groupBy('type.value')
+            ->map(fn (FieldCollection $fields, string $type) => [
+                $type,
+                $fields->filter->hasPermittedValues()->count(),
+                $fields->reject->hasPermittedValues()->count(),
+            ])
+            ->values()
+            ->all());
+
+        $multiSelect = $estate->fields->writable()->filter->hasPermittedValues()->firstWhere('type', FieldType::MultiSelect);
+        $keyedArrays = $estate->fields->sanitize(collect([
+            $multiSelect->key => ['a' => $multiSelect->permittedValues->keys()->first(), 'b' => 'not_a_value'],
+            'objekttitel' => ['a' => 'Haus am See', 'b' => 'Zweitzeile'],
+        ]));
+        $this->components->info('sanitize with keyed arrays: '.$keyedArrays->map(fn ($v, $k) => "$k=".json_encode($v))->implode(', '));
 
         return self::SUCCESS;
     }

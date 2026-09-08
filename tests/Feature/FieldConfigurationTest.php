@@ -302,3 +302,18 @@ it('keeps a default of "0" and parses the measure format into an enum', function
         ->and($estate->fields->get('wohnflaeche')->fieldMeasureFormat)->toBe(FieldMeasureFormat::Area)
         ->and($estate->fields->get('objektart')->fieldMeasureFormat)->toBeNull();
 });
+
+it('treats a length of "0" as no length', function () {
+    $file = file_get_contents(testDirectory('Stubs/FieldsResponse2.json'));
+    $json = json_decode($file, true);
+
+    $json['response']['results'][0]['data']['records'][0]['elements']['Anrede-Titel']['length'] = '0';
+
+    Http::fake([
+        'https://api.onoffice.de/api/stable/api.php' => Http::response($json),
+    ]);
+
+    $address = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'))->get('address');
+
+    expect($address->fields->get('Anrede-Titel')->length)->toBeNull();
+});

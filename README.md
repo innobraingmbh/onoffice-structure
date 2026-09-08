@@ -93,7 +93,7 @@ $objekttyp = $estateModule->fields->get('objekttyp')->withPermittedValuesFor('ha
 
 ### Looking Up Fields and Permitted Values
 
-The API accepts field keys in any casing, so lookups fall back to a case-insensitive match:
+The API accepts field keys in any casing, so field lookups fall back to a case-insensitive match. Module keys are fixed, so `module()` matches exactly:
 
 ```php
 $field = $estateModule->field('ort');            // finds "Ort"

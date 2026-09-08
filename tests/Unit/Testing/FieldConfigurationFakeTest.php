@@ -26,6 +26,14 @@ it('serves canned modules through the Structure facade', function (): void {
         ->and($modules->module('estate'))->toBe($this->estate);
 });
 
+it('replaces a Structure instance that was resolved before faking', function (): void {
+    Structure::forClient($this->credentials);
+
+    Structure::fake([$this->estate]);
+
+    expect(Structure::forClient($this->credentials)->getModules()->keys()->all())->toBe(['estate']);
+});
+
 it('narrows to the requested modules', function (): void {
     $fake = FieldConfiguration::fake([$this->estate, $this->address]);
 

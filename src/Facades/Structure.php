@@ -29,6 +29,8 @@ class Structure extends Facade
      */
     public static function fake(ModulesCollection|array $modules = []): FieldConfigurationFake
     {
+        static::clearResolvedInstance(ServiceStructure::class);
+
         return FieldConfiguration::fake($modules);
     }
 
