@@ -32,9 +32,7 @@ class FieldFilterBuilder
             return $this->fields;
         }
 
-        $filtered = $this->fields->filter(fn (Field $field) => $field->matchesFilters($this->filters));
-
-        return new FieldCollection($filtered->all());
+        return $this->fields->filter(fn (Field $field): bool => $field->matchesFilters($this->filters));
     }
 
     public function first(): ?Field

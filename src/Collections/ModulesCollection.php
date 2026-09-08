@@ -10,6 +10,8 @@ use Innobrain\Structure\Contracts\ConvertStrategy;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 
+use function Illuminate\Support\enum_value;
+
 /**
  * @extends Collection<string, Module>
  */
@@ -17,7 +19,7 @@ final class ModulesCollection extends Collection implements Convertible
 {
     public function module(FieldConfigurationModule|string $module): ?Module
     {
-        return $this->get($module instanceof FieldConfigurationModule ? $module->value : $module);
+        return $this->get(enum_value($module));
     }
 
     /**

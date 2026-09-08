@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Testing;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Conditionable;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\FieldDependency;
 use Innobrain\Structure\Dtos\FieldFilter;
@@ -16,6 +18,8 @@ use Innobrain\Structure\Enums\FieldType;
  */
 final class FieldFactory
 {
+    use Conditionable;
+
     private ?string $label = null;
 
     private ?int $length = null;
@@ -133,7 +137,7 @@ final class FieldFactory
     {
         return new Field(
             key: $this->key,
-            label: $this->label ?? ucfirst($this->key),
+            label: $this->label ?? Str::ucfirst($this->key),
             type: $this->type,
             length: $this->length,
             permittedValues: collect($this->permittedValues)

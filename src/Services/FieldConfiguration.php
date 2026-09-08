@@ -6,6 +6,7 @@ namespace Innobrain\Structure\Services;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\OnOfficeAdapter\Exceptions\OnOfficeException;
 use Innobrain\OnOfficeAdapter\Facades\FieldRepository;
@@ -24,7 +25,6 @@ use InvalidArgumentException;
 
 use function is_array;
 use function is_string;
-use function ucfirst;
 
 class FieldConfiguration
 {
@@ -83,7 +83,7 @@ class FieldConfiguration
 
         return new Module(
             key: $module,
-            label: ucfirst($moduleKey),
+            label: Str::ucfirst($moduleKey),
             fields: $this->parseFields($fieldsData),
         );
     }
@@ -116,7 +116,7 @@ class FieldConfiguration
 
             $fields->put($fieldKey, new Field(
                 key: $fieldKey,
-                label: (string) Arr::get($fieldData, 'label', ucfirst($fieldKey)),
+                label: (string) Arr::get($fieldData, 'label', Str::ucfirst($fieldKey)),
                 type: $fieldType,
                 length: $this->isBlank($length) ? null : (int) $length,
                 permittedValues: $this->parsePermittedValues(Arr::get($fieldData, 'permittedvalues', [])),

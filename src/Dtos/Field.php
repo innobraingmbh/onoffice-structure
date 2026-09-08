@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Innobrain\Structure\Dtos;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Innobrain\Structure\Contracts\Convertible;
 use Innobrain\Structure\Contracts\ConvertStrategy;
 use Innobrain\Structure\Enums\FieldMeasureFormat;
@@ -161,12 +162,12 @@ readonly class Field implements Convertible
             return $keyOrLabel;
         }
 
-        $needle = mb_strtolower(trim($keyOrLabel));
+        $needle = Str::lower(trim($keyOrLabel));
 
-        $byKey = $this->permittedValues->first(fn (PermittedValue $permittedValue): bool => mb_strtolower($permittedValue->key) === $needle);
-        $byLabel = $this->permittedValues->first(fn (PermittedValue $permittedValue): bool => mb_strtolower($permittedValue->label) === $needle);
+        $permittedValue = $this->permittedValues->first(fn (PermittedValue $permittedValue): bool => Str::lower($permittedValue->key) === $needle)
+            ?? $this->permittedValues->first(fn (PermittedValue $permittedValue): bool => Str::lower($permittedValue->label) === $needle);
 
-        return ($byKey ?? $byLabel)?->key;
+        return $permittedValue?->key;
     }
 
     public function containsPermittedValue(string $permittedValueKey): bool
@@ -191,7 +192,7 @@ readonly class Field implements Convertible
         }
 
         if (is_array($value)) {
-            return array_all($value, fn (mixed $item): bool => $this->permits($item));
+            return collect($value)->every($this->permits(...));
         }
 
         return is_scalar($value) && $this->containsPermittedValue((string) $value);

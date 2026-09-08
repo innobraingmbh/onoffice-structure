@@ -11,7 +11,9 @@ use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\Language;
 use Innobrain\Structure\Services\FieldConfiguration;
 use Override;
-use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Assert as PHPUnit;
+
+use function Illuminate\Support\enum_value;
 
 class FieldConfigurationFake extends FieldConfiguration
 {
@@ -56,24 +58,27 @@ class FieldConfigurationFake extends FieldConfiguration
 
     public function assertRetrieved(FieldConfigurationModule|string|null $module = null, ?Language $language = null): void
     {
-        $moduleValue = $module instanceof FieldConfigurationModule ? $module->value : $module;
+        $moduleValue = enum_value($module);
 
-        $matching = array_filter(
-            $this->retrievals,
+        $retrieved = collect($this->retrievals)->contains(
             fn (array $retrieval): bool => ($moduleValue === null || in_array($moduleValue, $retrieval['only'], true))
                 && (! $language instanceof Language || $retrieval['language'] === $language),
         );
 
-        Assert::assertNotEmpty($matching, 'The field configuration was not retrieved'.($moduleValue === null ? '' : " for module [{$moduleValue}]").'.');
+        PHPUnit::assertTrue($retrieved, $moduleValue === null
+            ? 'The field configuration was not retrieved.'
+            : "The field configuration was not retrieved for module [{$moduleValue}].");
     }
 
     public function assertRetrievedTimes(int $times): void
     {
-        Assert::assertCount($times, $this->retrievals, sprintf('The field configuration was retrieved %d times instead of %d.', count($this->retrievals), $times));
+        $actual = count($this->retrievals);
+
+        PHPUnit::assertSame($times, $actual, "The field configuration was retrieved {$actual} times instead of {$times}.");
     }
 
     public function assertNotRetrieved(): void
     {
-        Assert::assertEmpty($this->retrievals, 'The field configuration was retrieved unexpectedly.');
+        PHPUnit::assertEmpty($this->retrievals, 'The field configuration was retrieved unexpectedly.');
     }
 }

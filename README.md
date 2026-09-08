@@ -234,6 +234,8 @@ $fake->assertRetrieved(FieldConfigurationModule::Estate);
 
 The fake narrows to the requested modules and still throws for unknown module keys. The same modules are returned for every language.
 
+Both factories are `Conditionable`, so `->when($condition, fn ($field) => $field->default('haus'))` works as on query builders.
+
 ## DTOs
 
 All DTOs are readonly. `Field` only requires `key`, `label` and `type`; the other properties default to `null` or an empty collection.

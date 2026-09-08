@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Testing;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Conditionable;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\Module;
@@ -14,6 +16,8 @@ use Innobrain\Structure\Enums\FieldConfigurationModule;
  */
 final class ModuleFactory
 {
+    use Conditionable;
+
     private ?string $label = null;
 
     /** @var array<int, Field> */
@@ -54,7 +58,7 @@ final class ModuleFactory
 
         return new Module(
             key: $this->module,
-            label: $this->label ?? ucfirst($this->module->value),
+            label: $this->label ?? Str::ucfirst($this->module->value),
             fields: $fields,
         );
     }

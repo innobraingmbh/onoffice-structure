@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Innobrain\Structure\Collections;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Innobrain\Structure\Builders\FieldFilterBuilder;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\FieldViolation;
@@ -34,15 +36,8 @@ final class FieldCollection extends Collection
      */
     public function find(string $key): ?Field
     {
-        $field = $this->get($key);
-
-        if ($field instanceof Field) {
-            return $field;
-        }
-
-        $needle = mb_strtolower($key);
-
-        return $this->first(fn (Field $field): bool => mb_strtolower($field->key) === $needle);
+        return $this->get($key)
+            ?? $this->first(fn (Field $field): bool => Str::lower($field->key) === Str::lower($key));
     }
 
     /**
@@ -66,7 +61,7 @@ final class FieldCollection extends Collection
             }
 
             if (is_array($value)) {
-                $value = array_values(array_filter($value, $field->permits(...)));
+                $value = collect($value)->filter($field->permits(...))->values()->all();
             }
 
             if ($field->permits($value)) {
@@ -96,7 +91,7 @@ final class FieldCollection extends Collection
                 continue;
             }
 
-            foreach (is_array($value) ? $value : [$value] as $item) {
+            foreach (Arr::wrap($value) as $item) {
                 if (! $field->permits($item)) {
                     $violations->push(new FieldViolation($field->key, $item, ViolationReason::ValueNotPermitted));
                 }
