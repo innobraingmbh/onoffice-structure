@@ -52,6 +52,21 @@ Both have facades in `src/Facades/`.
 
 All enums are **string-backed** (enforced by arch tests): `FieldConfigurationModule` (11 modules), `FieldType` (10 types), `Language` (34 languages).
 
+## Live API Probes
+
+For exploring or debugging the field configuration against the real onOffice API, use Workbench Artisan commands under `workbench/app/Console/Commands/`. The `WorkbenchServiceProvider` loads `ON_OFFICE_TOKEN` / `ON_OFFICE_SECRET` from the package-root `.env` (gitignored) and pushes them into `config('onoffice.*')`, so probes call the real API the same way consumers would.
+
+Run a probe via Testbench:
+
+```bash
+vendor/bin/testbench probe:structure
+vendor/bin/testbench probe:structure --only=estate --only=address --language=ENG --fields
+```
+
+Add a new probe by dropping a command into `workbench/app/Console/Commands/` and registering it in `WorkbenchServiceProvider::boot()`. Use the package's facades (`Structure::forClient(...)->getModules(...)`) directly inside `handle()`.
+
+This is for development feedback only, not test infrastructure.
+
 ## Code Standards
 
 - PHP 8.4+, `declare(strict_types=1)` in every file
