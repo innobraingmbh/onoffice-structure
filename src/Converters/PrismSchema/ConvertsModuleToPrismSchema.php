@@ -17,10 +17,13 @@ trait ConvertsModuleToPrismSchema
 
         foreach ($module->fields as $fieldKey => $field) {
             /** @var Field $field */
+            if (! $field->isWritable()) {
+                continue;
+            }
+
             $properties[] = $this->convertField($field);
 
-            // Mark field as required if it has a default value
-            if ($field->default !== null) {
+            if (! $field->hasDefault()) {
                 $requiredFields[] = $fieldKey;
             }
         }

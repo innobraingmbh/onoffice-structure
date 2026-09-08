@@ -11,6 +11,7 @@ use Innobrain\Structure\Dtos\FieldDependency;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
+use Innobrain\Structure\Enums\FieldMeasureFormat;
 use Innobrain\Structure\Enums\FieldType;
 
 describe('JsonSchemaConvertStrategy Feature Tests', function () {
@@ -58,7 +59,7 @@ describe('JsonSchemaConvertStrategy Feature Tests', function () {
                     filters: collect(),
                     dependencies: collect(),
                     compoundFields: collect(),
-                    fieldMeasureFormat: 'EUR'
+                    fieldMeasureFormat: FieldMeasureFormat::Monetary
                 ),
                 'zimmer' => new Field(
                     key: 'zimmer',

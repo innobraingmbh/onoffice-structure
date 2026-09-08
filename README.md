@@ -122,6 +122,8 @@ $rules = $addressModule->convert($strategy);
 // 'Beziehung' => 'array|distinct|nullable', 'Beziehung.*' => 'in:0,1,2,3'
 ```
 
+Module conversions for Laravel rules, Prism and JSON Schema only include writable fields (`Field::isWritable()`). Hints and dividing lines carry no data, and compound fields such as `Plz-Ort` are set through their individual fields, so they are left out. Converting such a field directly still works.
+
 #### Prism Schema (for AI tooling)
 
 ```php
@@ -134,6 +136,7 @@ $strategy = new PrismSchemaConvertStrategy(
 
 $schema = $addressModule->convert($strategy);
 // Returns an ObjectSchema usable with Prism's structured output
+// Fields without a default are required; fields with a default are optional.
 ```
 
 Field type mapping: `VarChar/Text/Blob` -> `StringSchema`, `Integer/Float` -> `NumberSchema`, `Boolean` -> `BooleanSchema`, `Date/DateTime` -> `StringSchema` (with format hint), `SingleSelect` -> `EnumSchema`, `MultiSelect` -> `ArraySchema<EnumSchema>`.
@@ -177,9 +180,9 @@ All DTOs are readonly and implement `Convertible`.
 | DTO | Key Properties |
 |-----|---------------|
 | `Module` | `key` (FieldConfigurationModule), `label`, `fields` (FieldCollection) |
-| `Field` | `key`, `label`, `type` (FieldType), `length`, `permittedValues`, `default`, `filters`, `dependencies`, `compoundFields`, `fieldMeasureFormat` |
+| `Field` | `key`, `label`, `type` (FieldType), `length`, `permittedValues`, `default`, `filters`, `dependencies`, `compoundFields`, `fieldMeasureFormat` (FieldMeasureFormat) |
 | `PermittedValue` | `key`, `label` |
-| `FieldDependency` | `dependentFieldKey`, `dependentFieldValue` |
+| `FieldDependency` | `dependentFieldKey`, `dependentFieldValue` (maps a permitted value of this field to the required value of its parent field, e.g. `objekttyp` => `objektart`) |
 | `FieldFilter` | `name`, `config` |
 
 ## Testing

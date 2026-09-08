@@ -15,6 +15,7 @@ trait ConvertsModuleToJsonSchema
     {
         $properties = $module->fields
             ->toBase()
+            ->filter(fn (Field $field): bool => $field->isWritable())
             ->mapWithKeys(fn (Field $field) => $this->convertField($field))
             ->all();
 

@@ -17,6 +17,7 @@ use Innobrain\Structure\Dtos\FieldFilter;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
+use Innobrain\Structure\Enums\FieldMeasureFormat;
 use Innobrain\Structure\Enums\FieldType;
 use Innobrain\Structure\Enums\Language;
 
@@ -102,27 +103,32 @@ class FieldConfiguration
             /** @var array<int, string> $compoundFields */
             $compoundFields = Arr::get($fieldData, 'compoundFields', []);
 
+            $length = Arr::get($fieldData, 'length');
+            $default = Arr::get($fieldData, 'default');
+
             $fields->put($fieldKey, new Field(
                 key: $fieldKey,
                 label: (string) Arr::get($fieldData, 'label', ucfirst($fieldKey)),
                 type: $fieldType,
-                length: Arr::get($fieldData, 'length')
-                    ? (int) Arr::get($fieldData, 'length')
-                    : null,
+                length: $this->isBlank($length) ? null : (int) $length,
                 permittedValues: $this->parsePermittedValues(Arr::get($fieldData, 'permittedvalues', [])),
-                default: Arr::get($fieldData, 'default')
-                    ? (string) Arr::get($fieldData, 'default')
-                    : null,
+                default: $this->isBlank($default) ? null : (string) $default,
                 filters: $this->parseFieldFilters(Arr::get($fieldData, 'filters', [])),
                 dependencies: $this->parseFieldDependencies(Arr::get($fieldData, 'dependencies', [])),
                 compoundFields: collect($compoundFields),
-                fieldMeasureFormat: Arr::get($fieldData, 'fieldMeasureFormat')
-                    ? (string) Arr::get($fieldData, 'fieldMeasureFormat')
-                    : null,
+                fieldMeasureFormat: FieldMeasureFormat::tryFrom((string) Arr::get($fieldData, 'fieldMeasureFormat', '')),
             ));
         }
 
         return $fields;
+    }
+
+    /**
+     * A default of "0" is a real value, so only null and empty strings count as blank.
+     */
+    private function isBlank(mixed $value): bool
+    {
+        return $value === null || $value === '';
     }
 
     /**

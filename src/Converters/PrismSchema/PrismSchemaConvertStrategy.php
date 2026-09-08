@@ -23,6 +23,9 @@ final readonly class PrismSchemaConvertStrategy extends BaseConvertStrategy
     use ConvertsModuleToPrismSchema;
 
     /**
+     * Fields without a default value are marked as required; fields with a
+     * default are optional, matching the JSON Schema strategy.
+     *
      * @param  bool  $includeNullable  true ➜ mark fields as nullable when they have no default
      * @param  bool  $includeDescriptions  true ➜ include field labels as descriptions
      * @param  string[]  $requiredFieldKeys  list of field keys to mark as required, overrides internal logic

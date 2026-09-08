@@ -2,6 +2,26 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## Unreleased
+
+### Breaking
+
+- `Field::$fieldMeasureFormat` is now a `FieldMeasureFormat` enum instead of a string. Unknown formats parse to `null`.
+- Module conversions for Laravel rules, Prism and JSON Schema skip non-writable fields (hints, dividing lines, compound fields). Use `Field::isWritable()` to check.
+- Prism schemas now mark fields without a default as required, matching JSON Schema. Previously fields with a default were required.
+- Laravel rules no longer emit `required_if` from field dependencies. Dependencies map permitted values to their parent field's value, not fields to values.
+
+### Fixed
+
+- JSON Schema enums kept numeric permitted value keys as strings instead of integers.
+- A field default of `"0"` is no longer parsed as `null`.
+
+### Added
+
+- `FieldMeasureFormat` enum.
+- `Field::isWritable()`.
+- Workbench probe commands for exploring the live field configuration.
+
 ## v3.1.0 - 2026-09-04
 
 - chore: allow `innobrain/laravel-onoffice-adapter` ^2.0 alongside ^1.10

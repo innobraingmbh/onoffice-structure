@@ -263,7 +263,7 @@ describe('PrismSchemaConvertStrategy', function () {
                 ->and($schema->name)->toBe('address')
                 ->and($schema->description)->toBe('Address Information')
                 ->and($schema->properties)->toHaveCount(3)
-                ->and($schema->requiredFields)->toBe(['verified']);
+                ->and($schema->requiredFields)->toBe(['street', 'city']);
         });
     });
 

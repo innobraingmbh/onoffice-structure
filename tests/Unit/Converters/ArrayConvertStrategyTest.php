@@ -14,6 +14,7 @@ use Innobrain\Structure\Dtos\FieldFilter;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
+use Innobrain\Structure\Enums\FieldMeasureFormat;
 use Innobrain\Structure\Enums\FieldType;
 
 describe('ArrayConvertStrategy', function () {
@@ -108,7 +109,7 @@ describe('ArrayConvertStrategy', function () {
             'filters' => new Collection(['ff1' => new FieldFilter('ff1', new Collection(['cfg' => ['val']]))]),
             'dependencies' => new Collection([new FieldDependency('dep_key', 'dep_val')]),
             'compoundFields' => new Collection(['cf1', 'cf2']),
-            'fieldMeasureFormat' => 'DATA_TYPE_TEXT',
+            'fieldMeasureFormat' => FieldMeasureFormat::Monetary,
         ];
 
         it('converts Field to array with all values', function () use ($baseFieldData) {
@@ -126,7 +127,7 @@ describe('ArrayConvertStrategy', function () {
                 'filters' => ['ff1' => ['name' => 'ff1', 'config' => ['cfg' => ['val']]]],
                 'dependencies' => [['dependentFieldKey' => 'dep_key', 'dependentFieldValue' => 'dep_val']],
                 'compoundFields' => ['cf1', 'cf2'],
-                'fieldMeasureFormat' => 'DATA_TYPE_TEXT',
+                'fieldMeasureFormat' => 'DATA_TYPE_MONETARY',
             ]);
         });
 
@@ -141,7 +142,7 @@ describe('ArrayConvertStrategy', function () {
                 'filters' => new Collection, // should be dropped
                 'dependencies' => new Collection, // should be dropped
                 'compoundFields' => new Collection, // should be dropped
-                'fieldMeasureFormat' => '', // should be dropped
+                'fieldMeasureFormat' => null, // should be dropped
             ];
             $field = new Field(...$fieldData);
             $strategy = new ArrayConvertStrategy(dropEmpty: true);
@@ -165,7 +166,7 @@ describe('ArrayConvertStrategy', function () {
                 'filters' => new Collection,
                 'dependencies' => new Collection,
                 'compoundFields' => new Collection,
-                'fieldMeasureFormat' => '',
+                'fieldMeasureFormat' => null,
             ];
             $field = new Field(...$fieldData);
             $strategy = new ArrayConvertStrategy(dropEmpty: false);
@@ -181,7 +182,7 @@ describe('ArrayConvertStrategy', function () {
                 'filters' => [],
                 'dependencies' => [],
                 'compoundFields' => [],
-                'fieldMeasureFormat' => '',
+                'fieldMeasureFormat' => null,
             ]);
         });
     });

@@ -11,9 +11,9 @@ use Innobrain\Structure\Enums\FieldType;
 trait ConvertsModuleToLaravelRules
 {
     /**
-     * The returned array is keyed by field key. For multi-select fields an
-     * additional "{fieldKey}.*" element is added so each item receives the
-     * proper "in:" check.
+     * The returned array is keyed by field key and only contains writable
+     * fields. For multi-select fields an additional "{fieldKey}.*" element is
+     * added so each item receives the proper "in:" check.
      *
      * @return array<string, mixed>
      */
@@ -23,6 +23,10 @@ trait ConvertsModuleToLaravelRules
 
         foreach ($module->fields as $fieldKey => $field) {
             /** @var Field $field */
+            if (! $field->isWritable()) {
+                continue;
+            }
+
             $result[$fieldKey] = $this->convertField($field);
 
             // Extra rules per item for multi-selects

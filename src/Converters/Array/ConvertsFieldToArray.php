@@ -32,7 +32,7 @@ trait ConvertsFieldToArray
                 ->map(fn (FieldDependency $d) => $d->convert($this))
                 ->toArray(),
             'compoundFields' => $field->compoundFields->all(),
-            'fieldMeasureFormat' => $field->fieldMeasureFormat,
+            'fieldMeasureFormat' => $field->fieldMeasureFormat?->value,
         ]);
     }
 }

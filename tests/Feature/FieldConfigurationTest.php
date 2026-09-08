@@ -11,6 +11,7 @@ use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\FieldFilter;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
+use Innobrain\Structure\Enums\FieldMeasureFormat;
 use Innobrain\Structure\Facades\FieldConfiguration;
 
 use function Pest\testDirectory;
@@ -282,4 +283,22 @@ it('should correctly convert retrieved field configuration from FieldsResponse_j
         'compoundFields' => ['Anrede', 'Titel'],
     ])
         ->and($anredeTitelFieldDropEmpty)->not->toHaveKeys(['permittedValues', 'default', 'filters', 'dependencies', 'fieldMeasureFormat']);
+});
+
+it('keeps a default of "0" and parses the measure format into an enum', function () {
+    $file = file_get_contents(testDirectory('Stubs/FieldsResponse2.json'));
+    $json = json_decode($file, true);
+
+    $json['response']['results'][0]['data']['records'][4]['elements']['provisionsAbgabe_innen']['default'] = '0';
+
+    Http::fake([
+        'https://api.onoffice.de/api/stable/api.php' => Http::response($json),
+    ]);
+
+    $estate = FieldConfiguration::retrieveForClient(new OnOfficeApiCredentials('test', 'test'))->get('estate');
+
+    expect($estate->fields->get('provisionsAbgabe_innen')->default)->toBe('0')
+        ->and($estate->fields->get('kaufpreis')->fieldMeasureFormat)->toBe(FieldMeasureFormat::Monetary)
+        ->and($estate->fields->get('wohnflaeche')->fieldMeasureFormat)->toBe(FieldMeasureFormat::Area)
+        ->and($estate->fields->get('objektart')->fieldMeasureFormat)->toBeNull();
 });

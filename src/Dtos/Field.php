@@ -7,6 +7,7 @@ namespace Innobrain\Structure\Dtos;
 use Illuminate\Support\Collection;
 use Innobrain\Structure\Concerns\HasConverter;
 use Innobrain\Structure\Contracts\Convertible;
+use Innobrain\Structure\Enums\FieldMeasureFormat;
 use Innobrain\Structure\Enums\FieldType;
 
 readonly class Field implements Convertible
@@ -29,7 +30,7 @@ readonly class Field implements Convertible
         public Collection $filters,
         public Collection $dependencies,
         public Collection $compoundFields,
-        public ?string $fieldMeasureFormat
+        public ?FieldMeasureFormat $fieldMeasureFormat
     ) {}
 
     /**
@@ -80,6 +81,20 @@ readonly class Field implements Convertible
         }
 
         return true;
+    }
+
+    /**
+     * Hints and dividing lines carry no data, and compound fields such as
+     * "Plz-Ort" are set through their individual fields, so none of them
+     * can be written to the API.
+     */
+    public function isWritable(): bool
+    {
+        if ($this->compoundFields->isNotEmpty()) {
+            return false;
+        }
+
+        return ! in_array($this->type, [FieldType::RedHint, FieldType::BlackHint, FieldType::DividingLine], true);
     }
 
     /**

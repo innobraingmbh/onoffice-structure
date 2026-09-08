@@ -10,6 +10,7 @@ use Innobrain\Structure\Dtos\FieldDependency;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Dtos\PermittedValue;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
+use Innobrain\Structure\Enums\FieldMeasureFormat;
 use Innobrain\Structure\Enums\FieldType;
 use Prism\Prism\Schema\ArraySchema;
 use Prism\Prism\Schema\BooleanSchema;
@@ -63,7 +64,7 @@ describe('PrismSchemaConvertStrategy Feature Tests', function () {
                     filters: collect(),
                     dependencies: collect(),
                     compoundFields: collect(),
-                    fieldMeasureFormat: 'EUR'
+                    fieldMeasureFormat: FieldMeasureFormat::Monetary
                 ),
                 'zimmer' => new Field(
                     key: 'zimmer',
@@ -186,11 +187,11 @@ describe('PrismSchemaConvertStrategy Feature Tests', function () {
         expect($properties[7])->toBeInstanceOf(StringSchema::class)
             ->and($properties[7]->name)->toBe('beschreibung');
 
-        // Check required fields
-        expect($schema->requiredFields)->toContain('zimmer')
-            ->and($schema->requiredFields)->toContain('verfuegbar')
-            ->and($schema->requiredFields)->not->toContain('objekttitel')
-            ->and($schema->requiredFields)->not->toContain('verfuegbar_ab');
+        // Fields without a default are required, fields with a default are optional
+        expect($schema->requiredFields)->not->toContain('zimmer')
+            ->and($schema->requiredFields)->not->toContain('verfuegbar')
+            ->and($schema->requiredFields)->toContain('objekttitel')
+            ->and($schema->requiredFields)->toContain('verfuegbar_ab');
     });
 
     it('handles ModulesCollection conversion', function () {
@@ -395,12 +396,8 @@ describe('PrismSchemaConvertStrategy Feature Tests', function () {
             ArraySchema::class,   // multi select
         ]);
 
-        // Check required fields (those with defaults)
-        expect($schema->requiredFields)->toContain('varchar_field')
-            ->and($schema->requiredFields)->toContain('integer_field')
-            ->and($schema->requiredFields)->toContain('float_field')
-            ->and($schema->requiredFields)->toContain('boolean_field')
-            ->and($schema->requiredFields)->toContain('single_select_field');
+        // Fields without a default are required, fields with a default are optional
+        expect($schema->requiredFields)->toBe(['text_field', 'blob_field', 'date_field', 'datetime_field', 'multi_select_field']);
     });
 
     it('respects configuration options', function () {
@@ -443,6 +440,6 @@ describe('PrismSchemaConvertStrategy Feature Tests', function () {
         $schemaNoNull = $module->convert($strategyNoNull);
 
         expect($schemaNoNull->properties[0]->nullable ?? false)->toBeFalse()
-            ->and($schemaNoNull->requiredFields)->toBe([]);
+            ->and($schemaNoNull->requiredFields)->toBe(['field1']);
     });
 });
