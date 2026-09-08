@@ -62,6 +62,8 @@ vendor/bin/testbench probe:structure
 vendor/bin/testbench probe:structure --only=estate --only=address --language=ENG --fields
 vendor/bin/testbench probe:convert address --format=json --field=Anrede
 vendor/bin/testbench probe:objekttyp haus
+vendor/bin/testbench probe:all --language=ENG   # every module through every converter, reports anomalies
+vendor/bin/testbench probe:filters              # whereMatchesFilters() and sanitize() on live data
 ```
 
 Add a new probe by dropping a command into `workbench/app/Console/Commands/` and registering it in `WorkbenchServiceProvider::boot()`. Use the package's facades (`Structure::forClient(...)->getModules(...)`) directly inside `handle()`.

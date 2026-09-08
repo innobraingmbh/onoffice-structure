@@ -34,6 +34,12 @@ class ProbeObjekttypCommand extends Command
         }
 
         $objektart = (string) $this->argument('objektart');
+        $objektartField = $estate->fields->get('objektart');
+
+        if ($objektartField instanceof Field && $objektartField->doesntContainPermittedValue($objektart)) {
+            $this->components->warn(sprintf('"%s" is not an objektart key in this account. Known keys: %s', $objektart, implode(', ', $objektartField->permittedValueKeys())));
+        }
+
         $narrowed = $objekttyp->withPermittedValuesFor($objektart);
 
         $this->components->info(sprintf('%d of %d objekttyp values apply to objektart "%s"', $narrowed->permittedValues->count(), $objekttyp->permittedValues->count(), $objektart));
