@@ -13,6 +13,7 @@ use Workbench\App\Console\Commands\ProbeFiltersCommand;
 use Workbench\App\Console\Commands\ProbeLookupCommand;
 use Workbench\App\Console\Commands\ProbeObjekttypCommand;
 use Workbench\App\Console\Commands\ProbeRawFieldsCommand;
+use Workbench\App\Console\Commands\ProbeSearchCriteriaCommand;
 use Workbench\App\Console\Commands\ProbeStructureCommand;
 
 class WorkbenchServiceProvider extends ServiceProvider
@@ -41,6 +42,7 @@ class WorkbenchServiceProvider extends ServiceProvider
                 ProbeLookupCommand::class,
                 ProbeObjekttypCommand::class,
                 ProbeRawFieldsCommand::class,
+                ProbeSearchCriteriaCommand::class,
                 ProbeStructureCommand::class,
             ]);
         }
