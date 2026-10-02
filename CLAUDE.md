@@ -40,8 +40,9 @@ Each strategy implements `ConvertStrategy`. Converter-specific traits live in th
 
 - **`Structure`** — main entry point with fluent API: `Structure::forClient($credentials)->getModules($only, $language)`. `$only` accepts `FieldConfigurationModule` cases or keys; unknown keys throw.
 - **`FieldConfiguration`** — parses raw onOffice API responses into DTO hierarchies
+- **`SearchCriteria`** — parses the `searchCriteriaFields` endpoint into a `SearchCriteriaFieldCollection`, reached through `Structure::forClient($credentials)->getSearchCriteriaFields($language)`. Search criteria are not a field configuration module: they have their own `SearchCriteriaField` DTO and `SearchCriteriaFieldType` enum (the endpoint's type vocabulary differs from `FieldType`), and are not `Convertible`.
 
-Both have facades in `src/Facades/`.
+All have facades in `src/Facades/`.
 
 ### Collections
 
@@ -49,7 +50,7 @@ Both have facades in `src/Facades/`.
 
 ### Testing Helpers
 
-`src/Testing/` ships `FieldConfigurationFake` (swapped in via `Structure::fake()` / `FieldConfiguration::fake()`) and the `FieldFactory` / `ModuleFactory` builders. `Structure::serializableClasses()` lists every class a cache store must allow to unserialize a `ModulesCollection`; keep it in sync when adding DTOs or enums to the graph.
+`src/Testing/` ships `FieldConfigurationFake` (swapped in via `Structure::fake()` / `FieldConfiguration::fake()`), `SearchCriteriaFake` (via `Structure::fakeSearchCriteria()` / `SearchCriteria::fake()`) and the `FieldFactory` / `ModuleFactory` / `SearchCriteriaFieldFactory` builders. `Structure::serializableClasses()` lists every class a cache store must allow to unserialize a `ModulesCollection` or a `SearchCriteriaFieldCollection`; keep it in sync when adding DTOs or enums to the graph.
 
 ### Enums
 
@@ -69,6 +70,7 @@ vendor/bin/testbench probe:objekttyp haus
 vendor/bin/testbench probe:all --language=ENG   # every module through every converter, reports anomalies
 vendor/bin/testbench probe:filters              # whereMatchesFilters() and sanitize() on live data
 vendor/bin/testbench probe:lookup               # find(), label helpers, violations() and the serializable class list
+vendor/bin/testbench probe:search-criteria --language=ENG   # parsed search criteria fields, warns about unknown types
 ```
 
 Add a new probe by dropping a command into `workbench/app/Console/Commands/` and registering it in `WorkbenchServiceProvider::boot()`. Use the package's facades (`Structure::forClient(...)->getModules(...)`) directly inside `handle()`.

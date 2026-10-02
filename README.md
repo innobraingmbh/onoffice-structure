@@ -14,6 +14,7 @@ Extract and work with the onOffice enterprise field configuration (Modul- und Fe
 - Convert to arrays, Laravel validation rules, or JSON Schema
 - Filter fields by configuration-based conditions with a fluent builder
 - Sanitize input data against field definitions and permitted values
+- Fetch the fields an account has configured as search criteria (Suchkriterien), with ranges, must-match presets and property scoping
 - Multi-language support (German, English, French, Spanish, Italian, Croatian)
 - Extensible converter strategy pattern for custom output formats
 
@@ -131,9 +132,36 @@ foreach ($addressModule->fields->violations($input) as $violation) {
 }
 ```
 
+### Search Criteria Fields
+
+Search criteria (Suchkriterien) are not a field configuration module. onOffice serves the fields an account has selected as search criteria from their own endpoint, and only that endpoint knows which fields hold a from–to range:
+
+```php
+use Innobrain\Structure\Enums\Language;
+
+$fields = Structure::forClient($credentials)->getSearchCriteriaFields(Language::English);
+
+$kaufpreis = $fields->get('kaufpreis');
+
+$kaufpreis->isRange;              // true
+$kaufpreis->rangeFromKey();       // 'kaufpreis__von', the key the lower bound is written under
+$kaufpreis->rangeToKey();         // 'kaufpreis__bis'
+$kaufpreis->storedRangeKey();     // 'range_kaufpreis', the key a stored range is read back under
+$kaufpreis->rangeFromLabel;       // 'min. Sales price'
+$kaufpreis->mustMatchByDefault;   // the account presets the field as a knockout criterion
+$kaufpreis->appliesTo->all();     // ['vermarktungsart' => ['kauf']], the classification values it is limited to
+
+$fields->byCategory();            // fields grouped by category name
+$fields->get('regionaler_zusatz')->isRegions();   // its values are region keys
+$fields->get('objektart')->isClassification();    // one of vermarktungsart, nutzungsart, objektart
+$fields->get('objektart')->permittedValueLabels(); // same helpers as on Field
+```
+
+Nothing is read from onOffice until `getSearchCriteriaFields()` is called. The endpoint has its own type vocabulary, so `type` is a `SearchCriteriaFieldType`: selects, `Float` and `Decimal`, and for the regions field how its values are displayed. A type the package does not know yet keeps the field with `type` set to `null`; `rawType` always holds what the API returned. Category names are always German, the API does not translate them.
+
 ### Caching
 
-The DTOs serialize cleanly, so a `ModulesCollection` can be cached as-is. If your cache store restricts unserializable classes, allow the package's classes in `config/cache.php`:
+The DTOs serialize cleanly, so a `ModulesCollection` or a `SearchCriteriaFieldCollection` can be cached as-is. If your cache store restricts unserializable classes, allow the package's classes in `config/cache.php`:
 
 ```php
 'serializable_classes' => \Innobrain\Structure\Services\Structure::serializableClasses(),
@@ -234,7 +262,22 @@ $fake->assertRetrieved(FieldConfigurationModule::Estate);
 
 The fake narrows to the requested modules and still throws for unknown module keys. The same modules are returned for every language.
 
-Both factories are `Conditionable`, so `->when($condition, fn ($field) => $field->default('haus'))` works as on query builders.
+Search criteria fields are faked the same way with `Structure::fakeSearchCriteria()` (or `SearchCriteria::fake()`) and the `SearchCriteriaFieldFactory`:
+
+```php
+use Innobrain\Structure\Enums\EstateClassification;
+use Innobrain\Structure\Testing\SearchCriteriaFieldFactory;
+
+$fake = Structure::fakeSearchCriteria([
+    SearchCriteriaFieldFactory::singleSelect('vermarktungsart', ['kauf' => 'Kauf', 'miete' => 'Miete'])->mustMatchByDefault()->make(),
+    SearchCriteriaFieldFactory::range('kaufpreis')->category('Preise')->appliesTo(EstateClassification::MarketingType, 'kauf')->make(),
+    SearchCriteriaFieldFactory::regions()->make(),
+]);
+
+$fake->assertRetrieved();
+```
+
+All factories are `Conditionable`, so `->when($condition, fn ($field) => $field->mandatory())` works as on query builders.
 
 ## DTOs
 
@@ -244,6 +287,7 @@ All DTOs are readonly. `Field` only requires `key`, `label` and `type`; the othe
 |-----|---------------|
 | `Module` | `key` (FieldConfigurationModule), `label`, `fields` (FieldCollection) |
 | `Field` | `key`, `label`, `type` (FieldType), `length`, `permittedValues`, `default`, `filters`, `dependencies`, `compoundFields`, `fieldMeasureFormat` (FieldMeasureFormat) |
+| `SearchCriteriaField` | `key`, `label`, `category`, `rawType`, `type` (SearchCriteriaFieldType), `isRange`, `rangeFromLabel`, `rangeToLabel`, `mustMatchByDefault`, `isMandatory`, `permittedValues`, `appliesTo` |
 | `PermittedValue` | `key`, `label` |
 | `FieldDependency` | `permittedValueKey`, `parentFieldValue` (the permitted value is only available when the parent field holds that value, e.g. `objekttyp` => `objektart`) |
 | `FieldFilter` | `name`, `config` |
