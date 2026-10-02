@@ -7,17 +7,21 @@ namespace Innobrain\Structure\Facades;
 use Illuminate\Support\Facades\Facade;
 use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\Structure\Collections\ModulesCollection;
+use Innobrain\Structure\Collections\SearchCriteriaFieldCollection;
 use Innobrain\Structure\Dtos\Module;
+use Innobrain\Structure\Dtos\SearchCriteriaField;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\Language;
 use Innobrain\Structure\Services\Structure as ServiceStructure;
 use Innobrain\Structure\Testing\FieldConfigurationFake;
+use Innobrain\Structure\Testing\SearchCriteriaFake;
 
 /**
  * @see ServiceStructure
  *
  * @method static ServiceStructure forClient(OnOfficeApiCredentials $onOfficeApiCredentials)
  * @method static ModulesCollection getModules(FieldConfigurationModule|string|array<int, FieldConfigurationModule|string> $only = [], Language $language = Language::German)
+ * @method static SearchCriteriaFieldCollection getSearchCriteriaFields(Language $language = Language::German)
  * @method static array<int, class-string> serializableClasses()
  */
 class Structure extends Facade
@@ -32,6 +36,16 @@ class Structure extends Facade
         static::clearResolvedInstance(ServiceStructure::class);
 
         return FieldConfiguration::fake($modules);
+    }
+
+    /**
+     * Replace the search criteria with canned fields for the rest of the test.
+     *
+     * @param  SearchCriteriaFieldCollection|array<int, SearchCriteriaField>  $fields
+     */
+    public static function fakeSearchCriteria(SearchCriteriaFieldCollection|array $fields = []): SearchCriteriaFake
+    {
+        return SearchCriteria::fake($fields);
     }
 
     protected static function getFacadeAccessor(): string

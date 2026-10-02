@@ -10,15 +10,18 @@ use Innobrain\OnOfficeAdapter\Dtos\OnOfficeApiCredentials;
 use Innobrain\OnOfficeAdapter\Exceptions\OnOfficeException;
 use Innobrain\Structure\Collections\FieldCollection;
 use Innobrain\Structure\Collections\ModulesCollection;
+use Innobrain\Structure\Collections\SearchCriteriaFieldCollection;
 use Innobrain\Structure\Dtos\Field;
 use Innobrain\Structure\Dtos\FieldDependency;
 use Innobrain\Structure\Dtos\FieldFilter;
 use Innobrain\Structure\Dtos\Module;
 use Innobrain\Structure\Dtos\PermittedValue;
+use Innobrain\Structure\Dtos\SearchCriteriaField;
 use Innobrain\Structure\Enums\FieldConfigurationModule;
 use Innobrain\Structure\Enums\FieldMeasureFormat;
 use Innobrain\Structure\Enums\FieldType;
 use Innobrain\Structure\Enums\Language;
+use Innobrain\Structure\Enums\SearchCriteriaFieldType;
 use LogicException;
 use Throwable;
 
@@ -31,7 +34,8 @@ class Structure
 
     /**
      * The classes a cache store needs to allow when unserializing a
-     * ModulesCollection, for the "cache.serializable_classes" config.
+     * ModulesCollection or a SearchCriteriaFieldCollection, for the
+     * "cache.serializable_classes" config.
      *
      * @return array<int, class-string>
      */
@@ -49,6 +53,9 @@ class Structure
             FieldConfigurationModule::class,
             FieldType::class,
             FieldMeasureFormat::class,
+            SearchCriteriaFieldCollection::class,
+            SearchCriteriaField::class,
+            SearchCriteriaFieldType::class,
         ];
     }
 
@@ -68,5 +75,19 @@ class Structure
         throw_unless($this->onOfficeApiCredentials instanceof OnOfficeApiCredentials, LogicException::class, 'No OnOfficeApiCredentials provided. Use the forClient method to provide credentials.');
 
         return $this->fieldConfiguration->retrieveForClient($this->onOfficeApiCredentials, Arr::wrap($only), $language);
+    }
+
+    /**
+     * The fields the client has configured as search criteria, keyed by field
+     * key. They are only read from onOffice when this is called.
+     *
+     * @throws OnOfficeException
+     * @throws Throwable
+     */
+    public function getSearchCriteriaFields(Language $language = Language::German): SearchCriteriaFieldCollection
+    {
+        throw_unless($this->onOfficeApiCredentials instanceof OnOfficeApiCredentials, LogicException::class, 'No OnOfficeApiCredentials provided. Use the forClient method to provide credentials.');
+
+        return resolve(SearchCriteria::class)->retrieveForClient($this->onOfficeApiCredentials, $language);
     }
 }

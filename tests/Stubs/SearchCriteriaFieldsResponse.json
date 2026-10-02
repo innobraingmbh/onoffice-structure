@@ -1,0 +1,186 @@
+{
+    "status": {
+        "code": 200,
+        "errorcode": 0,
+        "message": "OK"
+    },
+    "response": {
+        "results": [
+            {
+                "actionid": "urn:onoffice-de-ns:smart:2.5:smartml:action:get",
+                "resourceid": "",
+                "resourcetype": "searchCriteriaFields",
+                "cacheable": false,
+                "identifier": "",
+                "data": {
+                    "meta": {
+                        "cntabsolute": null
+                    },
+                    "records": [
+                        {
+                            "id": 0,
+                            "type": "",
+                            "elements": {
+                                "name": "Kategorie",
+                                "fields": [
+                                    {
+                                        "id": "vermarktungsart",
+                                        "name": "Type of commercialization",
+                                        "position": 1,
+                                        "ko": "true",
+                                        "type": "singleselect",
+                                        "values": {
+                                            "kauf": "Purchase",
+                                            "miete": "Rent",
+                                            "pacht": "Lease",
+                                            "erbpacht": "Hereditary lease"
+                                        },
+                                        "default": null
+                                    },
+                                    {
+                                        "id": "objektart",
+                                        "name": "Type of property",
+                                        "position": 2,
+                                        "ko": "true",
+                                        "type": "singleselect",
+                                        "values": {
+                                            "zimmer": "Room",
+                                            "haus": "House",
+                                            "wohnung": "Apartment",
+                                            "grundstueck": "Plot",
+                                            "buero_praxen": "Offices/Medical facilities",
+                                            "einzelhandel": "Shop/Retail",
+                                            "gastgewerbe": "Hospitality industry",
+                                            "hallen_lager_prod": "Halls/Warehouse/Production",
+                                            "land_und_forstwirtschaft": "Agriculture/Forestry",
+                                            "freizeitimmbilien_gewerblich": "Leisuretime property (commercial)",
+                                            "sonstige": "Other",
+                                            "parken": "Parking",
+                                            "hausbau": "House construction",
+                                            "zwangsversteigerung": "Foreclosure",
+                                            "zinshaus_renditeobjekt": "Interest and yield property"
+                                        },
+                                        "default": null
+                                    },
+                                    {
+                                        "id": "objekttyp",
+                                        "name": "Kind of property",
+                                        "position": 3,
+                                        "type": "singleselect",
+                                        "values": {
+                                            "stellplatz": "Parking space",
+                                            "carport": "Carport",
+                                            "doppelgarage": "Two-car garage",
+                                            "duplex": "Duplex",
+                                            "tiefgarage": "Underground parking"
+                                        },
+                                        "default": null
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 1,
+                            "type": "",
+                            "elements": {
+                                "name": "Flächen",
+                                "fields": [
+                                    {
+                                        "id": "wohnflaeche",
+                                        "name": "Living area",
+                                        "position": 4,
+                                        "rangefield": "true",
+                                        "additionalTranslations": {
+                                            "wohnflaeche__von": "Min. living area of",
+                                            "wohnflaeche__bis": "Max. living area"
+                                        },
+                                        "type": "urn:onoffice-de-ns:smart:2.5:dbAccess:dataType:float",
+                                        "objektarten": "wohnung,haus,waz,hallen_lager_prod,zimmer"
+                                    },
+                                    {
+                                        "id": "anzahl_zimmer",
+                                        "name": "Number of rooms",
+                                        "position": 5,
+                                        "rangefield": "true",
+                                        "additionalTranslations": {
+                                            "anzahl_zimmer__von": "Number of rooms (min)",
+                                            "anzahl_zimmer__bis": "Number of rooms (max)"
+                                        },
+                                        "type": "urn:onoffice-de-ns:smart:2.5:dbAccess:dataType:float",
+                                        "objektarten": "wohnung,haus,buero_praxen,einzelhandel,gastgewerbe,hallen_lager_prod,land_und_forstwirtschaft,sonstige,zinshaus_renditeobjekt,freizeitimmbilien_gewerblich,zimmer,hausbau,zwangsversteigerung,parken",
+                                        "nutzungsarten": "wohnen,gewerbe"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 2,
+                            "type": "",
+                            "elements": {
+                                "name": "Preise",
+                                "fields": [
+                                    {
+                                        "id": "kaufpreis",
+                                        "name": "Purchase price",
+                                        "position": 6,
+                                        "rangefield": "true",
+                                        "additionalTranslations": {
+                                            "kaufpreis__von": "min. Sales price",
+                                            "kaufpreis__bis": "max. Sales price"
+                                        },
+                                        "type": "urn:onoffice-de-ns:smart:2.5:dbAccess:dataType:decimal",
+                                        "vermarktungsarten": "kauf"
+                                    },
+                                    {
+                                        "id": "kaltmiete",
+                                        "name": "Basic rent",
+                                        "position": 7,
+                                        "rangefield": "true",
+                                        "additionalTranslations": {
+                                            "kaltmiete__von": "Basic rent from",
+                                            "kaltmiete__bis": "Basic rent up to"
+                                        },
+                                        "type": "urn:onoffice-de-ns:smart:2.5:dbAccess:dataType:decimal",
+                                        "vermarktungsarten": "miete"
+                                    },
+                                    {
+                                        "id": "netRentPerSquareMeterPerYear",
+                                        "name": "Net rent / m² / year",
+                                        "position": 8,
+                                        "rangefield": "true",
+                                        "additionalTranslations": {
+                                            "netRentPerSquareMeterPerYear__von": "Nettomiete / m² / Jahr von",
+                                            "netRentPerSquareMeterPerYear__bis": "Nettomiete / m² / Jahr bis"
+                                        },
+                                        "type": "urn:onoffice-de-ns:smart:2.5:dbAccess:dataType:decimal",
+                                        "nutzungsarten": "gewerbe",
+                                        "vermarktungsarten": "miete"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 3,
+                            "type": "",
+                            "elements": {
+                                "name": "Geografische-Angaben",
+                                "fields": [
+                                    {
+                                        "id": "regionaler_zusatz",
+                                        "name": "Additional geographical information",
+                                        "position": 9,
+                                        "type": "displayLive"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "status": {
+                    "errorcode": 0,
+                    "message": "OK"
+                }
+            }
+        ]
+    }
+}
