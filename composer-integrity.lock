@@ -184,6 +184,13 @@
                 "sourceUrl": "https://github.com/innobraingmbh/laravel-onoffice-adapter.git",
                 "distUrl": "https://api.github.com/repos/innobraingmbh/laravel-onoffice-adapter/zipball/e2c08400fcb7aa5c7532500b9dda14d377d7069e",
                 "firstSeenAt": "2026-09-04T15:03:41+00:00"
+            },
+            "v2.5.0": {
+                "sha256": "bea4f721cba0adb1f0e5fa584340ff1e8521f5c42969525f0c32380d2e0b2a06",
+                "sourceReference": "13d33ed8a9b6dbf3b76d705e0586d4181a633bbb",
+                "sourceUrl": "https://github.com/innobraingmbh/laravel-onoffice-adapter.git",
+                "distUrl": "https://api.github.com/repos/innobraingmbh/laravel-onoffice-adapter/zipball/13d33ed8a9b6dbf3b76d705e0586d4181a633bbb",
+                "firstSeenAt": "2026-10-02T07:15:24+00:00"
             }
         },
         "larastan/larastan": {
