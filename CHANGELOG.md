@@ -2,6 +2,22 @@
 
 All notable changes to `onoffice-structure` will be documented in this file.
 
+## v4.1.0 - 2026-10-02
+
+### Added
+
+- `Structure::forClient($credentials)->getSearchCriteriaFields($language)` returns the fields an account has configured as search criteria as a `SearchCriteriaFieldCollection` of `SearchCriteriaField` DTOs: category, type, range with the keys and labels of its bounds, must-match preset, mandatory flag, permitted values and the classification values a field applies to.
+- `SearchCriteriaFieldType` and `EstateClassification` enums.
+- `SearchCriteria` service and facade, `Structure::fakeSearchCriteria()`, `SearchCriteriaFake` and `SearchCriteriaFieldFactory`.
+- `probe:search-criteria` workbench command.
+
+### Changed
+
+- Requires `innobrain/laravel-onoffice-adapter` `^2.2`, the first release that reads search criteria fields.
+- The permitted value helpers of `Field` moved to the `HasPermittedValues` trait, which `SearchCriteriaField` shares.
+
+**Full Changelog**: https://github.com/innobraingmbh/onoffice-structure/compare/v4.0.0...v4.1.0
+
 ## v4.0.0 - 2026-09-08
 
 ### Breaking
