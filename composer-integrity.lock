@@ -1333,14 +1333,14 @@
         },
         "vlucas/phpdotenv": {
             "v5.6.3": {
-                "sha256": "83e6d9477800b85568271c99613e371e5576ef2a785f19ccd6db2a81a183a20e",
+                "sha256": "3a7d1219ea734abd5a93022d27f8a50383442e873dbb03a8ff72f162ea7cce20",
                 "sourceReference": "955e7815d677a3eaa7075231212f2110983adecc",
                 "sourceUrl": "https://github.com/vlucas/phpdotenv.git",
                 "distUrl": "https://api.github.com/repos/vlucas/phpdotenv/zipball/955e7815d677a3eaa7075231212f2110983adecc",
                 "firstSeenAt": "2026-07-08T04:26:25+00:00"
             },
             "v5.7.0": {
-                "sha256": "cbc5bf8db966ecfce2f6bf793be5b2dda2b35f7b88d8bbb8a2c66c9433e9b5c0",
+                "sha256": "2188a3e2d26d6e4965be4e98de1f133941e7b05ffd012ac2e1a6778f3d4a168a",
                 "sourceReference": "301c07936b16d88628b126b01d082ba153cf4c40",
                 "sourceUrl": "https://github.com/vlucas/phpdotenv.git",
                 "distUrl": "https://api.github.com/repos/vlucas/phpdotenv/zipball/301c07936b16d88628b126b01d082ba153cf4c40",
